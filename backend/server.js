@@ -150,6 +150,8 @@ app.use((req, res, next) => {
 app.get('/health', (req, res) => {
     const checks = {
         status: 'ok',
+        version: '1.1.0',
+        codename: '万象更新',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
         database: 'unknown'
