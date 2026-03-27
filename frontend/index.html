@@ -3,797 +3,1022 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>云信旺店</title>
-    <meta name="description" content="实体店铺营销小程序">
+    <title>潘海平 · 技术实践与开源项目</title>
+    <meta name="description" content="潘海平的个人开发者作品集，分享开源项目、技术DEMO、开发工具和实战经验。">
+    <meta name="keywords" content="开发者,开源项目,技术DEMO,Web开发,小程序,潘海平">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 基础重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #f59e0b;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-color: #64748b;
+            --success-color: #10b981;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f5f5;
-            max-width: 768px;
-            margin: 0 auto;
-        }
-        
-        .container {
-            background: white;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #fef7ff 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         
-        /* 店铺头部 */
-        .shop-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
+        /* 导航栏 */
+        .navbar {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
             position: relative;
         }
         
-        .shop-name {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
+        .nav-link:hover {
+            color: var(--primary-color);
         }
         
-        .shop-tags {
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-color);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-badges {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 1rem;
             flex-wrap: wrap;
+            margin-bottom: 3rem;
         }
         
-        .tag {
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-        }
-        
-        .shop-description {
-            font-size: 14px;
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-        
-        .business-status {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
+        .badge {
+            background: var(--card-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
             font-weight: 500;
-        }
-        
-        .status-open {
-            background: rgba(76, 209, 114, 0.2);
-            color: #4cd172;
-        }
-        
-        .status-closed {
-            background: rgba(255, 95, 87, 0.2);
-            color: #ff5f57;
-        }
-        
-        /* 信息卡片 */
-        .info-card {
-            background: white;
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        
-        .info-item {
+            box-shadow: var(--shadow);
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            font-size: 14px;
-            line-height: 1.6;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
         }
         
-        .info-item:last-child {
-            margin-bottom: 0;
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
-        .info-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            flex-shrink: 0;
+        .badge i {
+            color: var(--primary-color);
         }
         
-        .info-label {
-            color: #666;
-            margin-right: 8px;
-            white-space: nowrap;
-        }
-        
-        /* 特色服务 */
-        .features-section {
-            background: white;
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        /* DEMO展示区域 */
+        .demos-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .section-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-        }
-        
-        .feature-item {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
             text-align: center;
-            font-size: 13px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: var(--dark-color);
         }
         
-        .feature-icon {
-            font-size: 24px;
-            margin-bottom: 6px;
+        .section-title span {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        /* 按钮组 */
-        .button-group {
+        .demos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .demo-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            height: 100%;
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            flex-direction: column;
         }
         
-        .btn {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
+        .demo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-        
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-        
-        .btn-secondary:active {
-            background: #e0e0e0;
-        }
-        
-        .btn-share {
-            background: #07c160;
-            color: white;
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-        
-        /* 地图容器 */
-        .map-container {
+        .demo-image {
             height: 200px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            margin-top: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
         }
         
-        /* 评价墙 */
-        .reviews-section {
-            background: white;
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        
-        .reviews-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .reviews-count {
-            color: #999;
-            font-size: 13px;
-        }
-        
-        .review-item {
-            border-bottom: 1px solid #f0f0f0;
-            padding: 15px 0;
-        }
-        
-        .review-item:last-child {
-            border-bottom: none;
-        }
-        
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        
-        .review-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .review-name {
-            font-weight: 500;
-            color: #333;
-        }
-        
-        .review-tag {
-            background: #f0f0f0;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            color: #666;
-        }
-        
-        .review-time {
-            color: #999;
-            font-size: 12px;
-        }
-        
-        .review-rating {
-            color: #ff9500;
-            font-size: 14px;
-        }
-        
-        .review-content {
-            color: #666;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-        
-        /* WiFi 密码弹窗 */
-        .modal {
-            display: none;
-            position: fixed;
+        .demo-image::after {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+        }
+        
+        .demo-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .demo-description {
+            color: var(--gray-color);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .demo-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tag {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .demo-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+        
+        .demo-link {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
             align-items: center;
             justify-content: center;
+            gap: 0.5rem;
         }
         
-        .modal.show {
-            display: flex;
+        .demo-link:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
         }
         
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 300px;
-            width: 90%;
-            text-align: center;
+        .demo-link.secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
         }
         
-        .wifi-info {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
+        .demo-link.secondary:hover {
+            background: var(--primary-color);
+            color: white;
         }
         
-        .wifi-ssid {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
+        /* 技术栈展示 */
+        .tech-stack {
+            padding: 4rem 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            margin: 4rem auto;
+            max-width: 1200px;
+            box-shadow: var(--shadow);
         }
         
-        .wifi-password {
-            font-size: 20px;
-            color: #667eea;
-            font-family: monospace;
-            letter-spacing: 2px;
-        }
-        
-        /* 分享弹窗 */
-        .share-grid {
+        .tech-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
         
-        .share-item {
+        .tech-item {
             text-align: center;
-            cursor: pointer;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
         }
         
-        .share-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+        .tech-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .tech-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tech-level {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        /* 关于我 */
+        .about-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--gray-color);
+        }
+        
+        /* 联系区域 */
+        .contact-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            border-radius: 20px;
+            margin: 4rem auto;
+            max-width: 1200px;
+        }
+        
+        .contact-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .contact-link {
+            background: white;
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .contact-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 页脚 */
+        .footer {
+            padding: 3rem 2rem;
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .footer-link:hover {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+        
+        .copyright {
+            opacity: 0.6;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .demos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .about-image {
+                margin: 0 auto;
+            }
+            
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        
+        /* 滚动进度条 */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.3s ease;
+        }
+        
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 8px;
-            font-size: 24px;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
-        .share-wechat { background: #07c160; color: white; }
-        .share-moments { background: #29b6f6; color: white; }
-        .share-qq { background: #ff9800; color: white; }
-        .share-copy { background: #9e9e9e; color: white; }
-        
-        .share-label {
-            font-size: 12px;
-            color: #666;
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
-        /* 加载状态 */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-        
-        /* 错误提示 */
-        .error {
-            background: #fff3f3;
-            color: #ff4444;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px;
-        }
-        
-        /* 隐藏类 */
-        .hidden {
-            display: none !important;
-        }
-        
-        /* 分享按钮（右上角） */
-        .share-btn-fixed {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-5px);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 分享按钮 -->
-        <button class="btn btn-primary btn-share share-btn-fixed" onclick="showShareModal()">
-            📤 分享
-        </button>
-        
-        <!-- 店铺头部 -->
-        <div class="shop-header">
-            <div class="shop-name" id="shopName">加载中...</div>
-            <div class="shop-tags" id="shopTags"></div>
-            <div class="shop-description" id="shopDescription"></div>
-            <div class="business-status" id="businessStatus"></div>
+    <!-- 滚动进度条 -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- 返回顶部按钮 -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span>潘海平 · 开发者</span>
+            </div>
+            <div class="nav-links">
+                <a href="#demos" class="nav-link">DEMO展示</a>
+                <a href="#tech" class="nav-link">技术栈</a>
+                <a href="#about" class="nav-link">关于我</a>
+                <a href="#contact" class="nav-link">联系</a>
+            </div>
         </div>
-        
-        <!-- 基本信息 -->
-        <div class="info-card">
-            <div class="info-item">
-                <span class="info-icon">🕐</span>
-                <span><span class="info-label">营业时间</span><span id="businessHours"></span></span>
+    </nav>
+    
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title animate">将创意转化为代码</h1>
+            <p class="hero-subtitle animate delay-1">
+                全栈开发者 · 开源贡献者 · 技术布道者
+                <br>分享我的开发实践、开源项目和技术思考
+            </p>
+            <div class="hero-badges">
+                <div class="badge animate delay-2">
+                    <i class="fas fa-star"></i>
+                    <span>8年开发经验</span>
+                </div>
+                <div class="badge animate delay-3">
+                    <i class="fas fa-code-branch"></i>
+                    <span>20+ 开源项目</span>
+                </div>
+                <div class="bad                </div>
+                <div class="badge animate delay-4">
+                    <i class="fas fa-users"></i>
+                    <span>技术社区活跃</span>
+                </div>
             </div>
-            <div class="info-item">
-                <span class="info-icon">📍</span>
-                <span><span class="info-label">地址</span><span id="address"></span></span>
-            </div>
-            <div class="info-item">
-                <span class="info-icon">📞</span>
-                <span><span class="info-label">电话</span><span id="phone"></span></span>
+        </div>
+    </section>
+    
+    <!-- DEMO展示区域 -->
+    <section class="demos-section" id="demos">
+        <h2 class="section-title animate">我的<span> DEMO 作品</span></h2>
+        <div class="demos-grid">
+            <!-- DEMO 1: 云信旺店小程序 -->
+            <div class="demo-card animate">
+                <div class="demo-image">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="demo-content">
+                    <h3 class="demo-title">云信旺店小程序</h3>
+                    <p class="demo-description">
+                        为实体店铺打造的数字化营销解决方案，包含顾客端、管理后台、数据分析等完整功能模块。
+                    </p>
+                    <div class="demo-tags">
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">MySQL</span>
+                        <span class="tag">小程序</span>
+                    </div>
+                    <div class="demo-links">
+                        <a href="https://gitee.com/illusoryNone/seven-admin" class="demo-link" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            体验DEMO
+                        </a>
+                        <a href="https://gitee.com/illusoryNone/seven-admin" class="demo-link secondary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            源码
+                        </a>
+                    </div>
+                </div>
             </div>
             
-            <!-- WiFi 模块 -->
-            <div id="wifiModule" class="hidden">
-                <div class="button-group">
-                    <button class="btn btn-primary" onclick="confirmWechat()">
-                        ✓ 已加微信
-                    </button>
-                    <button class="btn btn-secondary" onclick="showWifiPassword()">
-                        📶 显示 WiFi 密码
-                    </button>
+            <!-- DEMO 2: 智能表单构建器 -->
+            <div class="demo-card animate delay-1">
+                <div class="demo-image">
+                    <i class="fas fa-wpforms"></i>
+                </div>
+                <div class="demo-content">
+                    <h3 class="demo-title">智能表单构建器</h3>
+                    <p class="demo-description">
+                        可视化表单设计工具，支持拖拽布局、条件逻辑、数据验证和实时预览，可导出多种格式。
+                    </p>
+                    <div class="demo-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">DnD</span>
+                        <span class="tag">JSON Schema</span>
+                    </div>
+                    <div class="demo-links">
+                        <a href="/temp/v2/" class="demo-link" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            体验DEMO
+                        </a>
+                        <a href="https://gitee.com/illusoryNone/seven-admin" class="demo-link secondary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            源码
+                        </a>
+                    </div>
                 </div>
             </div>
             
-            <!-- 地图模块 -->
-            <div id="mapModule" class="hidden">
-                <div class="map-container" id="mapContainer">
-                    地图加载中...
+            <!-- DEMO 3: 实时协作白板 -->
+            <div class="demo-card animate delay-2">
+                <div class="demo-image">
+                    <i class="fas fa-chalkboard"></i>
+                </div>
+                <div class="demo-content">
+                    <h3 class="demo-title">实时协作白板</h3>
+                    <p class="demo-description">
+                        基于 WebSocket 的实时协作工具，支持多人同时绘制、文字聊天、图形标注和版本历史。
+                    </p>
+                    <div class="demo-tags">
+                        <span class="tag">WebSocket</span>
+                        <span class="tag">Canvas</span>
+                        <span class="tag">Redis</span>
+                        <span class="tag">实时通信</span>
+                    </div>
+                    <div class="demo-links">
+                        <a href="#" class="demo-link" onclick="showComingSoon()">
+                            <i class="fas fa-external-link-alt"></i>
+                            体验DEMO
+                        </a>
+                        <a href="https://gitee.com/illusoryNone/seven-admin" class="demo-link secondary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            源码
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DEMO 4: 数据可视化仪表盘 -->
+            <div class="demo-card animate delay-3">
+                <div class="demo-image">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="demo-content">
+                    <h3 class="demo-title">数据可视化仪表盘</h3>
+                    <p class="demo-description">
+                        可配置的数据可视化平台，支持多种图表类型、实时数据更新、自定义主题和导出功能。
+                    </p>
+                    <div class="demo-tags">
+                        <span class="tag">ECharts</span>
+                        <span class="tag">D3.js</span>
+                        <span class="tag">Vue 3</span>
+                        <span class="tag">数据驱动</span>
+                    </div>
+                    <div class="demo-links">
+                        <a href="#" class="demo-link" onclick="showComingSoon()">
+                            <i class="fas fa-external-link-alt"></i>
+                            体验DEMO
+                        </a>
+                        <a href="/saas-customer/shop.html?shop=2" class="demo-link secondary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            源码
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DEMO 5: Markdown 知识库 -->
+            <div class="demo-card animate delay-1">
+                <div class="demo-image">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="demo-content">
+                    <h3 class="demo-title">Markdown 知识库</h3>
+                    <p class="demo-description">
+                        基于 Git 的文档管理系统，支持 Markdown 编辑、版本控制、全文搜索和团队协作。
+                    </p>
+                    <div class="demo-tags">
+                        <span class="tag">Next.js</span>
+                        <span class="tag">Markdown</span>
+                        <span class="tag">Git</span>
+                        <span class="tag">搜索</span>
+                    </div>
+                    <div class="demo-links">
+                        <a href="#" class="demo-link" onclick="showComingSoon()">
+                            <i class="fas fa-external-link-alt"></i>
+                            体验DEMO
+                        </a>
+                        <a href="https://gitee.com/illusoryNone/seven-admin" class="demo-link secondary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            源码
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DEMO 6: API 接口管理平台 -->
+            <div class="demo-card animate delay-2">
+                <div class="demo-image">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <div class="demo-content">
+                    <h3 class="demo-title">API 接口管理平台</h3>
+                    <p class="demo-description">
+                        完整的 API 生命周期管理工具，包含文档生成、Mock 服务、测试用例和性能监控。
+                    </p>
+                    <div class="demo-tags">
+                        <span class="tag">OpenAPI</span>
+                        <span class="tag">Mock</span>
+                        <span class="tag">测试</span>
+                        <span class="tag">文档</span>
+                    </div>
+                    <div class="demo-links">
+                        <a href="#" class="demo-link" onclick="showComingSoon()">
+                            <i class="fas fa-external-link-alt"></i>
+                            体验DEMO
+                        </a>
+                        <a href="https://gitee.com/illusoryNone/seven-admin" class="demo-link secondary" target="_blank">
+                            <i class="fab fa-github"></i>
+                            源码
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <!-- 特色服务 -->
-        <div class="features-section" id="featuresSection">
-            <div class="section-title">✨ 特色服务</div>
-            <div class="features-grid" id="featuresGrid">
-                <!-- 动态加载 -->
-            </div>
-        </div>
-        
-        <!-- 评价墙 -->
-        <div class="reviews-section" id="reviewsSection">
-            <div class="reviews-header">
-                <div class="section-title">💬 顾客评价</div>
-                <div class="reviews-count" id="reviewsCount"></div>
-            </div>
-            <div id="reviewsList">
-                <div class="loading">加载中...</div>
-            </div>
-        </div>
-    </div>
+    </section>
     
-    <!-- WiFi 密码弹窗 -->
-    <div class="modal" id="wifiModal">
-        <div class="modal-content">
-            <h3>📶 WiFi 信息</h3>
-            <div class="wifi-info">
-                <div class="wifi-ssid" id="wifiSsid"></div>
-                <div class="wifi-password" id="wifiPassword"></div>
+    <!-- 技术栈展示 -->
+    <section class="tech-stack" id="tech">
+        <h2 class="section-title animate">我的<span> 技术栈</span></h2>
+        <div class="tech-grid">
+            <div class="tech-item animate">
+                <div class="tech-icon">
+                    <i class="fab fa-vuejs"></i>
+                </div>
+                <h3 class="tech-name">Vue.js</h3>
+                <p class="tech-level">精通 · 5年经验</p>
             </div>
-            <button class="btn btn-primary" onclick="closeModal()">知道了</button>
+            <div class="tech-item animate delay-1">
+                <div class="tech-icon">
+                    <i class="fab fa-react"></i>
+                </div>
+                <h3 class="tech-name">React</h3>
+                <p class="tech-level">熟练 · 3年经验</p>
+            </div>
+            <div class="tech-item animate delay-2">
+                <div class="tech-icon">
+                    <i class="fab fa-node-js"></i>
+                </div>
+                <h3 class="tech-name">Node.js</h3>
+                <p class="tech-level">精通 · 6年经验</p>
+            </div>
+            <div class="tech-item animate delay-3">
+                <div class="tech-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3 class="tech-name">MySQL</h3>
+                <p class="tech-level">熟练 · 5年经验</p>
+            </div>
+            <div class="tech-item animate">
+                <div class="tech-icon">
+                    <i class="fab fa-docker"></i>
+                </div>
+                <h3 class="tech-name">Docker</h3>
+                <p class="tech-level">熟练 · 3年经验</p>
+            </div>
+            <div class="tech-item animate delay-1">
+                <div class="tech-icon">
+                    <i class="fab fa-git-alt"></i>
+                </div>
+                <h3 class="tech-name">Git</h3>
+                <p class="tech-level">精通 · 7年经验</p>
+            </div>
+            <div class="tech-item animate delay-2">
+                <div class="tech-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3 class="tech-name">Linux</h3>
+                <p class="tech-level">熟练 · 6年经验</p>
+            </div>
+            <div class="tech-item animate delay-3">
+                <div class="tech-icon">
+                    <i class="fas fa-cloud"></i>
+                </div>
+                <h3 class="tech-name">云服务</h3>
+                <p class="tech-level">熟练 · 4年经验</p>
+            </div>
         </div>
-    </div>
+    </section>
     
-    <!-- 分享弹窗 -->
-    <div class="modal" id="shareModal">
-        <div class="modal-content">
-            <h3>📤 分享给朋友</h3>
-            <div class="share-grid">
-                <div class="share-item" onclick="shareToWechat()">
-                    <div class="share-icon share-wechat">💬</div>
-                    <div class="share-label">微信好友</div>
-                </div>
-                <div class="share-item" onclick="shareToMoments()">
-                    <div class="share-icon share-moments">📱</div>
-                    <div class="share-label">朋友圈</div>
-                </div>
-                <div class="share-item" onclick="shareToQQ()">
-                    <div class="share-icon share-qq">🐧</div>
-                    <div class="share-label">QQ 好友</div>
-                </div>
-                <div class="share-item" onclick="copyLink()">
-                    <div class="share-icon share-copy">🔗</div>
-                    <div class="share-label">复制链接</div>
+    <!-- 关于我 -->
+    <section class="about-section" id="about">
+        <h2 class="section-title animate">关于<span> 我</span></h2>
+        <div class="about-content">
+            <div class="about-image animate">
+                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
+                    <i class="fas fa-user-tie"></i>
                 </div>
             </div>
-            <button class="btn btn-secondary" onclick="closeShareModal()" style="margin-top: 20px; width: 100%;">取消</button>
+            <div class="about-text">
+                <h3 class="animate">潘海平/ PanHaiPing · 全栈开发者</h3>
+                <p class="animate delay-1">
+                    拥有8年Web开发经验，专注于构建现代化、高性能的Web应用。热爱开源，在GitHub上维护多个高质量项目。
+                </p>
+                <p class="animate delay-2">
+                    擅长从前端到后端的全栈开发，对用户体验、性能优化和系统架构有深入理解。喜欢探索新技术，并将最佳实践应用于实际项目中。
+                </p>
+                <p class="animate delay-3">
+                    除了编码，我也热衷于技术分享和社区建设。定期在技术社区发表文章，参与开源项目贡献，并组织技术交流活动。
+                </p>
+                <div class="hero-badges animate delay-4" style="justify-content: flex-start; margin-top: 2rem;">
+                    <div class="badge">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>专注计算机科学</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>中国 · 杭州</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+    
+    <!-- 联系区域 -->
+    <section class="contact-section" id="contact">
+        <h2 class="contact-title animate">保持<span> 联系</span></h2>
+        <p class="contact-subtitle animate delay-1">
+            对某个项目感兴趣？想要技术交流？或者有合作机会？
+            <br>欢迎通过以下方式联系我
+        </p>
+        <div class="contact-links">
+            <a href="mailto:phj112@163.com" class="contact-link animate delay-2">
+                <i class="fas fa-envelope"></i>
+                发送邮件
+            </a>
+            <a href="https://gitee.com" class="contact-link animate delay-3" target="_blank">
+                <i class="fab fa-github"></i>
+                Gitee
+            </a>
+            <a href="https://aliyun.com" class="contact-link animate delay-4" target="_blank">
+                <i class="fab fa-twitter"></i>
+                aliyun
+            </a>
+            <a href="https://163.com/in/yourusername" class="contact-link animate delay-2" target="_blank">
+                <i class="fab fa-linkedin"></i>
+                163.com
+            </a>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="logo" style="justify-content: center; margin-bottom: 1rem;">
+                <i class="fas fa-code"></i>
+                <span>潘海平 · 技术实践与开源项目</span>
+            </div>
+            <div class="footer-links">
+                <a href="#demos" class="footer-link">DEMO展示</a>
+                <a href="#tech" class="footer-link">技术栈</a>
+                <a href="#about" class="footer-link">关于我</a>
+                <a href="#contact" class="footer-link">联系</a>
+                <a href="/admin/" class="footer-link">管理后台</a>
+            </div>
+            <p class="copyright">
+                © 2026 潘海平 · 本页面所有DEMO均为开源项目
+                <br>最后更新: 2026年3月23日
+            </p>
+        </div>
+    </footer>
     
     <script>
-        // 配置 - 自动检测当前访问地址
-        const currentHost = window.location.hostname || 'localhost';
-        const API_BASE = `http://${currentHost}:3000/api`;
-        const SHOP_ID = 1; // DEMO 店铺 ID
-        
-        // 特色服务配置（可在数据库中添加字段控制显示）
-        const FEATURES = [
-            { icon: '📶', name: '免费 WiFi' },
-            { icon: '🅿️', name: '免费停车' },
-            { icon: '🎵', name: '音乐现场' },
-            { icon: '🎂', name: '生日派对' },
-            { icon: '💳', name: '会员积分' },
-            { icon: '📦', name: '外卖配送' }
-        ];
-        
-        // 页面加载
-        document.addEventListener('DOMContentLoaded', function() {
-            loadShopInfo();
-            loadFeatures();
-            loadReviews();
-            recordVisit('view');
+        // 滚动进度条
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            
+            // 显示/隐藏返回顶部按钮
+            const backToTop = document.getElementById('backToTop');
+            if (winScroll > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
         });
         
-        // 加载店铺信息
-        async function loadShopInfo() {
-            try {
-                const response = await fetch(`${API_BASE}/shop/${SHOP_ID}`);
-                const shop = await response.json();
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
                 
-                if (shop.error) {
-                    showError(shop.error);
-                    return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
                 }
-                
-                // 填充基本信息
-                document.getElementById('shopName').textContent = shop.name;
-                document.getElementById('shopDescription').textContent = shop.description;
-                document.getElementById('businessHours').textContent = parseBusinessHours(shop.business_hours);
-                document.getElementById('address').textContent = shop.address;
-                document.getElementById('phone').textContent = shop.phone;
-                
-                // 营业状态
-                updateBusinessStatus(shop.business_hours);
-                
-                // 条件显示模块
-                if (shop.show_wechat_button && shop.show_wifi_button) {
-                    document.getElementById('wifiModule').classList.remove('hidden');
-                }
-                
-                if (shop.show_map && shop.latitude && shop.longitude) {
-                    document.getElementById('mapModule').classList.remove('hidden');
-                    loadMap(shop.latitude, shop.longitude);
-                }
-                
-                if (!shop.show_reviews) {
-                    document.getElementById('reviewsSection').classList.add('hidden');
-                }
-                
-            } catch (error) {
-                showError('加载失败，请刷新重试');
-                console.error(error);
-            }
-        }
-        
-        // 更新营业状态
-        function updateBusinessStatus(businessHoursJson) {
-            try {
-                const hours = JSON.parse(businessHoursJson);
-                const now = new Date();
-                const currentTime = now.getHours() * 60 + now.getMinutes();
-                
-                const [openHour, openMin] = hours.open.split(':').map(Number);
-                const [closeHour, closeMin] = hours.close.split(':').map(Number);
-                
-                const openTime = openHour * 60 + openMin;
-                const closeTime = closeHour * 60 + closeMin;
-                
-                const isOpen = currentTime >= openTime && currentTime < closeTime;
-                const statusEl = document.getElementById('businessStatus');
-                
-                if (isOpen) {
-                    statusEl.className = 'business-status status-open';
-                    statusEl.textContent = '🟢 营业中';
-                } else {
-                    statusEl.className = 'business-status status-closed';
-                    statusEl.textContent = `🔴 已打烊 (${hours.open}-${hours.close})`;
-                }
-                
-            } catch (e) {
-                console.error('营业状态解析失败:', e);
-            }
-        }
-        
-        // 加载特色服务
-        function loadFeatures() {
-            const featuresGrid = document.getElementById('featuresGrid');
-            featuresGrid.innerHTML = FEATURES.map(f => `
-                <div class="feature-item">
-                    <div class="feature-icon">${f.icon}</div>
-                    <div>${f.name}</div>
-                </div>
-            `).join('');
-        }
-        
-        // 加载评价
-        async function loadReviews() {
-            try {
-                const response = await fetch(`${API_BASE}/shop/${SHOP_ID}/reviews`);
-                const reviews = await response.json();
-                
-                document.getElementById('reviewsCount').textContent = `${reviews.length}条评价`;
-                
-                const reviewsList = document.getElementById('reviewsList');
-                
-                if (reviews.length === 0) {
-                    reviewsList.innerHTML = '<div class="loading">暂无评价</div>';
-                    return;
-                }
-                
-                reviewsList.innerHTML = reviews.map((review, index) => {
-                    const timeAgo = getTimeAgo(review.created_at);
-                    const tags = index % 3 === 0 ? '<span class="review-tag">常客</span>' : 
-                                 index % 3 === 1 ? '<span class="review-tag">第一次来</span>' : '';
-                    
-                    return `
-                        <div class="review-item">
-                            <div class="review-header">
-                                <div class="review-meta">
-                                    <span class="review-name">${escapeHtml(review.customer_name)}</span>
-                                    ${tags}
-                                    <span class="review-time">${timeAgo}</span>
-                                </div>
-                                <span class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
-                            </div>
-                            <div class="review-content">${escapeHtml(review.content)}</div>
-                        </div>
-                    `;
-                }).join('');
-                
-            } catch (error) {
-                console.error('加载评价失败:', error);
-            }
-        }
-        
-        // 获取相对时间
-        function getTimeAgo(dateStr) {
-            if (!dateStr) return '';
-            const date = new Date(dateStr);
-            const now = new Date();
-            const diff = now - date;
-            
-            const minutes = Math.floor(diff / 60000);
-            const hours = Math.floor(diff / 3600000);
-            const days = Math.floor(diff / 86400000);
-            
-            if (minutes < 60) return `${minutes}分钟前`;
-            if (hours < 24) return `${hours}小时前`;
-            if (days < 7) return `${days}天前`;
-            return date.toLocaleDateString('zh-CN');
-        }
-        
-        // 确认加微信
-        function confirmWechat() {
-            recordVisit('click_wechat');
-            alert('已记录！感谢您的关注～');
-        }
-        
-        // 显示 WiFi 密码
-        async function showWifiPassword() {
-            try {
-                const response = await fetch(`${API_BASE}/shop/${SHOP_ID}/wifi`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'confirm' })
-                });
-                
-                const data = await response.json();
-                
-                if (data.error) {
-                    alert(data.error);
-                    return;
-                }
-                
-                document.getElementById('wifiSsid').textContent = `名称：${data.ssid}`;
-                document.getElementById('wifiPassword').textContent = data.password;
-                document.getElementById('wifiModal').classList.add('show');
-                
-                recordVisit('click_wifi');
-                
-            } catch (error) {
-                alert('获取 WiFi 信息失败');
-                console.error(error);
-            }
-        }
-        
-        // 显示分享弹窗
-        function showShareModal() {
-            document.getElementById('shareModal').classList.add('show');
-        }
-        
-        // 关闭分享弹窗
-        function closeShareModal() {
-            document.getElementById('shareModal').classList.remove('show');
-        }
-        
-        // 分享到微信
-        function shareToWechat() {
-            alert('提示：在微信中打开此页面，点击右上角「···」分享给好友');
-            closeShareModal();
-        }
-        
-        // 分享到朋友圈
-        function shareToMoments() {
-            alert('提示：在微信中打开此页面，点击右上角「···」分享到朋友圈');
-            closeShareModal();
-        }
-        
-        // 分享到 QQ
-        function shareToQQ() {
-            const url = encodeURIComponent(window.location.href);
-            const title = encodeURIComponent(document.getElementById('shopName').textContent);
-            window.open(`https://connect.qq.com/widget/shareqq/index.html?url=${url}&title=${title}`, '_blank');
-            closeShareModal();
-        }
-        
-        // 复制链接
-        function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                alert('链接已复制！');
-            }).catch(() => {
-                prompt('请手动复制链接：', window.location.href);
             });
-            closeShareModal();
+        });
+        
+        // 返回顶部
+        document.getElementById('backToTop').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 动画触发
+        function checkAnimation() {
+            const elements = document.querySelectorAll('.animate');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
         }
         
-        // 关闭弹窗
-        function closeModal() {
-            document.getElementById('wifiModal').classList.remove('show');
+        // 初始检查和滚动监听
+        window.addEventListener('load', checkAnimation);
+        window.addEventListener('scroll', checkAnimation);
+        
+        // 显示即将上线提示
+        function showComingSoon() {
+            alert('🚧 这个DEMO正在开发中，即将上线！\n\n可以先查看GitHub源码，或者体验其他已上线的DEMO。');
         }
         
-        // 加载地图（DEMO 用静态图）
-        function loadMap(lat, lng) {
-            const mapContainer = document.getElementById('mapContainer');
-            mapContainer.innerHTML = `
-                <div style="text-align: center;">
-                    <div style="font-size: 40px;">🗺️</div>
-                    <div style="margin-top: 10px;">地图位置：${lat}, ${lng}</div>
-                    <a href="https://uri.amap.com/marker?position=${lng},${lat}" 
-                       target="_blank" 
-                       style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; text-decoration: none; border-radius: 6px;">
-                        打开导航
-                    </a>
-                </div>
-            `;
-        }
-        
-        // 记录访问
-        async function recordVisit(action) {
-            try {
-                await fetch(`${API_BASE}/shop/${SHOP_ID}/visit`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action })
-                });
-            } catch (error) {
-                console.error('记录访问失败:', error);
+        // 导航栏滚动效果
+        let lastScroll = 0;
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset;
+            const navbar = document.querySelector('.navbar');
+            
+            if (currentScroll <= 0) {
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                return;
             }
-        }
-        
-        // 解析营业时间
-        function parseBusinessHours(hoursJson) {
-            try {
-                const hours = JSON.parse(hoursJson);
-                return hours.description || `${hours.open}-${hours.close}`;
-            } catch {
-                return hoursJson;
-            }
-        }
-        
-        // HTML 转义
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // 显示错误
-        function showError(message) {
-            const container = document.querySelector('.container');
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error';
-            errorDiv.textContent = message;
-            container.insertBefore(errorDiv, container.firstChild);
-        }
-    </script>
-</body>
-</html>
+            
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                // 向下滚动
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                // 向上滚动
+                navbar.style.transform = 'translateY(0)';
+                navbar.style.boxShadow = currentScroll > 100 ? 
+                    '0 5px 20px rgba(0, 0, 0, 0.15)' : 
+                    '0 2px 10px rgba(0,

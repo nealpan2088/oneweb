@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>PanHaiPing个人作品 · 开源项目集 | 我的实验室--web小程序开发</title>
+    <!-- 引入优雅字体 & 简单重置 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #faf8f5 0%, #f1ede8 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            color: #1e1b1a;
+            line-height: 1.4;
+            scroll-behavior: smooth;
+        }
+
+        /* 自定义滚动条 (个人风格小细节) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e6e0d8;
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bcaca0;
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9b8a7c;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+        }
+
+        /* 个人头部 — 随性有温度 */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            border-bottom: 2px solid rgba(156, 126, 106, 0.25);
+            padding-bottom: 2rem;
+        }
+        .hero-intro {
+            flex: 2;
+        }
+        .avatar-badge {
+            flex: 0 0 auto;
+            background: #fff6ef;
+            padding: 0.6rem 1.4rem;
+            border-radius: 200px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #7f5e48;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,240,0.8);
+            backdrop-filter: blur(2px);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -0.2px;
+        }
+        .hero h1 {
+            font-size: 3.6rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #2c241e, #5f4433);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .tagline {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #6c5a4e;
+            margin-top: 0.5rem;
+            border-left: 3px solid #d9b48b;
+            padding-left: 1rem;
+        }
+        .hero-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .hero-meta a {
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #7c5f48;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px dashed #d9c6b5;
+        }
+        .hero-meta a:hover {
+            color: #3f2c1f;
+            border-bottom-color: #b2805a;
+            transform: translateY(-1px);
+        }
+
+        /* 项目介绍主卡片区 */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 3rem 0 1.5rem 0;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title:before {
+            content: "//";
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 400;
+            color: #c1a086;
+            font-size: 1.6rem;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* 卡片个性设计: 手工感+轻微毛玻璃 */
+        .project-card {
+            background: rgba(255, 251, 245, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 1.8rem;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid #f3ede5;
+            box-shadow: 0 12px 22px -12px rgba(0, 0, 0, 0.05);
+        }
+        .project-card:hover {
+            transform: translateY(-6px);
+            background: #fffefb;
+            border-color: #e9dbcf;
+            box-shadow: 0 24px 36px -14px rgba(83, 57, 39, 0.12);
+        }
+
+        .project-icon {
+            font-size: 2.6rem;
+            margin-bottom: 0.8rem;
+            display: inline-block;
+            background: #f3ebe3;
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            box-shadow: inset 0 1px 2px #fff8, 0 3px 6px rgba(0,0,0,0.02);
+        }
+        .project-name {
+            font-size: 1.7rem;
+            font-weight: 650;
+            margin: 0.9rem 0 0.5rem;
+            letter-spacing: -0.3px;
+        }
+        .project-desc {
+            color: #3d332b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0.7rem 0 1.2rem;
+            font-weight: 400;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 1rem 0 1.4rem;
+        }
+        .tech {
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: #eae1d7;
+            padding: 0.25rem 0.8rem;
+            border-radius: 40px;
+            color: #4e3a2c;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+        }
+        .card-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid #f0e5dc;
+            padding-top: 1rem;
+        }
+        .card-links a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #9c7a60;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .card-links a:hover {
+            color: #5c3e2b;
+        }
+
+        /* 详细介绍区域 (个人风格故事板) */
+        .story-section {
+            background: #fffaf5;
+            border-radius: 2rem;
+            padding: 2rem 2rem 2.2rem;
+            margin: 3rem 0 2rem;
+            border: 1px solid #efe2d6;
+            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.03);
+        }
+        .story-greeting {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #ac8a6c;
+            margin-bottom: 1rem;
+            letter-spacing: -0.2px;
+        }
+        .story-text {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #2b241f;
+            max-width: 85%;
+            margin-bottom: 1.6rem;
+        }
+        .story-quote {
+            font-family: 'JetBrains Mono', monospace;
+            background: #f0e8e0;
+            padding: 0.8rem 1.2rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            color: #7a5d48;
+            display: inline-block;
+        }
+
+        /* 更多项目 + 动态号召 */
+        .other-projects {
+            margin: 3rem 0 2rem;
+        }
+        .inline-badge {
+            background: #e8dfd6;
+            border-radius: 40px;
+            padding: 0.2rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #6b4d36;
+        }
+        .footer-note {
+            margin-top: 5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #ac988a;
+            border-top: 1px solid #e7ddd2;
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        @media (max-width: 680px) {
+            .container {
+                padding: 1.5rem;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .story-text {
+                max-width: 100%;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* 个人手绘点缀 */
+        .deco-dot {
+            background: radial-gradient(circle at 30% 30%, #e7cfbc, #d6bea6);
+            width: 80px;
+            height: 80px;
+            position: fixed;
+            bottom: 20px;
+            right: -30px;
+            border-radius: 50%;
+            filter: blur(48px);
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .deco-dot2 {
+            top: 100px;
+            left: -40px;
+            width: 150px;
+            height: 150px;
+            background: #e3cfbc;
+            filter: blur(70px);
+            position: fixed;
+            z-index: -1;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+<div class="deco-dot"></div>
+<div class="deco-dot2"></div>
+
+<div class="container">
+    <!-- 个人头部区域：充满呼吸感 -->
+    <div class="hero">
+        <div class="hero-intro">
+            <h1>PanHaiPing / 平的空间</h1>
+            <div class="tagline">「 建造微小但锐利的工具，将灵感编译成开源星尘 」</div>
+            <div class="hero-meta">
+                <a href="#">🌐 Ping·空间</a>
+                <a href="#">🐙 GitHub / https://nealpan2088.github.io/restaurant-promo/</a>
+                <a href="#">📮 phj112@163.com</a>
+                <a href="#">🕊️ 关于我</a>
+            </div>
+        </div>
+        <div class="avatar-badge">
+            ✨ 每日 commit · 创造而非消费
+        </div>
+    </div>
+
+    <!-- 重点开源项目介绍区（个人风格重点） -->
+    <div class="section-title">
+        航行 · 核心项目
+    </div>
+    <div class="featured-grid">
+        <!-- 项目卡片 1 -->
+        <div class="project-card">
+            <div class="project-icon">📦</div>
+            <div class="project-name">AtomiCSS</div>
+            <div class="project-desc">
+                原子级 CSS 引擎 —— 用 JavaScript 实时生成零运行时样式，为现代组件库提供极速风格方案。
+                设计理念: 像搭乐高一样构建界面，Tree-shakable 且自带类型推导。-web小程序开发
+            </div>
+            <div class="tech-stack">
+                <span class="tech">TypeScript</span>
+                <span class="tech">PostCSS</span>
+                <span class="tech">Rollup</span>
+                <span class="tech">JIT</span>
+            </div>
+            <div class="card-links">
+                <a href="#">📖 文档</a>
+                <a href="#">⭐ GitHub</a>
+                <a href="#">🧪 Playground</a>
+            </div>
+        </div>
+
+        <!-- 项目卡片 2 -->
+        <div class="project-card">
+            <div class="project-icon">🗄️</div>
+            <div class="project-name">LiteQueue</div>
+            <div class="project-desc">
+                轻量级任务队列 + 消息代理，基于 Redis 和 Node.js 打造。支持延迟任务、重试策略、优先级调度。
+                代码优雅，核心不到 800 行，却支撑着个人小工具及两个小团队的内部流转。-web小程序开发
+            </div>
+            <div class="tech-stack">
+                <span class="tech">Node.js</span>
+                <span class="tech">Redis</span>
+                <span class="tech">bull-mq风格</span>
+                <span class="tech">Jest</span>
+            </div>
+            <div class="card-links">
+                <a href="https://nealpan2088.github.io/restaurant-promo/duligame05.html">📦 Demo1展示：web小游戏1</a>
+                <a href="https://nealpan2088.github.io/restaurant-promo/duligame04.html">🔧 Demo2展示：web小游戏2</a>
+                <a href="/saas-customer/shop.html?shop=1">📄 Demo3展示：电铺小程序</a>
+            </div>
+        </div>
+
+        <!-- 项目卡片 3 -->
+        <div class="project-card">
+            <div class="project-icon">🎨</div>
+            <div class="project-name">GinyGradient</div>
+            <div class="project-desc">
+                交互式渐变生成器 + 前端微组件库。支持导出 CSS / SVG / 多格式调色板，用于设计师与开发者的桥梁工具。
+                附带 Figma 插件灵感，已累计 400+ 个开源渐变预设。-web小程序开发
+            </div>
+            <div class="tech-stack">
+                <span class="tech">Vue3</span>
+                <span class="tech">Canvas</span>
+                <span class="tech">chroma.js</span>
+                <span class="tech">Vite</span>
+            </div>
+            <div class="card-links">
+                <a href="https://nealpan2088.github.io/restaurant-promo/tudougame.html">🎨 开发在线工具-web小程序开发</a>
+                <a href="https://nealpan2088.github.io/restaurant-promo/tudougame.html">🐙 开发源码-web小游戏开发</a>
+                <a href="https://nealpan2088.github.io/restaurant-promo/tudougame.html">✨ 演示-web小程序开发</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 深入介绍个人风格+项目背后的故事 这里凸显“个人” -->
+    <div class="story-section">
+        <div class="story-greeting">
+            🧑‍💻 关于这些项目，我想说的——
+        </div>
+        <div class="story-text">
+            「开源对我而言，是数字时代的写作。每一个项目都源于我自己的真实痛点：<strong>AtomiCSS</strong> 诞生于我对 CSS-in-JS 运行时开销的烦躁；<strong>LiteQueue</strong> 是为了在个人服务器上运行轻任务，拒绝沉重依赖；<strong>TinyGradient</strong> 则是为了让非技术朋友也能快乐玩颜色。
+            <br><br>
+            我信奉少即是多，保持文档温暖、示例生动。代码不仅要运行，更要让人读懂、敢修改。欢迎任何形式的 PR 或者闲聊，这是我作为独立开发者的浪漫。」
+        </div>
+        <div class="story-quote">
+            “build with kindness, ship with clarity”
+        </div>
+    </div>
+<a href="https://example.com">链接文字</a>
+
+    <!-- 其他小项目 / 实验性 -->
+    <div class="other-projects">
+        <div class="section-title" style="margin-bottom: 1rem;">
+            实验室 · 萌芽中
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: space-between; align-items: center;">
+            <div style="background: #f7efe8; border-radius: 28px; padding: 1rem 1.6rem; flex:1; min-width: 200px;">
+                <div style="font-weight: 600; display: flex; gap: 12px; align-items: center;"><span>🍃</span> <span>MarkFlora</span> <span class="inline-badge">个人博客Web程序</span></div>
+                <div style="font-size: 0.85rem; margin-top: 8px;"> 飞书双向同步工具，支持 CLI & 插件化。</div>
+                <div class="card-links" style="border: none; padding: 0; margin-top: 12px;"><a href="#">🔍 预览</a><a href="#">🚧 WIP</a></div>
+            </div>
+            <div style="background: #f7efe8; border-radius: 28px; padding: 1rem 1.6rem; flex:1; min-width: 200px;">
+                <div style="font-weight: 600; display: flex; gap: 12px; align-items: center;"><span>⚡</span> <span>VoxelDB</span> <span class="inline-badge">个人小店铺Web程序</span></div>
+                <div style="font-size: 0.85rem; margin-top: 8px;">虚拟列的向量检索拓展，探索轻量级 AI 记忆层。</div>
+                <div class="card-links" style="border: none; padding: 0; margin-top: 12px;"><a href="#">📐 设计稿</a><a href="https://github.com/nealpan2088/restaurant-promo/red_game.html">🧪 小红人小程序</a></div>
+            </div>
+            <div style="background: #f7efe8; border-radius: 28px; padding: 1rem 1.6rem; flex:1; min-width: 200px;">
+                <div style="font-weight: 600; display: flex; gap: 12px; align-items: center;"><span>🎧</span> <span>PodScript</span> <span class="inline-badge">"Web game开发</span></div>
+                <div style="font-size: 0.85rem; margin-top: 8px;">为播客生成高亮文本和思维导图。</div>
+                <div class="card-links" style="border: none; padding: 0; margin-top: 12px;"><a href="#">🔊 体验版</a><a href="#">🤝 贡献指南</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 另一个“个人风格” 亮点: 贡献日历 / 动态彩蛋 这里用简洁指标代替 -->
+    <div style="margin: 3rem 0 1rem; background: #fff6ef; border-radius: 2rem; padding: 1.2rem 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+        <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+            <div><span style="font-weight: 700; font-size: 1.5rem;">24</span> <span style="color:#7f624b;">开源仓库</span></div>
+            <div><span style="font-weight: 700; font-size: 1.5rem;">1.2k</span> <span style="color:#7f624b;">GitHub Stars 累计</span></div>
+            <div><span style="font-weight: 700; font-size: 1.5rem;">6</span> <span style="color:#7f624b;">贡献者伙伴</span></div>
+        </div>
+        <div style="font-family: monospace; background: #e5d9cf; padding: 0.3rem 1rem; border-radius: 60px; font-size: 0.8rem;">
+            # OpenSource ===  digital garden 🌱
+        </div>
+    </div>
+
+    <!-- 鼓励互动 个性化CTA -->
+    <div style="text-align: center; margin: 3rem auto 0; max-width: 600px;">
+        <div style="background: #1e1b1a0c; border-radius: 60px; padding: 0.5rem 1rem; display: inline-flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <span style="font-size: 0.85rem;">✨ 喜欢某个项目？ star 就是最好的鼓励</span>
+            <span style="font-size: 0.85rem;">📬 提issue / 闲聊 → 秒回信</span>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <span>© 2026 PanHaiPing · 保持好奇，保持开源</span>
+        <span>📡 订阅更新 via RSS | 本站完全手写，无框架依赖</span>
+        <span>⚡ 最后构建: 2026.03 / 永远beta</span>
+    </div>
+</div>
+
+<!-- 增加一个极简的个性化鼠标小效果 (个人风格加分，轻量) -->
+<script>
+    (function() {
+        // 单纯为了加一点交互温度: 控制台输出问候 & 鼠标移动极简影子 (optional)
+        console.log("%c🪶 欢迎访问林墨的开源作坊 — 代码见真心", "color: #b2805a; font-size: 14px; font-family: monospace;");
+        // 极简背景跟随光晕? 为了不喧宾夺主不加复杂效果，只是展示个人细节
+        const body = document.body;
+        const deco = document.createElement('div');
+        deco.style.position = 'fixed';
+        deco.style.width = '200px';
+        deco.style.height = '200px';
+        deco.style.borderRadius = '50%';
+        deco.style.background = 'radial-gradient(circle, rgba(205,171,138,0.08) 0%, rgba(0,0,0,0) 70%)';
+        deco.style.pointerEvents = 'none';
+        deco.style.zIndex = '999';
+        deco.style.transition = 'transform 0.05s linear';
+        deco.style.top = '-100px';
+        deco.style.left = '-100px';
+        body.appendChild(deco);
+        document.addEventListener('mousemove', (e) => {
+            if (!deco) return;
+            const x = e.clientX - 100;
+            const y = e.clientY - 100;
+            deco.style.transform = `translate(${x}px, ${y}px)`;
+        });
+        // 卡片点击留出友好提醒（非必要但有趣）
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach((card, idx) => {
+            card.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') return;
+                console.log(`✨ 你对「${card.querySelector('.project-name')?.innerText || '项目'}」感兴趣，去 GitHub 看看吧～`);
+            });
+        });
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云信旺店</title>
+    <meta name="description" content="实体店铺营销小程序">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            max-width: 768px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background: white;
+            min-height: 100vh;
+        }
+        
+        /* 店铺头部 */
+        .shop-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .shop-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .shop-tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .shop-description {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .business-status {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .status-open {
+            background: rgba(76, 209, 114, 0.2);
+            color: #4cd172;
+        }
+        
+        .status-closed {
+            background: rgba(255, 95, 87, 0.2);
+            color: #ff5f57;
+        }
+        
+        /* 信息卡片 */
+        .info-card {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .info-label {
+            color: #666;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+        
+        /* 特色服务 */
+        .features-section {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .feature-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:active {
+            background: #e0e0e0;
+        }
+        
+        .btn-share {
+            background: #07c160;
+            color: white;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+        
+        /* 地图容器 */
+        .map-container {
+            height: 200px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        /* 评价墙 */
+        .reviews-section {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .reviews-count {
+            color: #999;
+            font-size: 13px;
+        }
+        
+        .review-item {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 0;
+        }
+        
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .review-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .review-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .review-tag {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .review-time {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .review-rating {
+            color: #ff9500;
+            font-size: 14px;
+        }
+        
+        .review-content {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        /* WiFi 密码弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 300px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .wifi-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .wifi-ssid {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .wifi-password {
+            font-size: 20px;
+            color: #667eea;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        
+        /* 分享弹窗 */
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .share-item {
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .share-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 24px;
+        }
+        
+        .share-wechat { background: #07c160; color: white; }
+        .share-moments { background: #29b6f6; color: white; }
+        .share-qq { background: #ff9800; color: white; }
+        .share-copy { background: #9e9e9e; color: white; }
+        
+        .share-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        /* 错误提示 */
+        .error {
+            background: #fff3f3;
+            color: #ff4444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px;
+        }
+        
+        /* 隐藏类 */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 分享按钮（右上角） */
+        .share-btn-fixed {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 分享按钮 -->
+        <button class="btn btn-primary btn-share share-btn-fixed" onclick="showShareModal()">
+            📤 分享
+        </button>
+        
+        <!-- 店铺头部 -->
+        <div class="shop-header">
+            <div class="shop-name" id="shopName">加载中...</div>
+            <div class="shop-tags" id="shopTags"></div>
+            <div class="shop-description" id="shopDescription"></div>
+            <div class="business-status" id="businessStatus"></div>
+        </div>
+        
+        <!-- 基本信息 -->
+        <div class="info-card">
+            <div class="info-item">
+                <span class="info-icon">🕐</span>
+                <span><span class="info-label">营业时间</span><span id="businessHours"></span></span>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">📍</span>
+                <span><span class="info-label">地址</span><span id="address"></span></span>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">📞</span>
+                <span><span class="info-label">电话</span><span id="phone"></span></span>
+            </div>
+            
+            <!-- WiFi 模块 -->
+            <div id="wifiModule" class="hidden">
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="confirmWechat()">
+                        ✓ 已加微信
+                    </button>
+                    <button class="btn btn-secondary" onclick="showWifiPassword()">
+                        📶 显示 WiFi 密码
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 地图模块 -->
+            <div id="mapModule" class="hidden">
+                <div class="map-container" id="mapContainer">
+                    地图加载中...
+                </div>
+            </div>
+        </div>
+        
+        <!-- 特色服务 -->
+        <div class="features-section" id="featuresSection">
+            <div class="section-title">✨ 特色服务</div>
+            <div class="features-grid" id="featuresGrid">
+                <!-- 动态加载 -->
+            </div>
+        </div>
+        
+        <!-- 评价墙 -->
+        <div class="reviews-section" id="reviewsSection">
+            <div class="reviews-header">
+                <div class="section-title">💬 顾客评价</div>
+                <div class="reviews-count" id="reviewsCount"></div>
+            </div>
+            <div id="reviewsList">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- WiFi 密码弹窗 -->
+    <div class="modal" id="wifiModal">
+        <div class="modal-content">
+            <h3>📶 WiFi 信息</h3>
+            <div class="wifi-info">
+                <div class="wifi-ssid" id="wifiSsid"></div>
+                <div class="wifi-password" id="wifiPassword"></div>
+            </div>
+            <button class="btn btn-primary" onclick="closeModal()">知道了</button>
+        </div>
+    </div>
+    
+    <!-- 分享弹窗 -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <h3>📤 分享给朋友</h3>
+            <div class="share-grid">
+                <div class="share-item" onclick="shareToWechat()">
+                    <div class="share-icon share-wechat">💬</div>
+                    <div class="share-label">微信好友</div>
+                </div>
+                <div class="share-item" onclick="shareToMoments()">
+                    <div class="share-icon share-moments">📱</div>
+                    <div class="share-label">朋友圈</div>
+                </div>
+                <div class="share-item" onclick="shareToQQ()">
+                    <div class="share-icon share-qq">🐧</div>
+                    <div class="share-label">QQ 好友</div>
+                </div>
+                <div class="share-item" onclick="copyLink()">
+                    <div class="share-icon share-copy">🔗</div>
+                    <div class="share-label">复制链接</div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" onclick="closeShareModal()" style="margin-top: 20px; width: 100%;">取消</button>
+        </div>
+    </div>
+    
+    <script>
+        // 配置 - 自动检测当前访问地址
+        const currentHost = window.location.hostname || 'localhost';
+        const API_BASE = `http://${currentHost}:3000/api`;
+        const SHOP_ID = 1; // DEMO 店铺 ID
+        
+        // 特色服务配置（可在数据库中添加字段控制显示）
+        const FEATURES = [
+            { icon: '📶', name: '免费 WiFi' },
+            { icon: '🅿️', name: '免费停车' },
+            { icon: '🎵', name: '音乐现场' },
+            { icon: '🎂', name: '生日派对' },
+            { icon: '💳', name: '会员积分' },
+            { icon: '📦', name: '外卖配送' }
+        ];
+        
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            loadShopInfo();
+            loadFeatures();
+            loadReviews();
+            recordVisit('view');
+        });
+        
+        // 加载店铺信息
+        async function loadShopInfo() {
+            try {
+                const response = await fetch(`${API_BASE}/shop/${SHOP_ID}`);
+                const shop = await response.json();
+                
+                if (shop.error) {
+                    showError(shop.error);
+                    return;
+                }
+                
+                // 填充基本信息
+                document.getElementById('shopName').textContent = shop.name;
+                document.getElementById('shopDescription').textContent = shop.description;
+                document.getElementById('businessHours').textContent = parseBusinessHours(shop.business_hours);
+                document.getElementById('address').textContent = shop.address;
+                document.getElementById('phone').textContent = shop.phone;
+                
+                // 营业状态
+                updateBusinessStatus(shop.business_hours);
+                
+                // 条件显示模块
+                if (shop.show_wechat_button && shop.show_wifi_button) {
+                    document.getElementById('wifiModule').classList.remove('hidden');
+                }
+                
+                if (shop.show_map && shop.latitude && shop.longitude) {
+                    document.getElementById('mapModule').classList.remove('hidden');
+                    loadMap(shop.latitude, shop.longitude);
+                }
+                
+                if (!shop.show_reviews) {
+                    document.getElementById('reviewsSection').classList.add('hidden');
+                }
+                
+            } catch (error) {
+                showError('加载失败，请刷新重试');
+                console.error(error);
+            }
+        }
+        
+        // 更新营业状态
+        function updateBusinessStatus(businessHoursJson) {
+            try {
+                const hours = JSON.parse(businessHoursJson);
+                const now = new Date();
+                const currentTime = now.getHours() * 60 + now.getMinutes();
+                
+                const [openHour, openMin] = hours.open.split(':').map(Number);
+                const [closeHour, closeMin] = hours.close.split(':').map(Number);
+                
+                const openTime = openHour * 60 + openMin;
+                const closeTime = closeHour * 60 + closeMin;
+                
+                const isOpen = currentTime >= openTime && currentTime < closeTime;
+                const statusEl = document.getElementById('businessStatus');
+                
+                if (isOpen) {
+                    statusEl.className = 'business-status status-open';
+                    statusEl.textContent = '🟢 营业中';
+                } else {
+                    statusEl.className = 'business-status status-closed';
+                    statusEl.textContent = `🔴 已打烊 (${hours.open}-${hours.close})`;
+                }
+                
+            } catch (e) {
+                console.error('营业状态解析失败:', e);
+            }
+        }
+        
+        // 加载特色服务
+        function loadFeatures() {
+            const featuresGrid = document.getElementById('featuresGrid');
+            featuresGrid.innerHTML = FEATURES.map(f => `
+                <div class="feature-item">
+                    <div class="feature-icon">${f.icon}</div>
+                    <div>${f.name}</div>
+                </div>
+            `).join('');
+        }
+        
+        // 加载评价
+        async function loadReviews() {
+            try {
+                const response = await fetch(`${API_BASE}/shop/${SHOP_ID}/reviews`);
+                const reviews = await response.json();
+                
+                document.getElementById('reviewsCount').textContent = `${reviews.length}条评价`;
+                
+                const reviewsList = document.getElementById('reviewsList');
+                
+                if (reviews.length === 0) {
+                    reviewsList.innerHTML = '<div class="loading">暂无评价</div>';
+                    return;
+                }
+                
+                reviewsList.innerHTML = reviews.map((review, index) => {
+                    const timeAgo = getTimeAgo(review.created_at);
+                    const tags = index % 3 === 0 ? '<span class="review-tag">常客</span>' : 
+                                 index % 3 === 1 ? '<span class="review-tag">第一次来</span>' : '';
+                    
+                    return `
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="review-meta">
+                                    <span class="review-name">${escapeHtml(review.customer_name)}</span>
+                                    ${tags}
+                                    <span class="review-time">${timeAgo}</span>
+                                </div>
+                                <span class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
+                            </div>
+                            <div class="review-content">${escapeHtml(review.content)}</div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('加载评价失败:', error);
+            }
+        }
+        
+        // 获取相对时间
+        function getTimeAgo(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 60) return `${minutes}分钟前`;
+            if (hours < 24) return `${hours}小时前`;
+            if (days < 7) return `${days}天前`;
+            return date.toLocaleDateString('zh-CN');
+        }
+        
+        // 确认加微信
+        function confirmWechat() {
+            recordVisit('click_wechat');
+            alert('已记录！感谢您的关注～');
+        }
+        
+        // 显示 WiFi 密码
+        async function showWifiPassword() {
+            try {
+                const response = await fetch(`${API_BASE}/shop/${SHOP_ID}/wifi`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'confirm' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                document.getElementById('wifiSsid').textContent = `名称：${data.ssid}`;
+                document.getElementById('wifiPassword').textContent = data.password;
+                document.getElementById('wifiModal').classList.add('show');
+                
+                recordVisit('click_wifi');
+                
+            } catch (error) {
+                alert('获取 WiFi 信息失败');
+                console.error(error);
+            }
+        }
+        
+        // 显示分享弹窗
+        function showShareModal() {
+            document.getElementById('shareModal').classList.add('show');
+        }
+        
+        // 关闭分享弹窗
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('show');
+        }
+        
+        // 分享到微信
+        function shareToWechat() {
+            alert('提示：在微信中打开此页面，点击右上角「···」分享给好友');
+            closeShareModal();
+        }
+        
+        // 分享到朋友圈
+        function shareToMoments() {
+            alert('提示：在微信中打开此页面，点击右上角「···」分享到朋友圈');
+            closeShareModal();
+        }
+        
+        // 分享到 QQ
+        function shareToQQ() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.getElementById('shopName').textContent);
+            window.open(`https://connect.qq.com/widget/shareqq/index.html?url=${url}&title=${title}`, '_blank');
+            closeShareModal();
+        }
+        
+        // 复制链接
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('链接已复制！');
+            }).catch(() => {
+                prompt('请手动复制链接：', window.location.href);
+            });
+            closeShareModal();
+        }
+        
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('wifiModal').classList.remove('show');
+        }
+        
+        // 加载地图（DEMO 用静态图）
+        function loadMap(lat, lng) {
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 40px;">🗺️</div>
+                    <div style="margin-top: 10px;">地图位置：${lat}, ${lng}</div>
+                    <a href="https://uri.amap.com/marker?position=${lng},${lat}" 
+                       target="_blank" 
+                       style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; text-decoration: none; border-radius: 6px;">
+                        打开导航
+                    </a>
+                </div>
+            `;
+        }
+        
+        // 记录访问
+        async function recordVisit(action) {
+            try {
+                await fetch(`${API_BASE}/shop/${SHOP_ID}/visit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+            } catch (error) {
+                console.error('记录访问失败:', error);
+            }
+        }
+        
+        // 解析营业时间
+        function parseBusinessHours(hoursJson) {
+            try {
+                const hours = JSON.parse(hoursJson);
+                return hours.description || `${hours.open}-${hours.close}`;
+            } catch {
+                return hoursJson;
+            }
+        }
+        
+        // HTML 转义
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const container = document.querySelector('.container');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            container.insertBefore(errorDiv, container.firstChild);
+        }
+    </script>
+</body>
+</html>
