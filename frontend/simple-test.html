@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>简单API测试</title>
+    <script>
+        function testAPI(url) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `测试 ${url}...`;
+            
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    resultDiv.innerHTML = `✅ ${url} 成功<br>${JSON.stringify(data, null, 2)}`;
+                    resultDiv.style.color = 'green';
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `❌ ${url} 失败<br>错误: ${error.message}`;
+                    resultDiv.style.color = 'red';
+                    console.error('详细错误:', error);
+                });
+        }
+        
+        function testAll() {
+            const urls = [
+                'http://localhost:3007/health',
+                'http://47.110.156.11:3007/health',
+                'http://127.0.0.1:3007/health'
+            ];
+            
+            const resultsDiv = document.getElementById('allResults');
+            resultsDiv.innerHTML = '';
+            
+            urls.forEach(url => {
+                const testDiv = document.createElement('div');
+                testDiv.id = 'test-' + url;
+                testDiv.innerHTML = `测试 ${url}...`;
+                resultsDiv.appendChild(testDiv);
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        testDiv.innerHTML = `✅ ${url} - 成功`;
+                        testDiv.style.color = 'green';
+                    })
+                    .catch(error => {
+                        testDiv.innerHTML = `❌ ${url} - 失败: ${error.message}`;
+                        testDiv.style.color = 'red';
+                    });
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>简单API连接测试</h1>
+    
+    <div>
+        <h2>单个测试</h2>
+        <button onclick="testAPI('http://localhost:3007/health')">测试 localhost:3007</button>
+        <button onclick="testAPI('http://47.110.156.11:3007/health')">测试 47.110.156.11:3007</button>
+        <button onclick="testAPI('http://127.0.0.1:3007/health')">测试 127.0.0.1:3007</button>
+        <div id="result" style="margin: 20px; padding: 10px; border: 1px solid #ccc; min-height: 50px;"></div>
+    </div>
+    
+    <div>
+        <h2>批量测试</h2>
+        <button onclick="testAll()">测试所有地址</button>
+        <div id="allResults" style="margin: 20px;"></div>
+    </div>
+    
+    <div>
+        <h2>浏览器信息</h2>
+        <pre id="browserInfo"></pre>
+    </div>
+    
+    <script>
+        // 显示浏览器信息
+        document.getElementById('browserInfo').textContent = 
+            `URL: ${window.location.href}
+协议: ${window.location.protocol}
+主机: ${window.location.host}
+用户代理: ${navigator.userAgent}
+在线状态: ${navigator.onLine ? '在线' : '离线'}`;
+    </script>
+</body>
+</html>

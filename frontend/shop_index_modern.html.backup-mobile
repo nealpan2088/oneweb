@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旺财咖啡馆 - 云信旺店</title>
+    <meta name="description" content="实体店铺营销小程序">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            max-width: 768px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* 头部 - 优化版 */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shop-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .shop-description {
+            font-size: 15px;
+            opacity: 0.95;
+            margin-bottom: 16px;
+            line-height: 1.6;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-top: 8px;
+        }
+        
+        /* 信息卡片 - 优化版 */
+        .info-card {
+            padding: 18px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+        
+        .info-card:hover {
+            background-color: #fafafa;
+        }
+        
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-title i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            color: #667eea;
+        }
+        
+        .info-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            padding-left: 34px;
+        }
+        
+        /* 功能按钮 - 优化版 */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            background: linear-gradient(to bottom, #f9f9f9, #fff);
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(102, 126, 234, 0.2);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        .action-btn.wifi {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            box-shadow: 0 4px 6px rgba(72, 187, 120, 0.2);
+        }
+        
+        .action-btn.wifi:hover {
+            box-shadow: 0 6px 12px rgba(72, 187, 120, 0.3);
+        }
+        
+        /* 按钮图标 */
+        .btn-icon {
+            font-size: 18px;
+        }
+        
+        /* 评价区域 - 优化版 */
+        .reviews-section {
+            padding: 20px;
+        }
+        
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .reviews-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .review-count {
+            font-size: 14px;
+            color: #666;
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .review-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+        
+        .review-info {
+            flex: 1;
+            min-width: 0; /* 防止内容溢出 */
+        }
+        
+        .review-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #444;
+            font-size: 15px;
+        }
+        
+        .review-rating {
+            color: #ffc107;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+        
+        .star-empty {
+            color: #e0e0e0;
+        }
+        
+        .review-content {
+            color: #555;
+            line-height: 1.6;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        
+        .review-date {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .load-more-btn {
+            width: 100%;
+            padding: 12px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        
+        .load-more-btn:hover {
+            background: #f0f0f0;
+            color: #444;
+        }
+        
+        /* 加载状态 - 优化版 */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border-radius: 12px;
+            margin: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(102, 126, 234, 0.1);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .loading-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .loading-subtext {
+            font-size: 14px;
+            color: #888;
+            max-width: 300px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .loading-dots {
+            display: inline-block;
+            width: 20px;
+            text-align: left;
+        }
+        
+        .loading-dots::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 微交互动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        /* 应用动画 */
+        .info-card {
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        .review-card {
+            animation: slideIn 0.4s ease forwards;
+        }
+        
+        .action-btn:hover .btn-icon {
+            animation: bounce 0.5s ease;
+        }
+        
+        .status-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        /* 错误状态 */
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        /* 响应式 - 优化版 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .shop-name {
+                font-size: 22px;
+            }
+            
+            .shop-description {
+                font-size: 14px;
+                max-width: 100%;
+            }
+            
+            .info-card {
+                padding: 16px;
+            }
+            
+            .info-content {
+                padding-left: 30px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 16px;
+            }
+            
+            .action-btn {
+                min-height: 50px;
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            .shop-name {
+                font-size: 20px;
+            }
+            
+            .reviews-section {
+                padding: 16px;
+            }
+            
+            .review-card {
+                padding: 16px;
+                margin-bottom: 12px;
+            }
+            
+            .review-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                margin-right: 12px;
+            }
+            
+            /* 确保触摸目标足够大 */
+            button, .action-btn, .load-more-btn {
+                min-height: 44px;
+            }
+            
+            .loading {
+                padding: 40px 15px;
+                margin: 10px;
+            }
+            
+            .loading-spinner {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1 class="shop-name" id="shopName">加载中...</h1>
+            <p class="shop-description" id="shopDescription"></p>
+            <div class="status-badge" id="businessStatus">营业状态检测中...</div>
+        </div>
+        
+        <!-- 加载状态 - 优化版 -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">正在加载店铺信息<span class="loading-dots"></span></p>
+            <p class="loading-subtext">请稍候，我们正在为您准备最佳体验</p>
+        </div>
+        
+        <!-- 错误提示 -->
+        <div class="error hidden" id="errorMessage"></div>
+        
+        <!-- 店铺信息 -->
+        <div class="info-content hidden" id="shopContent">
+            <!-- 营业时间 -->
+            <div class="info-card">
+                <div class="info-title">
+                    <i>🕒</i> 营业时间
+                </div>
+                <div class="info-content" id="businessHours"></div>
+            </div>
+            
+            <!-- 地址 -->
+            <div class="info-card">
+                <div class="info-title">
+                    <i>📍</i> 店铺地址
+                </div>
+                <div class="info-content" id="address"></div>
+            </div>
+            
+            <!-- 联系方式 -->
+            <div class="info-card">
+                <div class="info-title">
+                    <i>📞</i> 联系方式
+                </div>
+                <div class="info-content" id="phone"></div>
+            </div>
+            
+            <!-- 功能按钮 -->
+            <div class="action-buttons">
+                <button class="action-btn wechat" onclick="showWechatInfo()">
+                    <i>💬</i> 联系微信
+                </button>
+                <button class="action-btn wifi" onclick="showWifiPassword()">
+                    <i>📶</i> WiFi密码
+                </button>
+            </div>
+            
+            <!-- 评价区域 -->
+            <div class="reviews-section">
+                <div class="reviews-header">
+                    <div class="reviews-title">
+                        <i>⭐</i> 顾客评价
+                    </div>
+                    <div class="review-count" id="reviewCount">0条</div>
+                </div>
+                <div id="reviewsList"></div>
+                <button class="load-more-btn hidden" id="loadMoreBtn" onclick="loadMoreReviews()">
+                    加载更多评价
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入API配置和服务 -->
+    <script src="./src/config/api.js"></script>
+    <script src="./src/services/apiClient.js"></script>
+    <script src="./src/services/shopService.js"></script>
+    
+    <script>
+        // 获取服务实例
+        const shopService = window.getShopService();
+        
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await loadPageData();
+            } catch (error) {
+                showError('页面加载失败: ' + error.message);
+            }
+        });
+        
+        // 加载页面数据
+        async function loadPageData() {
+            try {
+                // 并行加载数据
+                const [shopInfo, reviews, stats] = await Promise.all([
+                    shopService.getShopInfo(),
+                    shopService.getReviews(),
+                    shopService.getStats()
+                ]);
+                
+                // 更新页面
+                updateShopInfo(shopInfo);
+                updateReviews(reviews);
+                updateStats(stats);
+                
+                // 记录访问
+                await shopService.recordVisit('view');
+                
+                // 隐藏加载状态，显示内容
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('shopContent').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                
+                // 尝试使用旧API
+                try {
+                    await loadWithLegacyAPI();
+                } catch (legacyError) {
+                    showError('无法加载数据，请刷新页面重试');
+                }
+            }
+        }
+        
+        // 使用旧API加载（兼容性）
+        async function loadWithLegacyAPI() {
+            console.log('尝试使用旧API加载...');
+            
+            const [shopInfo, reviews] = await Promise.all([
+                shopService.getShopInfoLegacy(),
+                shopService.getReviewsLegacy()
+            ]);
+            
+            if (shopInfo.error) {
+                throw new Error(shopInfo.error);
+            }
+            
+            updateShopInfo(shopInfo);
+            updateReviews(reviews);
+            
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('shopContent').classList.remove('hidden');
+        }
+        
+        // 更新店铺信息
+        function updateShopInfo(shop) {
+            document.getElementById('shopName').textContent = shop.name || '旺财咖啡馆';
+            document.getElementById('shopDescription').textContent = shop.description || '一家温馨的社区咖啡馆';
+            document.getElementById('businessHours').textContent = parseBusinessHours(shop.business_hours);
+            
+            // 地址 - 添加一键导航功能
+            const addressElement = document.getElementById('address');
+            addressElement.textContent = shop.address || '地址信息加载中';
+            addressElement.className = 'info-content clickable-address';
+            addressElement.dataset.address = shop.address || '';
+            addressElement.title = '点击一键导航';
+            
+            // 电话 - 添加一键拨号功能
+            const phoneElement = document.getElementById('phone');
+            phoneElement.textContent = shop.phone || '暂无联系方式';
+            phoneElement.className = 'info-content clickable-phone';
+            phoneElement.dataset.phone = shop.phone || '';
+            phoneElement.title = '点击一键拨号';
+            
+            // 存储店铺信息到全局变量，供增强模块使用
+            window.shopData = shop;
+            window.currentShop = shop;
+            
+            // 初始化移动端增强功能（如果模块已加载）
+            setTimeout(() => {
+                if (window.mobileEnhancer) {
+                    window.mobileEnhancer.shopInfo = shop;
+                    window.mobileEnhancer.enhancePhoneFunction();
+                    window.mobileEnhancer.enhanceAddressFunction();
+                    window.mobileEnhancer.enhanceBusinessHours();
+                }
+            }, 100);
+            
+            // 更新营业状态
+            updateBusinessStatus(shop.business_hours);
+        }
+        
+        // 解析营业时间
+        function parseBusinessHours(businessHours) {
+            if (!businessHours) return '09:00 - 22:00';
+            
+            try {
+                const hours = JSON.parse(businessHours);
+                if (hours.description) return hours.description;
+                if (hours.open && hours.close) return `${hours.open} - ${hours.close}`;
+            } catch (e) {
+                // 如果不是JSON，直接显示
+            }
+            
+            return businessHours;
+        }
+        
+        // 更新营业状态
+        function updateBusinessStatus(businessHours) {
+            const statusElement = document.getElementById('businessStatus');
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            
+            try {
+                const hours = JSON.parse(businessHours);
+                if (hours.open && hours.close) {
+                    const [openHour, openMinute] = hours.open.split(':').map(Number);
+                    const [closeHour, closeMinute] = hours.close.split(':').map(Number);
+                    
+                    const currentTime = currentHour * 60 + currentMinute;
+                    const openTime = openHour * 60 + openMinute;
+                    const closeTime = closeHour * 60 + closeMinute;
+                    
+                    if (currentTime >= openTime && currentTime <= closeTime) {
+                        statusElement.textContent = '🟢 营业中';
+                        statusElement.style.background = 'rgba(72, 187, 120, 0.2)';
+                    } else {
+                        statusElement.textContent = '🔴 已打烊';
+                        statusElement.style.background = 'rgba(245, 101, 101, 0.2)';
+                    }
+                    return;
+                }
+            } catch (e) {
+                // 解析失败
+            }
+            
+            // 默认逻辑
+            if (currentHour >= 9 && currentHour < 22) {
+                statusElement.textContent = '🟢 营业中';
+                statusElement.style.background = 'rgba(72, 187, 120, 0.2)';
+            } else {
+                statusElement.textContent = '🔴 已打烊';
+                statusElement.style.background = 'rgba(245, 101, 101, 0.2)';
+            }
+        }
+        
+        // 更新评价 - 优化版
+        let currentReviews = [];
+        let reviewPage = 1;
+        const reviewsPerPage = 5;
+        
+        function updateReviews(reviewsData) {
+            const reviewsList = document.getElementById('reviewsList');
+            const reviewCount = document.getElementById('reviewCount');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            
+            let reviews = reviewsData;
+            if (reviewsData && reviewsData.items) {
+                reviews = reviewsData.items;
+                reviewCount.textContent = `${reviewsData.pagination?.total || reviews.length}条`;
+            } else {
+                reviewCount.textContent = `${reviews.length}条`;
+            }
+            
+            // 保存所有评价
+            currentReviews = reviews || [];
+            reviewPage = 1;
+            
+            if (!currentReviews || currentReviews.length === 0) {
+                reviewsList.innerHTML = '<div class="review-card"><p style="text-align: center; color: #666; padding: 20px;">暂无评价，快来成为第一个评论者吧！</p></div>';
+                loadMoreBtn.classList.add('hidden');
+                return;
+            }
+            
+            // 显示第一页评价
+            displayReviewsPage(1);
+            
+            // 如果有更多评价，显示加载更多按钮
+            if (currentReviews.length > reviewsPerPage) {
+                loadMoreBtn.classList.remove('hidden');
+            } else {
+                loadMoreBtn.classList.add('hidden');
+            }
+        }
+        
+        // 显示指定页的评价
+        function displayReviewsPage(page) {
+            const reviewsList = document.getElementById('reviewsList');
+            const startIndex = (page - 1) * reviewsPerPage;
+            const endIndex = startIndex + reviewsPerPage;
+            const pageReviews = currentReviews.slice(startIndex, endIndex);
+            
+            if (page === 1) {
+                // 第一页，清空重新显示
+                reviewsList.innerHTML = '';
+            }
+            
+            if (pageReviews.length === 0) {
+                if (page === 1) {
+                    reviewsList.innerHTML = '<div class="review-card"><p style="text-align: center; color: #666; padding: 20px;">暂无评价</p></div>';
+                }
+                return;
+            }
+            
+            // 添加新评价
+            pageReviews.forEach((review, index) => {
+                const rating = review.rating || 5;
+                const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+                const starHtml = stars.split('').map((star, i) => 
+                    `<span class="${star === '☆' ? 'star-empty' : ''}">${star}</span>`
+                ).join('');
+                
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'review-card';
+                reviewElement.style.animationDelay = `${index * 0.05}s`;
+                reviewElement.innerHTML = `
+                    <div class="review-header">
+                        <div class="review-avatar">
+                            ${review.customer_name?.charAt(0) || '客'}
+                        </div>
+                        <div class="review-info">
+                            <div class="review-name">${review.customer_name || '匿名顾客'}</div>
+                            <div class="review-rating">${starHtml}</div>
+                        </div>
+                    </div>
+                    <div class="review-content">${review.content || '暂无评价内容'}</div>
+                    <div class="review-date">
+                        <span>📅</span> ${formatDate(review.created_at)}
+                    </div>
+                `;
+                reviewsList.appendChild(reviewElement);
+            });
+        }
+        
+        // 加载更多评价
+        function loadMoreReviews() {
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const totalPages = Math.ceil(currentReviews.length / reviewsPerPage);
+            
+            reviewPage++;
+            
+            if (reviewPage <= totalPages) {
+                displayReviewsPage(reviewPage);
+                
+                // 如果是最后一页，隐藏按钮
+                if (reviewPage >= totalPages) {
+                    loadMoreBtn.textContent = '没有更多评价了';
+                    loadMoreBtn.disabled = true;
+                    setTimeout(() => {
+                        loadMoreBtn.classList.add('hidden');
+                    }, 2000);
+                }
+            }
+        }
+        
+        // 更新统计
+        function updateStats(stats) {
+            // 可以在这里显示统计信息
+            console.log('店铺统计:', stats);
+        }
+        
+        // WiFi密码功能
+        async function showWifiPassword() {
+            try {
+                const wifiInfo = await shopService.getWifiInfo();
+                if (wifiInfo && wifiInfo.password) {
+                    alert(`📶 WiFi信息\n\nWiFi名称: ${wifiInfo.ssid || 'WangCafe_Guest'}\nWiFi密码: ${wifiInfo.password}\n\n请妥善保管密码，勿外泄`);
+                    await shopService.recordVisit('click_wifi');
+                } else {
+                    // 如果API失败，显示默认信息
+                    alert('📶 WiFi信息\n\nWiFi名称: WangCafe_Guest\nWiFi密码: 88888888\n\n（默认信息，实际请咨询店员）');
+                }
+            } catch (error) {
+                console.error('获取WiFi信息失败:', error);
+                // 显示默认信息
+                alert('📶 WiFi信息\n\nWiFi名称: WangCafe_Guest\nWiFi密码: 88888888\n\n（默认信息，实际请咨询店员）');
+            }
+        }
+        
+        // 微信信息功能
+        async function showWechatInfo() {
+            try {
+                // 获取店铺信息
+                const shopInfo = await shopService.getShopInfo();
+                
+                if (shopInfo && shopInfo.wechat_id) {
+                    // 如果有微信ID，显示联系信息
+                    const wechatId = shopInfo.wechat_id;
+                    const shopName = shopInfo.name || '本店';
+                    
+                    // 创建更友好的微信提示
+                    const message = `💬 联系${shopName}微信\n\n` +
+                                   `微信号: ${wechatId}\n\n` +
+                                   `操作建议:\n` +
+                                   `1. 打开微信 → 添加朋友\n` +
+                                   `2. 搜索微信号: ${wechatId}\n` +
+                                   `3. 添加后即可联系\n\n` +
+                                   `添加时请备注: "来自店铺小程序"`;
+                    
+                    alert(message);
+                    
+                    // 记录微信访问
+                    await shopService.recordVisit('click_wechat');
+                    
+                    // 可选：提供复制功能
+                    if (confirm('是否要复制微信号到剪贴板？')) {
+                        navigator.clipboard.writeText(wechatId)
+                            .then(() => alert('微信号已复制到剪贴板！'))
+                            .catch(() => console.log('复制失败，请手动复制'));
+                    }
+                } else {
+                    // 如果没有微信ID，显示默认联系信息
+                    const message = `💬 联系店铺微信\n\n` +
+                                   `微信号: WangCafe_Service\n\n` +
+                                   `操作步骤:\n` +
+                                   `1. 打开微信 → 添加朋友\n` +
+                                   `2. 搜索微信号: WangCafe_Service\n` +
+                                   `3. 添加后即可联系客服\n\n` +
+                                   `添加时请备注: "来自店铺小程序"`;
+                    
+                    alert(message);
+                }
+            } catch (error) {
+                console.error('显示微信信息失败:', error);
+                
+                // 错误时显示友好的默认信息
+                alert(`💬 联系店铺微信\n\n` +
+                      `微信号: WangCafe_Service\n\n` +
+                      `打开微信搜索添加即可联系客服\n` +
+                      `添加时请备注: "来自店铺小程序"`);
+            }
+        }
+        
+        // 格式化日期
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-CN');
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        // 行业图标增强：更新店铺标题显示
+        function enhanceShopTitleWithIcon(shopInfo) {
+            const shopNameElement = document.getElementById('shopName');
+            if (!shopNameElement) return;
+            
+            // 获取行业类型（从店铺信息或默认）
+            const industry = shopInfo.industry || 
+                           (shopInfo.description && shopInfo.description.includes('咖啡') ? '咖啡馆' : '零售店');
+            
+            // 使用行业图标库更新标题
+            if (window.IndustryIcons) {
+                window.IndustryIcons.updateShopTitle(shopNameElement, industry);
+            } else {
+                // 备用方案：直接显示店铺名称
+                shopNameElement.textContent = shopInfo.name;
+            }
+        }
+        
+        // 修改原有的更新店铺信息函数
+        const originalUpdateShopInfo = window.updateShopInfo;
+        window.updateShopInfo = function(shopInfo) {
+            // 调用原始函数
+            if (originalUpdateShopInfo) {
+                originalUpdateShopInfo(shopInfo);
+            }
+            
+            // 增强：添加行业图标
+            enhanceShopTitleWithIcon(shopInfo);
+        };
+    </script>
+    
+    <!-- 引入移动端增强功能 -->
+    <link rel="stylesheet" href="./src/styles/mobile-enhancements.css">
+    <script src="./src/utils/mobile-enhancements.js" defer></script>
+    
+    <!-- 引入行业图标库 -->
+    <script>
+        // 内联行业图标库（简化版）
+        const IndustryIcons = {
+            icons: {
+                '咖啡馆': { emoji: '☕', color: '#8B4513' },
+                '餐厅': { emoji: '🍽️', color: '#DC143C' },
+                '零售店': { emoji: '🛍️', color: '#4361EE' },
+                '美容院': { emoji: '💇', color: '#FF69B4' },
+                '健身房': { emoji: '💪', color: '#228B22' },
+                '维修店': { emoji: '🔧', color: '#696969' },
+                'default': { emoji: '🏢', color: '#333333' }
+            },
+            
+            getIconInfo: function(industry) {
+                return this.icons[industry] || this.icons.default;
+            },
+            
+            updateShopTitle: function(shopNameElement, industry) {
+                const iconInfo = this.getIconInfo(industry);
+                const originalText = shopNameElement.textContent;
+                
+                // 创建新标题结构
+                const wrapper = document.createElement('div');
+                wrapper.className = 'shop-title-with-icon';
+                wrapper.style.display = 'flex';
+                wrapper.style.alignItems = 'center';
+                wrapper.style.gap = '12px';
+                wrapper.style.justifyContent = 'center';
+                
+                // 创建图标
+                const icon = document.createElement('span');
+                icon.className = 'industry-icon';
+                icon.textContent = iconInfo.emoji;
+                icon.style.color = iconInfo.color;
+                icon.style.fontSize = '1.8em';
+                icon.style.width = '50px';
+                icon.style.height = '50px';
+                icon.style.display = 'flex';
+                icon.style.alignItems = 'center';
+                icon.style.justifyContent = 'center';
+                icon.style.borderRadius = '10px';
+                icon.style.background = 'rgba(255,255,255,0.2)';
+                icon.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
+                
+                // 创建文本
+                const text = document.createElement('span');
+                text.className = 'shop-name-text';
+                text.textContent = originalText;
+                text.style.fontSize = '1.8em';
+                text.style.fontWeight = '700';
+                text.style.color = 'white';
+                text.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
+                
+                // 组装
+                wrapper.appendChild(icon);
+                wrapper.appendChild(text);
+                
+                // 替换原元素
+                shopNameElement.parentNode.replaceChild(wrapper, shopNameElement);
+                
+                return wrapper;
+            }
+        };
+        
+        // 导出到全局
+        window.IndustryIcons = IndustryIcons;
+        
+        // 添加CSS样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .industry-icon {
+                transition: all 0.3s ease;
+            }
+            
+            .industry-icon:hover {
+                transform: scale(1.1);
+                background: rgba(255,255,255,0.3) !important;
+            }
+            
+            /* 手机端优化：保持水平排列，适当调整间距 */
+            @media (max-width: 768px) {
+                .shop-title-with-icon {
+                    flex-direction: row !important; /* 强制水平排列 */
+                    gap: 10px !important;
+                    flex-wrap: wrap; /* 如果空间不够可以换行 */
+                    justify-content: center;
+                    align-items: center;
+                }
+                
+                .shop-name-text {
+                    font-size: 1.5em !important;
+                    text-align: center;
+                }
+                
+                .industry-icon {
+                    font-size: 1.5em !important;
+                    width: 40px !important;
+                    height: 40px !important;
+                    flex-shrink: 0; /* 防止图标被压缩 */
+                }
+                
+                /* 超小屏幕（手机竖屏）的微调 */
+                @media (max-width: 480px) {
+                    .shop-title-with-icon {
+                        gap: 8px !important;
+                    }
+                    
+                    .shop-name-text {
+                        font-size: 1.3em !important;
+                    }
+                    
+                    .industry-icon {
+                        font-size: 1.3em !important;
+                        width: 35px !important;
+                        height: 35px !important;
+                    }
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

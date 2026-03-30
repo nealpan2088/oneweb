@@ -1,0 +1,1 @@
+../it-tech-service/js/path-resolver.js

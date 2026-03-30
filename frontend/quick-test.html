@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快速测试 - 公网访问</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .test-item {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: #f9f9f9;
+        }
+        
+        .test-title {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+        
+        .test-url {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #666;
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .loading {
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-test-all {
+            background: #48bb78;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .btn-test-all:hover {
+            background: #38a169;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 公网访问快速测试</h1>
+        <p>测试所有服务通过公网IP <strong>47.110.156.11</strong> 的访问情况</p>
+        
+        <div class="test-item">
+            <div class="test-title">测试 1: Nginx静态文件服务</div>
+            <div class="test-url">GET / (根目录)</div>
+            <button class="btn" onclick="testNginx()">测试</button>
+            <div class="result" id="nginxResult"></div>
+        </div>
+        
+        <div class="test-item">
+            <div class="test-title">测试 2: 旧版API健康检查</div>
+            <div class="test-url">GET /health</div>
+            <button class="btn" onclick="testOldApiHealth()">测试</button>
+            <div class="result" id="oldApiResult"></div>
+        </div>
+        
+        <div class="test-item">
+            <div class="test-title">测试 3: 新版API健康检查</div>
+            <div class="test-url">GET /health-new</div>
+            <button class="btn" onclick="testNewApiHealth()">测试</button>
+            <div class="result" id="newApiResult"></div>
+        </div>
+        
+        <div class="test-item">
+            <div class="test-title">测试 4: 旧版API店铺信息</div>
+            <div class="test-url">GET /api/shop/3</div>
+            <button class="btn" onclick="testOldApiShop()">测试</button>
+            <div class="result" id="oldApiShopResult"></div>
+        </div>
+        
+        <div class="test-item">
+            <div class="test-title">测试 5: 新版API店铺信息</div>
+            <div class="test-url">GET /api/v1/shops/3</div>
+            <button class="btn" onclick="testNewApiShop()">测试</button>
+            <div class="result" id="newApiShopResult"></div>
+        </div>
+        
+        <button class="btn btn-test-all" onclick="testAll()">✅ 一键测试所有服务</button>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #e8f4fd; border-radius: 6px;">
+            <h3>📋 测试结果说明</h3>
+            <p><strong>绿色</strong>: 测试通过，服务正常</p>
+            <p><strong>红色</strong>: 测试失败，需要检查服务</p>
+            <p><strong>所有测试都应通过</strong>，如果失败请检查：</p>
+            <ol>
+                <li>服务是否运行: <code>./service-manager.sh status</code></li>
+                <li>Nginx配置: <code>sudo nginx -t</code></li>
+                <li>防火墙设置: <code>sudo ufw status</code></li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // 显示结果
+        function showResult(elementId, success, message, data = null) {
+            const element = document.getElementById(elementId);
+            const status = success ? '✅ 成功' : '❌ 失败';
+            let content = `<strong>${status}</strong><br>${message}`;
+            
+            if (data) {
+                content += `<br><small>${JSON.stringify(data).substring(0, 200)}...</small>`;
+            }
+            
+            element.innerHTML = content;
+            element.className = 'result ' + (success ? 'success' : 'error');
+        }
+        
+        // 显示加载中
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '⏳ 测试中...';
+            element.className = 'result loading';
+        }
+        
+        // 测试Nginx
+        async function testNginx() {
+            showLoading('nginxResult');
+            try {
+                const response = await fetch('/', { signal: AbortSignal.timeout(5000) });
+                const success = response.ok;
+                showResult('nginxResult', success, 
+                    success ? 'Nginx服务正常' : `HTTP ${response.status}`);
+            } catch (error) {
+                showResult('nginxResult', false, error.message);
+            }
+        }
+        
+        // 测试旧版API健康
+        async function testOldApiHealth() {
+            showLoading('oldApiResult');
+            try {
+                const response = await fetch('/health', { signal: AbortSignal.timeout(5000) });
+                const data = await response.json();
+                const success = response.ok && data.status === 'ok';
+                showResult('oldApiResult', success, 
+                    success ? '旧版API健康检查通过' : `状态: ${data.status || 'error'}`);
+            } catch (error) {
+                showResult('oldApiResult', false, error.message);
+            }
+        }
+        
+        // 测试新版API健康
+        async function testNewApiHealth() {
+            showLoading('newApiResult');
+            try {
+                const response = await fetch('/health-new', { signal: AbortSignal.timeout(5000) });
+                const data = await response.json();
+                const success = response.ok && data.success === true;
+                showResult('newApiResult', success, 
+                    success ? '新版API健康检查通过' : '新版API检查失败');
+            } catch (error) {
+                showResult('newApiResult', false, error.message);
+            }
+        }
+        
+        // 测试旧版API店铺
+        async function testOldApiShop() {
+            showLoading('oldApiShopResult');
+            try {
+                const response = await fetch('/api/shop/3', { signal: AbortSignal.timeout(5000) });
+                const data = await response.json();
+                const success = response.ok && !data.error;
+                showResult('oldApiShopResult', success, 
+                    success ? `获取店铺: ${data.name}` : `错误: ${data.error || '未知'}`);
+            } catch (error) {
+                showResult('oldApiShopResult', false, error.message);
+            }
+        }
+        
+        // 测试新版API店铺
+        async function testNewApiShop() {
+            showLoading('newApiShopResult');
+            try {
+                const response = await fetch('/api/v1/shops/3', { signal: AbortSignal.timeout(5000) });
+                const data = await response.json();
+                const success = response.ok && data.success === true;
+                showResult('newApiShopResult', success, 
+                    success ? `获取店铺: ${data.data?.name || '成功'}` : '新版API调用失败');
+            } catch (error) {
+                showResult('newApiShopResult', false, error.message);
+            }
+        }
+        
+        // 一键测试所有
+        async function testAll() {
+            await testNginx();
+            await testOldApiHealth();
+            await testNewApiHealth();
+            await testOldApiShop();
+            await testNewApiShop();
+            
+            // 检查所有结果
+            const results = document.querySelectorAll('.result');
+            const allSuccess = Array.from(results).every(r => r.className.includes('success'));
+            
+            if (allSuccess) {
+                alert('🎉 所有测试通过！公网访问正常。');
+            } else {
+                alert('⚠️ 部分测试失败，请检查服务状态。');
+            }
+        }
+        
+        // 页面加载时自动运行一键测试
+        window.onload = function() {
+            setTimeout(testAll, 500);
+        };
+    </script>
+</body>
+</html>

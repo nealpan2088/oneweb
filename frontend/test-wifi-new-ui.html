@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新版WiFi密码交互测试</title>
+    <link rel="stylesheet" href="./src/styles/wifi-modal.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4361ee;
+            padding-bottom: 10px;
+        }
+        
+        .feature-section {
+            margin: 30px 0;
+            padding: 25px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            color: white;
+        }
+        
+        .feature-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .demo-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .test-btn {
+            background: #38a169;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .test-btn:hover {
+            background: #2f855a;
+        }
+        
+        .btn-primary {
+            background: #4361ee;
+        }
+        
+        .btn-primary:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .step-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .step-list li {
+            margin: 8px 0;
+        }
+        
+        .interaction-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid #e9ecef;
+        }
+        
+        .flow-step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #38a169;
+            color: white;
+            border-radius: 50%;
+            line-height: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .flow-step.active {
+            border-color: #38a169;
+            background: #f0fff4;
+        }
+        
+        .device-simulator {
+            background: #333;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            max-width: 375px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .device-screen {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+        }
+        
+        .screen-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .screen-button {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .comparison-table .better {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .comparison-table .worse {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📶 新版WiFi密码交互测试</h1>
+        
+        <div class="info-box">
+            <h3>🎯 功能概述</h3>
+            <p>改进WiFi密码交互：密码模糊处理，点击复制到剪贴板，提升安全性和用户体验。</p>
+        </div>
+        
+        <div class="feature-section">
+            <div class="feature-title">🚀 新版交互流程</div>
+            
+            <div class="interaction-flow">
+                <div class="flow-step active">
+                    <div class="flow-step-number">1</div>
+                    <div>点击WiFi按钮</div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div>确认已加微信</div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div>查看WiFi账号</div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div>点击复制密码</div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-step-number">5</div>
+                    <div>连接WiFi网络</div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🧪 功能测试</h2>
+            
+            <div class="demo-card">
+                <h3>测试新版WiFi弹窗</h3>
+                <p>点击按钮测试新的WiFi密码交互界面：</p>
+                
+                <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                    <button class="test-btn" onclick="testWifiModal()">
+                        <i>📶</i> 测试WiFi弹窗
+                    </button>
+                    
+                    <button class="test-btn btn-primary" onclick="testCopyFunction()">
+                        <i>📋</i> 测试复制功能
+                    </button>
+                    
+                    <button class="test-btn btn-secondary" onclick="testMobileView()">
+                        <i>📱</i> 移动端预览
+                    </button>
+                </div>
+                
+                <div class="info-box">
+                    <h4>测试说明：</h4>
+                    <ul class="step-list">
+                        <li><strong>WiFi弹窗</strong>: 显示WiFi信息，密码模糊处理</li>
+                        <li><strong>复制功能</strong>: 点击密码区域自动复制到剪贴板</li>
+                        <li><strong>连接指南</strong>: 提供详细的WiFi连接步骤</li>
+                        <li><strong>键盘支持</strong>: ESC键关闭，Enter键复制</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>📊 新旧版本对比</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>功能特性</th>
+                        <th>旧版本</th>
+                        <th>新版本</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>密码显示</td>
+                        <td class="worse">明文显示</td>
+                        <td class="better">模糊处理 (●●●●●●●●)</td>
+                    </tr>
+                    <tr>
+                        <td>复制操作</td>
+                        <td class="worse">手动复制</td>
+                        <td class="better">一键点击复制</td>
+                    </tr>
+                    <tr>
+                        <td>安全性</td>
+                        <td class="worse">低 - 密码直接暴露</td>
+                        <td class="better">高 - 密码不直接显示</td>
+                    </tr>
+                    <tr>
+                        <td>用户体验</td>
+                        <td class="worse">基础alert对话框</td>
+                        <td class="better">专业弹窗 + 连接指南</td>
+                    </tr>
+                    <tr>
+                        <td>移动端适配</td>
+                        <td class="worse">一般</td>
+                        <td class="better">优秀 - 触摸优化</td>
+                    </tr>
+                    <tr>
+                        <td>无障碍访问</td>
+                        <td class="worse">无特别优化</td>
+                        <td class="better">完整ARIA支持</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="device-simulator">
+            <div class="device-screen">
+                <div class="screen-content">
+                    <div style="text-align: center; font-weight: bold; color: #333; margin-bottom: 15px;">
+                        旺财咖啡馆
+                    </div>
+                    
+                    <div class="screen-button" onclick="testWifiModal()">
+                        📶 WiFi密码
+                    </div>
+                    
+                    <div style="font-size: 14px; color: #666; text-align: center; margin-top: 10px;">
+                        点击测试移动端交互
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🌐 实际页面测试</h2>
+            
+            <div class="info-box">
+                <p><strong>重要提示</strong>: 由于浏览器缓存，可能需要强制刷新页面</p>
+                <p><strong>强制刷新方法</strong>:</p>
+                <ol class="step-list">
+                    <li>按 <strong>Ctrl+F5</strong> 或 <strong>Ctrl+Shift+R</strong></li>
+                    <li>或打开开发者工具 (F12) → 网络 → 勾选"禁用缓存"</li>
+                    <li>或清除浏览器缓存后重新访问</li>
+                </ol>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin: 15px 0;">
+                <a href="/shop_index_modern_optimized.html" target="_blank">
+                    <button class="test-btn btn-primary">
+                        <i>📱</i> 测试优化版店铺
+                    </button>
+                </a>
+                
+                <a href="/shop_index_modern.html" target="_blank">
+                    <button class="test-btn">
+                        <i>🌐</i> 测试现代版店铺
+                    </button>
+                </a>
+                
+                <button class="test-btn btn-secondary" onclick="clearCacheGuide()">
+                    <i>🧹</i> 清除缓存指南
+                </button>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🔧 技术实现</h2>
+            
+            <div class="info-box">
+                <h4>核心文件:</h4>
+                <ul class="step-list">
+                    <li><code>src/styles/wifi-modal.css</code> - 弹窗样式 (8.2KB)</li>
+                    <li><code>src/utils/wifi-modal.js</code> - 弹窗逻辑 (10.7KB)</li>
+                    <li><code>shop_index_modern*.html</code> - 店铺页面集成</li>
+                </ul>
+                
+                <h4>主要特性:</h4>
+                <ul class="step-list">
+                    <li><strong>模块化设计</strong>: 独立组件，易于维护</li>
+                    <li><strong>响应式布局</strong>: 适配所有设备尺寸</li>
+                    <li><strong>优雅降级</strong>: 旧浏览器使用传统alert</li>
+                    <li><strong>完整ARIA</strong>: 无障碍访问支持</li>
+                    <li><strong>键盘导航</strong>: ESC关闭，Enter复制</li>
+                    <li><strong>暗色模式</strong>: 自动适配系统主题</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🎯 用户体验价值</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+                    <h4>🔒 安全性提升</h4>
+                    <p>密码不直接显示，防止旁观者窥视</p>
+                </div>
+                
+                <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
+                    <h4>⚡ 操作便捷</h4>
+                    <p>一键复制，简化用户操作步骤</p>
+                </div>
+                
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                    <h4>📱 移动友好</h4>
+                    <p>触摸优化，大点击区域</p>
+                </div>
+                
+                <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
+                    <h4>🎨 专业形象</h4>
+                    <p>精致UI，提升店铺专业感</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入WiFi弹窗模块（带版本控制） -->
+    <script src="./src/utils/wifi-modal.js?v=20260330_1057"></script>
+    
+    <script>
+        // 测试WiFi弹窗
+        function testWifiModal() {
+            if (window.showWifiModal) {
+                window.showWifiModal({
+                    ssid: 'WangCafe_Guest',
+                    password: '88888888'
+                }, (wasCopied) => {
+                    console.log('测试弹窗关闭，密码是否被复制:', wasCopied);
+                    alert(`测试完成！\n\n密码${wasCopied ? '已' : '未'}被复制到剪贴板。`);
+                });
+            } else {
+                alert('WiFi弹窗模块未加载，请检查控制台错误。');
+            }
+        }
+        
+        // 测试复制功能
+        async function testCopyFunction() {
+            const testText = '测试密码: 88888888';
+            
+            try {
+                await navigator.clipboard.writeText(testText);
+                alert('✅ 复制功能测试成功！\n\n测试文本已复制到剪贴板。');
+            } catch (error) {
+                // 降级方案
+                try {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = testText;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    document.body.appendChild(textarea);
+                    
+                    textarea.select();
+                    textarea.setSelectionRange(0, 99999);
+                    
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    
+                    if (successful) {
+                        alert('✅ 复制功能测试成功（使用降级方案）！');
+                    } else {
+                        alert('❌ 复制功能测试失败，请手动复制。');
+                    }
+                } catch (fallbackError) {
+                    alert('❌ 复制功能完全失败: ' + fallbackError.message);
+                }
+            }
+        }
+        
+        // 测试移动端视图
+        function testMobileView() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                alert('📱 您正在使用移动设备，可以直接测试WiFi弹窗的触摸交互。');
+                testWifiModal();
+            } else {
+                alert('💻 您正在使用桌面设备。\n\n要测试移动端效果：\n1. 按 F12 打开开发者工具\n2. 点击设备工具栏图标（📱）\n3. 选择手机设备（如 iPhone 12）\n4. 刷新页面测试');
+            }
+        }
+        
+        // 清除缓存指南
+        function clearCacheGuide() {
+            alert('🧹 清除浏览器缓存指南:\n\n1. 快捷键: Ctrl+F5 或 Ctrl+Shift+R\n2. 开发者工具: F12 → 网络 → 勾选"禁用缓存"\n3. 浏览器设置: 清除浏览数据 → 缓存文件\n4. 移动端: 关闭重新打开或清除应用数据');
+        }
+        
+        // 页面加载时显示当前时间
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            console.log(`新版WiFi交互测试页面加载时间: ${now.toLocaleString('zh-CN')}`);
+            console.log('WiFi弹窗模块状态:', window.showWifiModal ? '已加载' : '未加载');
+            
+            // 自动测试模块加载
+            setTimeout(() => {
+                if (!window.showWifiModal) {
+                    console.warn('WiFi弹窗模块未正确加载，请检查路径和缓存。');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

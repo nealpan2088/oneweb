@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API连接测试 - IT技术服务站</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4361ee;
+            padding-bottom: 10px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .test-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .test-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #dee2e6;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .success {
+            border-left: 4px solid #38a169;
+        }
+        
+        .error {
+            border-left: 4px solid #e53e3e;
+        }
+        
+        .warning {
+            border-left: 4px solid #d69e2e;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-online {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-offline {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>API连接测试</h1>
+        <p>测试IT技术服务站留言API的连接状态和功能。</p>
+        
+        <div class="test-section">
+            <h2>1. 测试API健康检查</h2>
+            <p>API地址: <code>http://47.110.156.11:3007/health</code></p>
+            <button class="test-btn" onclick="testHealth()">测试健康检查</button>
+            <div id="healthResult" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. 测试留言提交</h2>
+            <p>API地址: <code>http://47.110.156.11:3007/api/messages</code></p>
+            <button class="test-btn" onclick="testSubmitMessage()">测试提交留言</button>
+            <div id="submitResult" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. 测试留言查看</h2>
+            <p>API地址: <code>http://47.110.156.11:3007/api/messages?password=admin123</code></p>
+            <button class="test-btn" onclick="testGetMessages()">测试查看留言</button>
+            <div id="messagesResult" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>4. 前端API客户端测试</h2>
+            <p>测试前端JavaScript API客户端</p>
+            <button class="test-btn" onclick="testFrontendAPI()">测试前端API</button>
+            <div id="frontendResult" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>5. 综合状态</h2>
+            <div id="overallStatus">
+                <p>点击下方按钮进行综合测试：</p>
+                <button class="test-btn" onclick="runAllTests()">运行所有测试</button>
+                <div id="overallResult" class="result"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/api-backend.js"></script>
+    <script>
+        function setResult(elementId, content, className = '') {
+            const element = document.getElementById(elementId);
+            element.textContent = content;
+            element.className = 'result ' + className;
+        }
+        
+        async function testHealth() {
+            setResult('healthResult', '测试中...', 'warning');
+            
+            try {
+                const response = await fetch('http://47.110.156.11:3007/health');
+                const data = await response.json();
+                
+                setResult('healthResult', 
+                    `✅ 健康检查成功\n状态: ${data.status}\n时间: ${data.timestamp}`,
+                    'success'
+                );
+            } catch (error) {
+                setResult('healthResult',
+                    `❌ 健康检查失败\n错误: ${error.message}`,
+                    'error'
+                );
+            }
+        }
+        
+        async function testSubmitMessage() {
+            setResult('submitResult', '测试中...', 'warning');
+            
+            try {
+                const response = await fetch('http://47.110.156.11:3007/api/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: '测试用户',
+                        phone: '13800138000',
+                        content: 'API连接测试留言',
+                        serviceType: '系统测试',
+                        budget: '测试'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                setResult('submitResult',
+                    `✅ 留言提交成功\nID: ${data.data.id}\n姓名: ${data.data.name}\n消息: ${data.message}`,
+                    'success'
+                );
+            } catch (error) {
+                setResult('submitResult',
+                    `❌ 留言提交失败\n错误: ${error.message}`,
+                    'error'
+                );
+            }
+        }
+        
+        async function testGetMessages() {
+            setResult('messagesResult', '测试中...', 'warning');
+            
+            try {
+                const response = await fetch('http://47.110.156.11:3007/api/messages?password=admin123');
+                const data = await response.json();
+                
+                setResult('messagesResult',
+                    `✅ 获取留言成功\n留言数量: ${data.count}\n\n留言列表:\n${JSON.stringify(data.messages, null, 2)}`,
+                    'success'
+                );
+            } catch (error) {
+                setResult('messagesResult',
+                    `❌ 获取留言失败\n错误: ${error.message}`,
+                    'error'
+                );
+            }
+        }
+        
+        async function testFrontendAPI() {
+            setResult('frontendResult', '测试中...', 'warning');
+            
+            try {
+                // 测试前端API客户端
+                const api = new MessageAPI();
+                const isAvailable = await api.isAvailable();
+                
+                if (isAvailable) {
+                    // 测试提交留言
+                    const submitResult = await api.submitMessage({
+                        name: '前端测试用户',
+                        phone: '13900139000',
+                        content: '前端API客户端测试留言'
+                    });
+                    
+                    // 测试获取留言
+                    const messagesResult = await api.getAllMessages();
+                    
+                    setResult('frontendResult',
+                        `✅ 前端API测试成功\nAPI可用: ${isAvailable}\n提交结果: ${submitResult.success}\n留言数量: ${messagesResult.count}`,
+                        'success'
+                    );
+                } else {
+                    setResult('frontendResult',
+                        `⚠️ 前端API不可用\n尝试回退到localStorage模式`,
+                        'warning'
+                    );
+                }
+            } catch (error) {
+                setResult('frontendResult',
+                    `❌ 前端API测试失败\n错误: ${error.message}`,
+                    'error'
+                );
+            }
+        }
+        
+        async function runAllTests() {
+            setResult('overallResult', '开始运行所有测试...\n\n', 'warning');
+            
+            const results = [];
+            
+            // 测试1: 健康检查
+            try {
+                const healthResponse = await fetch('http://47.110.156.11:3007/health');
+                const healthData = await healthResponse.json();
+                results.push(`✅ 健康检查: 成功 (${healthData.status})`);
+            } catch (error) {
+                results.push(`❌ 健康检查: 失败 (${error.message})`);
+            }
+            
+            // 测试2: 留言提交
+            try {
+                const submitResponse = await fetch('http://47.110.156.11:3007/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: '综合测试用户',
+                        phone: '13700137000',
+                        content: '综合测试留言内容'
+                    })
+                });
+                const submitData = await submitResponse.json();
+                results.push(`✅ 留言提交: 成功 (ID: ${submitData.data.id})`);
+            } catch (error) {
+                results.push(`❌ 留言提交: 失败 (${error.message})`);
+            }
+            
+            // 测试3: 留言查看
+            try {
+                const messagesResponse = await fetch('http://47.110.156.11:3007/api/messages?password=admin123');
+                const messagesData = await messagesResponse.json();
+                results.push(`✅ 留言查看: 成功 (${messagesData.count}条留言)`);
+            } catch (error) {
+                results.push(`❌ 留言查看: 失败 (${error.message})`);
+            }
+            
+            // 测试4: 前端API
+            try {
+                const api = new MessageAPI();
+                const isAvailable = await api.isAvailable();
+                results.push(`✅ 前端API: ${isAvailable ? '可用' : '不可用'}`);
+            } catch (error) {
+                results.push(`❌ 前端API: 失败 (${error.message})`);
+            }
+            
+            // 显示结果
+            const resultText = results.join('\n');
+            const successCount = results.filter(r => r.includes('✅')).length;
+            const totalCount = results.length;
+            
+            setResult('overallResult',
+                `测试完成 (${successCount}/${totalCount} 成功)\n\n${resultText}`,
+                successCount === totalCount ? 'success' : successCount > 0 ? 'warning' : 'error'
+            );
+        }
+        
+        // 页面加载时自动运行健康检查
+        document.addEventListener('DOMContentLoaded', function() {
+            testHealth();
+        });
+    </script>
+</body>
+</html>

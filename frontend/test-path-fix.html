@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>路径修复验证测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; }
+    </style>
+</head>
+<body>
+    <h1>路径修复验证测试</h1>
+    
+    <div class="test">
+        <h2>当前访问信息</h2>
+        <p id="currentPath"></p>
+    </div>
+    
+    <div class="test">
+        <h2>资源加载测试</h2>
+        <button onclick="testResource('css/style.min.css')">测试CSS加载</button>
+        <button onclick="testResource('js/main.js')">测试JS加载</button>
+        <div id="resourceResult"></div>
+    </div>
+    
+    <div class="test">
+        <h2>页面跳转测试</h2>
+        <p><a href="gallery.html">跳转到图片展示</a></p>
+        <p><a href="about.html">跳转到关于我</a></p>
+        <p><a href="beian.html">跳转到备案信息</a></p>
+    </div>
+    
+    <script>
+        // 显示当前路径
+        document.getElementById('currentPath').innerHTML = 
+            `当前URL: ${window.location.href}<br>
+             路径名: ${window.location.pathname}<br>
+             从根目录访问: ${window.location.pathname === '/'}`;
+        
+        // 测试资源加载
+        function testResource(path) {
+            const result = document.getElementById('resourceResult');
+            result.innerHTML = `测试加载: ${path}...`;
+            result.className = 'test warning';
+            
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = path;
+            link.onload = function() {
+                result.innerHTML = `✅ ${path} 加载成功`;
+                result.className = 'test success';
+            };
+            link.onerror = function() {
+                result.innerHTML = `❌ ${path} 加载失败`;
+                result.className = 'test error';
+            };
+            
+            if (path.endsWith('.css')) {
+                document.head.appendChild(link);
+            } else if (path.endsWith('.js')) {
+                const script = document.createElement('script');
+                script.src = path;
+                script.onload = link.onload;
+                script.onerror = link.onerror;
+                document.head.appendChild(script);
+            }
+        }
+        
+        // 自动测试CSS
+        setTimeout(() => testResource('css/style.min.css'), 1000);
+    </script>
+</body>
+</html>

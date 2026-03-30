@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新版API测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .test-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+        
+        .test-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .success {
+            border-left-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        .error {
+            border-left-color: #f56565;
+            background: #fff5f5;
+        }
+        
+        .loading {
+            color: #718096;
+            font-style: italic;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-ok {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📡 新版API测试页面</h1>
+        <p>测试端口3002的新版规范化API</p>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span>✅ 测试1：健康检查</span>
+                <span class="status-badge" id="healthStatus">待测试</span>
+            </div>
+            <p>端点：<code>GET /health-new</code></p>
+            <button class="test-btn" onclick="testHealth()">测试健康检查</button>
+            <div class="result" id="healthResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span>🏪 测试2：获取店铺信息</span>
+                <span class="status-badge" id="shopStatus">待测试</span>
+            </div>
+            <p>端点：<code>GET /api/v1/shops/3</code></p>
+            <button class="test-btn" onclick="testShopInfo()">测试店铺信息</button>
+            <div class="result" id="shopResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span>⭐ 测试3：获取评价列表</span>
+                <span class="status-badge" id="reviewsStatus">待测试</span>
+            </div>
+            <p>端点：<code>GET /api/v1/shops/3/reviews</code></p>
+            <button class="test-btn" onclick="testReviews()">测试评价列表</button>
+            <div class="result" id="reviewsResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span>📊 测试4：获取统计信息</span>
+                <span class="status-badge" id="statsStatus">待测试</span>
+            </div>
+            <p>端点：<code>GET /api/v1/shops/3/stats</code></p>
+            <button class="test-btn" onclick="testStats()">测试统计信息</button>
+            <div class="result" id="statsResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span>📄 测试5：API文档</span>
+                <span class="status-badge" id="docsStatus">待测试</span>
+            </div>
+            <p>端点：<code>GET /api/v1/docs</code></p>
+            <button class="test-btn" onclick="testDocs()">测试API文档</button>
+            <div class="result" id="docsResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span>🔄 测试6：对比新旧API</span>
+                <span class="status-badge" id="compareStatus">待测试</span>
+            </div>
+            <p>同时测试新旧API响应时间和格式</p>
+            <button class="test-btn" onclick="testCompare()">对比测试</button>
+            <div class="result" id="compareResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span>🌐 测试7：现代前端页面</span>
+            </div>
+            <p>测试完整的现代前端页面</p>
+            <button class="test-btn" onclick="window.open('/shop_index_modern.html', '_blank')">打开现代前端</button>
+            <button class="test-btn" onclick="window.open('/shop_index.html', '_blank')">打开传统前端</button>
+        </div>
+    </div>
+    
+    <script>
+        // 更新状态显示
+        function updateStatus(elementId, success, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = success ? '成功' : '失败';
+            element.className = 'status-badge ' + (success ? 'status-ok' : 'status-error');
+            if (message) {
+                console.log(message);
+            }
+        }
+        
+        // 显示结果
+        function showResult(elementId, data, success = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = JSON.stringify(data, null, 2);
+            element.className = 'result ' + (success ? 'success' : 'error');
+        }
+        
+        // 显示加载中
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.textContent = '加载中...';
+            element.className = 'result loading';
+        }
+        
+        // 测试健康检查 - 使用相对路径
+        async function testHealth() {
+            showLoading('healthResult');
+            try {
+                const start = Date.now();
+                const response = await fetch('/health-new', {  // 通过Nginx代理
+                    signal: AbortSignal.timeout(5000) // 5秒超时
+                });
+                const end = Date.now();
+                const data = await response.json();
+                
+                updateStatus('healthStatus', response.ok, `响应时间: ${end - start}ms`);
+                showResult('healthResult', {
+                    status: response.status,
+                    responseTime: `${end - start}ms`,
+                    data: data
+                }, response.ok);
+            } catch (error) {
+                updateStatus('healthStatus', false, error.message);
+                showResult('healthResult', { 
+                    error: error.message,
+                    suggestion: '新版API可能未运行或Nginx配置有问题',
+                    checkCommand: '检查服务: ./service-manager.sh status'
+                }, false);
+            }
+        }
+        
+        // 测试店铺信息 - 使用相对路径
+        async function testShopInfo() {
+            showLoading('shopResult');
+            try {
+                const start = Date.now();
+                const response = await fetch('/api/v1/shops/3');  // 通过Nginx代理
+                const end = Date.now();
+                const data = await response.json();
+                
+                updateStatus('shopStatus', response.ok, `响应时间: ${end - start}ms`);
+                showResult('shopResult', {
+                    status: response.status,
+                    responseTime: `${end - start}ms`,
+                    data: data
+                }, response.ok);
+            } catch (error) {
+                updateStatus('shopStatus', false, error.message);
+                showResult('shopResult', { error: error.message }, false);
+            }
+        }
+        
+        // 测试评价列表
+        async function testReviews() {
+            showLoading('reviewsResult');
+            try {
+                const start = Date.now();
+                const response = await fetch('/api/v1/shops/3/reviews?limit=5');
+                const end = Date.now();
+                const data = await response.json();
+                
+                updateStatus('reviewsStatus', response.ok, `响应时间: ${end - start}ms`);
+                showResult('reviewsResult', {
+                    status: response.status,
+                    responseTime: `${end - start}ms`,
+                    data: data
+                }, response.ok);
+            } catch (error) {
+                updateStatus('reviewsStatus', false, error.message);
+                showResult('reviewsResult', { error: error.message }, false);
+            }
+        }
+        
+        // 测试统计信息
+        async function testStats() {
+            showLoading('statsResult');
+            try {
+                const start = Date.now();
+                const response = await fetch('/api/v1/shops/3/stats');
+                const end = Date.now();
+                const data = await response.json();
+                
+                updateStatus('statsStatus', response.ok, `响应时间: ${end - start}ms`);
+                showResult('statsResult', {
+                    status: response.status,
+                    responseTime: `${end - start}ms`,
+                    data: data
+                }, response.ok);
+            } catch (error) {
+                updateStatus('statsStatus', false, error.message);
+                showResult('statsResult', { error: error.message }, false);
+            }
+        }
+        
+        // 测试API文档
+        async function testDocs() {
+            showLoading('docsResult');
+            try {
+                const start = Date.now();
+                const response = await fetch('/api/v1/docs');
+                const end = Date.now();
+                const data = await response.json();
+                
+                updateStatus('docsStatus', response.ok, `响应时间: ${end - start}ms`);
+                showResult('docsResult', {
+                    status: response.status,
+                    responseTime: `${end - start}ms`,
+                    data: data
+                }, response.ok);
+            } catch (error) {
+                updateStatus('docsStatus', false, error.message);
+                showResult('docsResult', { error: error.message }, false);
+            }
+        }
+        
+        // 对比测试新旧API
+        async function testCompare() {
+            showLoading('compareResult');
+            try {
+                const results = {};
+                
+                // 测试新版API
+                const newStart = Date.now();
+                const newResponse = await fetch('/api/v1/shops/3');
+                const newEnd = Date.now();
+                const newData = await newResponse.json();
+                
+                // 测试旧版API
+                const oldStart = Date.now();
+                const oldResponse = await fetch('/api/shop/3');
+                const oldEnd = Date.now();
+                const oldData = await oldResponse.json();
+                
+                updateStatus('compareStatus', true, '对比完成');
+                
+                showResult('compareResult', {
+                    comparison: {
+                        newAPI: {
+                            url: '/api/v1/shops/3',
+                            status: newResponse.status,
+                            responseTime: `${newEnd - newStart}ms`,
+                            format: '标准化格式',
+                            success: newData.success
+                        },
+                        oldAPI: {
+                            url: '/api/shop/3',
+                            status: oldResponse.status,
+                            responseTime: `${oldEnd - oldStart}ms`,
+                            format: '原始格式',
+                            hasError: !!oldData.error
+                        },
+                        difference: {
+                            responseTimeDiff: `${Math.abs((newEnd - newStart) - (oldEnd - oldStart))}ms`,
+                            formatChanged: true,
+                            backwardCompatible: !oldData.error
+                        }
+                    }
+                });
+            } catch (error) {
+                updateStatus('compareStatus', false, error.message);
+                showResult('compareResult', { error: error.message }, false);
+            }
+        }
+        
+        // 页面加载时自动测试健康检查
+        window.onload = function() {
+            setTimeout(testHealth, 500);
+        };
+    </script>
+</body>
+</html>

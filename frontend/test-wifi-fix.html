@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi密码功能修复测试</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4361ee;
+            padding-bottom: 10px;
+        }
+        
+        .status-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            border-color: #38a169;
+            color: #155724;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            border-color: #e53e3e;
+            color: #721c24;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        .test-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .test-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-success {
+            background: #07c160;
+        }
+        
+        .btn-success:hover {
+            background: #06ad56;
+        }
+        
+        .btn-wifi {
+            background: #38a169;
+        }
+        
+        .btn-wifi:hover {
+            background: #2f855a;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .step-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .step-list li {
+            margin: 8px 0;
+        }
+        
+        .api-test {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .result-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .result-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📶 WiFi密码功能修复测试</h1>
+        
+        <div class="status-box status-error">
+            <h3>🔧 问题诊断</h3>
+            <p><strong>错误信息</strong>: GET http://47.110.156.11/api/shop/3/wifi 404 (Not Found)</p>
+            <p><strong>根本原因</strong>: 前端使用GET请求，但后端只支持POST请求</p>
+        </div>
+        
+        <div>
+            <h2>📋 问题分析</h2>
+            
+            <div class="info-box">
+                <h4>后端API设计:</h4>
+                <ul class="step-list">
+                    <li>✅ <strong>POST /api/shop/:id/wifi</strong> - 需要传递 <code>{ action: 'confirm' }</code></li>
+                    <li>❌ <strong>GET /api/shop/:id/wifi</strong> - 不存在此端点</li>
+                </ul>
+                
+                <h4>前端代码问题:</h4>
+                <ul class="step-list">
+                    <li>原代码: <code>await this.apiClient.get(`/${shopId}/wifi`)</code></li>
+                    <li>修复后: <code>await this.apiClient.post(`/${shopId}/wifi`, { action: 'confirm' })</code></li>
+                </ul>
+                
+                <h4>业务逻辑:</h4>
+                <p>WiFi密码是店铺的敏感信息，需要用户先确认已加微信好友，才能获取密码。</p>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🔧 修复内容</h2>
+            
+            <div class="api-test">
+                <h4>1. 修复 shopService.js</h4>
+                <div class="code-block">
+// 修复前 - 使用GET请求（错误）
+async getWifiInfo(shopId = this.shopId) {
+    const wifiInfo = await this.apiClient.get(`/${shopId}/wifi`);
+    // ...
+}
+
+// 修复后 - 使用POST请求（正确）
+async getWifiInfo(shopId = this.shopId) {
+    const wifiInfo = await this.apiClient.post(`/${shopId}/wifi`, { action: 'confirm' });
+    // ...
+}
+                </div>
+                
+                <h4>2. 更新店铺页面函数</h4>
+                <div class="code-block">
+// 修复前 - 直接获取WiFi密码
+async function showWifiPassword() {
+    const wifiInfo = await shopService.getWifiInfo();
+    // 显示密码...
+}
+
+// 修复后 - 先确认用户已加微信
+async function showWifiPassword() {
+    // 先询问用户是否已加微信
+    const confirmed = confirm('📶 获取WiFi密码\n\n为了确保您是店铺顾客，请先确认：\n\n1. 已添加店铺微信好友\n2. 已向店员说明来意\n\n确认已完成后，点击"确定"获取WiFi密码。');
+    
+    if (!confirmed) return; // 用户取消
+    
+    const wifiInfo = await shopService.getWifiInfo();
+    // 显示密码...
+}
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🧪 功能测试</h2>
+            
+            <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                <button class="test-btn btn-wifi" onclick="testWifiFunction()">
+                    <i>📶</i> 测试WiFi功能
+                </button>
+                
+                <button class="test-btn" onclick="testApiDirectly()">
+                    <i>🔧</i> 直接测试API
+                </button>
+                
+                <button class="test-btn" onclick="checkCurrentCode()">
+                    <i>📝</i> 检查当前代码
+                </button>
+                
+                <a href="/shop_index_modern_optimized.html" target="_blank">
+                    <button class="test-btn btn-success">
+                        <i>🌐</i> 测试实际页面
+                    </button>
+                </a>
+            </div>
+            
+            <div id="testResult" class="test-result">
+                点击按钮开始测试...
+            </div>
+        </div>
+        
+        <div>
+            <h2>🌐 实际页面测试</h2>
+            
+            <div class="info-box">
+                <p><strong>重要提示</strong>: 由于浏览器缓存，可能需要强制刷新页面</p>
+                <p><strong>强制刷新方法</strong>:</p>
+                <ol class="step-list">
+                    <li>按 <strong>Ctrl+F5</strong> 或 <strong>Ctrl+Shift+R</strong></li>
+                    <li>或打开开发者工具 (F12) → 网络 → 勾选"禁用缓存"</li>
+                    <li>或清除浏览器缓存后重新访问</li>
+                </ol>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin: 15px 0;">
+                <a href="/shop_index_modern_optimized.html" target="_blank">
+                    <button class="test-btn btn-success">
+                        <i>📱</i> 优化版店铺
+                    </button>
+                </a>
+                
+                <a href="/shop_index_modern.html" target="_blank">
+                    <button class="test-btn">
+                        <i>🌐</i> 现代版店铺
+                    </button>
+                </a>
+            </div>
+        </div>
+        
+        <div>
+            <h2>📝 修复状态</h2>
+            
+            <div class="status-box status-info">
+                <h4>已修复的文件:</h4>
+                <ul class="step-list">
+                    <li>✅ <code>src/services/shopService.js</code> - 将GET改为POST请求</li>
+                    <li>✅ <code>shop_index_modern_optimized.html</code> - 添加用户确认步骤</li>
+                    <li>✅ <code>shop_index_modern.html</code> - 同步更新</li>
+                </ul>
+                
+                <h4>验证方法:</h4>
+                <ol class="step-list">
+                    <li>访问店铺页面</li>
+                    <li>点击"WiFi密码"按钮</li>
+                    <li>确认是否出现"已加微信"提示</li>
+                    <li>点击确定后是否显示WiFi密码</li>
+                    <li>检查控制台是否有404错误</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div>
+            <h2>⚠️ 常见问题</h2>
+            
+            <div class="info-box">
+                <h4>Q: 为什么还需要用户确认已加微信？</h4>
+                <p>A: 这是后端API的设计要求，WiFi密码是店铺的敏感信息，需要确保用户是真实顾客。</p>
+                
+                <h4>Q: 如果用户点击"取消"会怎样？</h4>
+                <p>A: 函数会直接返回，不会获取WiFi密码，也不会记录访问日志。</p>
+                
+                <h4>Q: 如果API连接失败会怎样？</h4>
+                <p>A: 会显示默认的WiFi信息，确保用户体验不受影响。</p>
+                
+                <h4>Q: 为什么之前能工作？</h4>
+                <p>A: 可能之前有GET端点，或者使用了不同的API版本。</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 测试WiFi功能
+        async function testWifiFunction() {
+            const result = document.getElementById('testResult');
+            result.innerHTML = '测试中...';
+            result.className = 'test-result';
+            
+            try {
+                // 模拟店铺服务
+                const shopService = {
+                    shopId: 3,
+                    async getWifiInfo() {
+                        // 模拟API调用
+                        const response = await fetch('/api/shop/3/wifi', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ action: 'confirm' })
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                        }
+                        
+                        return await response.json();
+                    },
+                    async recordVisit(action) {
+                        console.log(`记录访问: ${action}`);
+                        return { success: true };
+                    }
+                };
+                
+                // 测试确认对话框
+                const confirmed = confirm('📶 测试WiFi功能\n\n这是测试对话框，点击"确定"继续测试API连接。');
+                
+                if (!confirmed) {
+                    result.innerHTML = '用户取消了操作。';
+                    result.className = 'test-result result-info';
+                    return;
+                }
+                
+                // 测试API连接
+                const wifiInfo = await shopService.getWifiInfo();
+                await shopService.recordVisit('click_wifi');
+                
+                result.innerHTML = `✅ WiFi功能测试成功！\n\n返回数据:\n${JSON.stringify(wifiInfo, null, 2)}\n\nAPI连接正常，功能完整。`;
+                result.className = 'test-result result-success';
+                
+            } catch (error) {
+                result.innerHTML = `❌ WiFi功能测试失败\n\n错误信息: ${error.message}\n\n可能原因:\n1. 后端API服务未运行\n2. CORS配置问题\n3. 网络连接问题`;
+                result.className = 'test-result result-error';
+            }
+        }
+        
+        // 直接测试API
+        async function testApiDirectly() {
+            const result = document.getElementById('testResult');
+            result.innerHTML = '直接测试API中...';
+            result.className = 'test-result';
+            
+            try {
+                // 测试GET请求（应该失败）
+                const getResponse = await fetch('/api/shop/3/wifi');
+                const getStatus = getResponse.status;
+                
+                // 测试POST请求（应该成功）
+                const postResponse = await fetch('/api/shop/3/wifi', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'confirm' })
+                });
+                const postStatus = postResponse.status;
+                let postData = null;
+                
+                if (postResponse.ok) {
+                    postData = await postResponse.json();
+                }
+                
+                result.innerHTML = `📊 API测试结果:\n\n1. GET请求: HTTP ${getStatus} ${getStatus === 404 ? '❌ (预期失败)' : '⚠️ (非预期状态)'}\n2. POST请求: HTTP ${postStatus} ${postStatus === 200 ? '✅ (预期成功)' : '❌ (预期失败)'}\n\nPOST返回数据:\n${postData ? JSON.stringify(postData, null, 2) : '无数据'}`;
+                result.className = 'test-result result-success';
+                
+            } catch (error) {
+                result.innerHTML = `❌ API测试失败\n\n错误信息: ${error.message}\n\n可能原因:\n1. 网络连接问题\n2. 后端服务未运行\n3. CORS配置问题`;
+                result.className = 'test-result result-error';
+            }
+        }
+        
+        // 检查当前代码
+        function checkCurrentCode() {
+            const result = document.getElementById('testResult');
+            
+            // 检查shopService.js中的代码
+            fetch('/src/services/shopService.js')
+                .then(response => response.text())
+                .then(code => {
+                    const hasPostRequest = code.includes('apiClient.post');
+                    const hasGetRequest = code.includes('apiClient.get') && code.includes('/wifi');
+                    
+                    let status = '';
+                    if (hasPostRequest && !hasGetRequest) {
+                        status = '✅ 代码已修复: 使用POST请求';
+                    } else if (hasGetRequest) {
+                        status = '❌ 代码未修复: 仍使用GET请求';
+                    } else {
+                        status = '⚠️ 代码状态未知';
+                    }
+                    
+                    result.innerHTML = `📝 代码检查结果:\n\n${status}\n\n相关代码片段:\n${code.includes('getWifiInfo') ? code.substring(code.indexOf('getWifiInfo'), code.indexOf('getWifiInfo') + 300) : '未找到getWifiInfo函数'}`;
+                    result.className = 'test-result result-info';
+                })
+                .catch(error => {
+                    result.innerHTML = `❌ 无法检查代码\n\n错误信息: ${error.message}`;
+                    result.className = 'test-result result-error';
+                });
+        }
+        
+        // 页面加载时显示当前时间
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            console.log(`WiFi修复测试页面加载时间: ${now.toLocaleString('zh-CN')}`);
+            console.log('修复完成: GET → POST, 添加用户确认步骤');
+        });
+    </script>
+</body>
+</html>

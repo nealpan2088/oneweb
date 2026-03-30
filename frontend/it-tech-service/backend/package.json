@@ -1,0 +1,21 @@
+{
+  "name": "it-tech-message-api",
+  "version": "1.0.0",
+  "description": "IT技术服务站留言API后端",
+  "main": "message-api.js",
+  "scripts": {
+    "start": "node message-api.js",
+    "dev": "nodemon message-api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["message", "api", "it-tech", "consultation"],
+  "author": "旺财",
+  "license": "MIT"
+}

@@ -1,0 +1,459 @@
+/**
+ * WiFi密码弹窗样式
+ * 版本: 1.0.0
+ * 日期: 2026-03-30
+ */
+
+/* WiFi弹窗容器 */
+.wifi-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.wifi-modal {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 弹窗头部 */
+.wifi-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.wifi-modal-icon {
+    font-size: 28px;
+    color: #38a169;
+}
+
+.wifi-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+/* WiFi信息区域 */
+.wifi-info {
+    margin: 20px 0;
+}
+
+.wifi-info-item {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.wifi-info-item:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.wifi-info-label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 80px;
+    margin-right: 15px;
+}
+
+.wifi-info-value {
+    flex: 1;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 密码显示区域 */
+.password-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.password-display:hover {
+    background: #e3f2fd;
+}
+
+.password-display:active {
+    transform: scale(0.98);
+}
+
+.password-masked {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #495057;
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.password-revealed {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: #155724;
+    background: #d4edda;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #c3e6cb;
+    animation: reveal 0.3s ease;
+}
+
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.password-hint {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+    text-align: center;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.password-display:hover .password-hint {
+    opacity: 1;
+}
+
+/* 复制反馈 */
+.copy-feedback {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #38a169;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    animation: feedbackFade 2s ease;
+    z-index: 10;
+}
+
+.copy-feedback::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #38a169;
+}
+
+@keyframes feedbackFade {
+    0% { opacity: 0; transform: translateX(-50%) translateY(5px); }
+    20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-5px); }
+}
+
+/* 操作按钮 */
+.wifi-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.wifi-modal-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.wifi-modal-btn-primary {
+    background: #38a169;
+    color: white;
+}
+
+.wifi-modal-btn-primary:hover {
+    background: #2f855a;
+    transform: translateY(-2px);
+}
+
+.wifi-modal-btn-secondary {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.wifi-modal-btn-secondary:hover {
+    background: #e9ecef;
+    border-color: #ced4da;
+}
+
+.wifi-modal-btn:active {
+    transform: translateY(0);
+}
+
+/* 连接指南 */
+.connection-guide {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    border-left: 4px solid #4361ee;
+}
+
+.connection-guide-title {
+    font-weight: 600;
+    color: #4361ee;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.connection-guide-steps {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+    color: #495057;
+}
+
+.connection-guide-steps li {
+    margin: 5px 0;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .wifi-modal {
+        width: 95%;
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .wifi-info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .wifi-info-label {
+        min-width: auto;
+        margin-right: 0;
+    }
+    
+    .password-masked,
+    .password-revealed {
+        font-size: 16px;
+        padding: 6px 10px;
+    }
+    
+    .wifi-modal-actions {
+        flex-direction: column;
+    }
+    
+    .copy-feedback {
+        top: -25px;
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+    .wifi-modal {
+        background: #2d3748;
+        color: #e2e8f0;
+    }
+    
+    .wifi-modal-title {
+        color: #e2e8f0;
+    }
+    
+    .wifi-info-item {
+        background: #4a5568;
+        border-color: #718096;
+        color: #e2e8f0;
+    }
+    
+    .wifi-info-item:hover {
+        background: #5a6578;
+        border-color: #8a9bb2;
+    }
+    
+    .wifi-info-label {
+        color: #cbd5e0;
+    }
+    
+    .wifi-info-value {
+        color: #e2e8f0;
+    }
+    
+    .password-masked {
+        background: #4a5568;
+        border-color: #718096;
+        color: #cbd5e0;
+    }
+    
+    .password-revealed {
+        background: #22543d;
+        border-color: #38a169;
+        color: #c6f6d5;
+    }
+    
+    .wifi-modal-btn-secondary {
+        background: #4a5568;
+        color: #e2e8f0;
+        border-color: #718096;
+    }
+    
+    .wifi-modal-btn-secondary:hover {
+        background: #5a6578;
+        border-color: #8a9bb2;
+    }
+    
+    .connection-guide {
+        background: #2d5279;
+        border-left-color: #63b3ed;
+    }
+    
+    .connection-guide-title {
+        color: #90cdf4;
+    }
+}
+
+/* 无障碍支持 */
+.password-display:focus {
+    outline: 2px solid #4361ee;
+    outline-offset: 2px;
+}
+
+.wifi-modal-btn:focus {
+    outline: 2px solid #4361ee;
+    outline-offset: 2px;
+}
+
+/* 打印样式 */
+@media print {
+    .wifi-modal-overlay {
+        position: static;
+        background: none;
+    }
+    
+    .wifi-modal {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .password-masked {
+        background: none;
+        border: 1px solid #ccc;
+    }
+    
+    .wifi-modal-btn {
+        display: none;
+    }
+}
+
+/* 加载状态 */
+.wifi-loading {
+    text-align: center;
+    padding: 30px;
+}
+
+.wifi-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #38a169;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.wifi-loading-text {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* 错误状态 */
+.wifi-error {
+    text-align: center;
+    padding: 20px;
+    color: #721c24;
+    background: #f8d7da;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+    margin: 15px 0;
+}
+
+.wifi-error-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* 成功状态 */
+.wifi-success {
+    text-align: center;
+    padding: 20px;
+    color: #155724;
+    background: #d4edda;
+    border-radius: 8px;
+    border: 1px solid #c3e6cb;
+    margin: 15px 0;
+}
+
+.wifi-success-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+}

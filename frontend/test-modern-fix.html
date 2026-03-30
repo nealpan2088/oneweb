@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>现代前端修复测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 10px;
+        }
+        
+        .test-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        .test-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .test-btn.success {
+            background: #48bb78;
+        }
+        
+        .test-btn.error {
+            background: #f56565;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .success {
+            border-left-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        .error {
+            border-left-color: #f56565;
+            background: #fff5f5;
+        }
+        
+        .loading {
+            color: #718096;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 现代前端修复测试</h1>
+        <p>测试现代前端页面 (<code>shop_index_modern.html</code>) 的修复情况</p>
+        
+        <div class="test-section">
+            <div class="test-title">测试 1: 访问记录端点</div>
+            <p>端点: <code>POST /api/v1/shops/3/visit</code></p>
+            <button class="test-btn" onclick="testVisitEndpoint()">测试访问记录</button>
+            <div class="result" id="visitResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">测试 2: WiFi信息端点</div>
+            <p>端点: <code>GET /api/v1/shops/3/wifi</code></p>
+            <button class="test-btn" onclick="testWifiEndpoint()">测试WiFi信息</button>
+            <div class="result" id="wifiResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">测试 3: 模拟按钮点击</div>
+            <p>模拟现代前端页面的按钮点击行为</p>
+            <button class="test-btn" onclick="simulateWifiButton()">模拟WiFi按钮</button>
+            <button class="test-btn" onclick="simulateWechatButton()">模拟微信按钮</button>
+            <div class="result" id="buttonResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">测试 4: 完整页面测试</div>
+            <p>打开修复后的现代前端页面</p>
+            <button class="test-btn success" onclick="window.open('/shop_index_modern.html', '_blank')">打开现代前端</button>
+            <button class="test-btn" onclick="testFullPage()">测试完整功能</button>
+            <div class="result" id="fullPageResult"></div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #e8f4fd; border-radius: 6px;">
+            <h3>📋 测试说明</h3>
+            <p><strong>之前的问题</strong>:</p>
+            <ol>
+                <li>访问记录端点不存在 (404错误)</li>
+                <li>WiFi信息端点不存在 (404错误)</li>
+                <li>按钮点击时出现错误</li>
+            </ol>
+            <p><strong>已修复</strong>:</p>
+            <ol>
+                <li>✅ 添加了访问记录端点</li>
+                <li>✅ 添加了WiFi信息端点</li>
+                <li>✅ 更新了前端错误处理</li>
+                <li>✅ 添加了默认值回退</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // 显示结果
+        function showResult(elementId, success, message, data = null) {
+            const element = document.getElementById(elementId);
+            const status = success ? '✅ 成功' : '❌ 失败';
+            let content = `<strong>${status}</strong><br>${message}`;
+            
+            if (data) {
+                content += `<br><small>响应: ${JSON.stringify(data)}</small>`;
+            }
+            
+            element.innerHTML = content;
+            element.className = 'result ' + (success ? 'success' : 'error');
+        }
+        
+        // 显示加载中
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '⏳ 测试中...';
+            element.className = 'result loading';
+        }
+        
+        // 测试访问记录端点
+        async function testVisitEndpoint() {
+            showLoading('visitResult');
+            try {
+                const response = await fetch('/api/v1/shops/3/visit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'test' })
+                });
+                const data = await response.json();
+                const success = response.ok && data.success === true;
+                showResult('visitResult', success, 
+                    success ? '访问记录成功' : '访问记录失败', data);
+            } catch (error) {
+                showResult('visitResult', false, error.message);
+            }
+        }
+        
+        // 测试WiFi端点
+        async function testWifiEndpoint() {
+            showLoading('wifiResult');
+            try {
+                const response = await fetch('/api/v1/shops/3/wifi');
+                const data = await response.json();
+                const success = response.ok && data.success === true;
+                showResult('wifiResult', success, 
+                    success ? `WiFi信息: ${data.data.ssid}` : 'WiFi信息获取失败', data);
+            } catch (error) {
+                showResult('wifiResult', false, error.message);
+            }
+        }
+        
+        // 模拟WiFi按钮点击
+        async function simulateWifiButton() {
+            showLoading('buttonResult');
+            try {
+                // 1. 获取WiFi信息
+                const wifiResponse = await fetch('/api/v1/shops/3/wifi');
+                const wifiData = await wifiResponse.json();
+                
+                // 2. 记录访问
+                const visitResponse = await fetch('/api/v1/shops/3/visit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'click_wifi' })
+                });
+                const visitData = await visitResponse.json();
+                
+                const success = wifiResponse.ok && visitResponse.ok;
+                showResult('buttonResult', success, 
+                    success ? `WiFi按钮模拟成功\nWiFi: ${wifiData.data.ssid}\n密码: ${wifiData.data.password}` : '模拟失败');
+            } catch (error) {
+                showResult('buttonResult', false, `模拟失败: ${error.message}\n\n建议: 使用默认WiFi信息`);
+            }
+        }
+        
+        // 模拟微信按钮点击
+        async function simulateWechatButton() {
+            showLoading('buttonResult');
+            try {
+                const response = await fetch('/api/v1/shops/3/visit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'click_wechat' })
+                });
+                const data = await response.json();
+                const success = response.ok && data.success === true;
+                showResult('buttonResult', success, 
+                    success ? '微信按钮模拟成功' : '微信按钮模拟失败', data);
+            } catch (error) {
+                showResult('buttonResult', false, `模拟失败: ${error.message}`);
+            }
+        }
+        
+        // 测试完整页面
+        async function testFullPage() {
+            showLoading('fullPageResult');
+            try {
+                // 测试所有端点
+                const endpoints = [
+                    '/api/v1/shops/3',
+                    '/api/v1/shops/3/reviews',
+                    '/api/v1/shops/3/stats',
+                    '/api/v1/shops/3/wifi'
+                ];
+                
+                const results = await Promise.all(
+                    endpoints.map(async (endpoint) => {
+                        try {
+                            const response = await fetch(endpoint);
+                            const data = await response.json();
+                            return { endpoint, success: response.ok, data };
+                        } catch (error) {
+                            return { endpoint, success: false, error: error.message };
+                        }
+                    })
+                );
+                
+                const allSuccess = results.every(r => r.success);
+                let message = allSuccess ? '✅ 所有端点正常' : '⚠️ 部分端点有问题\n';
+                
+                results.forEach(r => {
+                    message += `\n${r.success ? '✅' : '❌'} ${r.endpoint}`;
+                });
+                
+                showResult('fullPageResult', allSuccess, message);
+            } catch (error) {
+                showResult('fullPageResult', false, error.message);
+            }
+        }
+        
+        // 页面加载时自动测试关键端点
+        window.onload = function() {
+            setTimeout(() => {
+                testVisitEndpoint();
+                testWifiEndpoint();
+            }, 500);
+        };
+    </script>
+</body>
+</html>

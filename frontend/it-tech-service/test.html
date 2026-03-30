@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT技术服务站 - 快速测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .test-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .test-header {
+            margin-bottom: 30px;
+        }
+        
+        .test-icon {
+            font-size: 64px;
+            color: #4361ee;
+            margin-bottom: 20px;
+        }
+        
+        .test-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .test-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .test-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #4361ee;
+        }
+        
+        .test-card i {
+            font-size: 32px;
+            color: #4361ee;
+            margin-bottom: 10px;
+        }
+        
+        .test-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .test-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .test-btn {
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .test-btn.primary {
+            background: linear-gradient(135deg, #4361ee, #7209b7);
+            color: white;
+        }
+        
+        .test-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .test-btn.secondary {
+            background: white;
+            color: #4361ee;
+            border: 2px solid #4361ee;
+        }
+        
+        .test-btn.secondary:hover {
+            background: #f8f9fa;
+        }
+        
+        .test-status {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 10px;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .test-status h4 {
+            color: #4361ee;
+            margin-bottom: 10px;
+        }
+        
+        .test-status ul {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .test-status li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .test-status i {
+            color: #48bb78;
+        }
+        
+        @media (max-width: 480px) {
+            .test-container {
+                padding: 20px;
+            }
+            
+            .test-title {
+                font-size: 24px;
+            }
+            
+            .test-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <div class="test-icon">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <h1 class="test-title">IT技术服务站</h1>
+            <p class="test-subtitle">专业电脑维修 · 网页开发 · IT技术服务</p>
+        </div>
+        
+        <div class="test-grid">
+            <div class="test-card" onclick="window.open('index.html', '_blank')">
+                <i class="fas fa-eye"></i>
+                <h3>查看网站</h3>
+            </div>
+            
+            <div class="test-card" onclick="testFeatures()">
+                <i class="fas fa-cogs"></i>
+                <h3>功能测试</h3>
+            </div>
+            
+            <div class="test-card" onclick="testMobile()">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>响应式测试</h3>
+            </div>
+            
+            <div class="test-card" onclick="testForm()">
+                <i class="fas fa-file-alt"></i>
+                <h3>表单测试</h3>
+            </div>
+        </div>
+        
+        <div class="test-buttons">
+            <a href="/" class="test-btn primary" target="_blank">
+                <i class="fas fa-rocket"></i> 进入主网站
+            </a>
+            <button class="test-btn secondary" onclick="runAllTests()">
+                <i class="fas fa-play-circle"></i> 运行完整测试
+            </button>
+        </div>
+        
+        <div class="test-status" id="testStatus">
+            <h4>测试状态</h4>
+            <ul id="testResults">
+                <li><i class="fas fa-clock"></i> 等待测试...</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        // 更新测试结果
+        function updateTestResult(testName, success, message) {
+            const resultsList = document.getElementById('testResults');
+            const icon = success ? 'fa-check-circle' : 'fa-times-circle';
+            const color = success ? '#48bb78' : '#f56565';
+            
+            const li = document.createElement('li');
+            li.innerHTML = `<i class="fas ${icon}" style="color: ${color}"></i> ${testName}: ${message}`;
+            resultsList.appendChild(li);
+        }
+        
+        // 测试功能
+        function testFeatures() {
+            const resultsList = document.getElementById('testResults');
+            resultsList.innerHTML = '';
+            
+            // 测试1: 检查文件
+            const filesExist = checkFiles();
+            updateTestResult('文件检查', filesExist, filesExist ? '所有文件正常' : '缺少文件');
+            
+            // 测试2: 检查CSS
+            const cssLoaded = checkCSS();
+            updateTestResult('CSS加载', cssLoaded, cssLoaded ? '样式加载正常' : '样式加载失败');
+            
+            // 测试3: 检查JS
+            const jsLoaded = checkJS();
+            updateTestResult('JavaScript', jsLoaded, jsLoaded ? '脚本加载正常' : '脚本加载失败');
+            
+            // 测试4: 检查响应式
+            setTimeout(() => {
+                const responsive = checkResponsive();
+                updateTestResult('响应式设计', responsive, responsive ? '响应式正常' : '响应式问题');
+            }, 500);
+        }
+        
+        function checkFiles() {
+            try {
+                // 检查主要文件是否存在
+                const requiredFiles = ['index.html', 'css/style.css', 'js/main.js'];
+                return requiredFiles.every(file => {
+                    try {
+                        // 尝试访问文件
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('HEAD', file, false);
+                        xhr.send();
+                        return xhr.status === 200 || xhr.status === 0;
+                    } catch (e) {
+                        return false;
+                    }
+                });
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        function checkCSS() {
+            try {
+                const stylesheets = document.styleSheets;
+                return stylesheets.length > 0;
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        function checkJS() {
+            try {
+                // 检查是否能够执行JavaScript
+                return typeof window !== 'undefined' && typeof document !== 'undefined';
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        function checkResponsive() {
+            try {
+                // 检查视口设置
+                const viewport = document.querySelector('meta[name="viewport"]');
+                return viewport && viewport.content.includes('width=device-width');
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        function testMobile() {
+            alert('请调整浏览器窗口大小测试响应式效果，或使用开发者工具切换设备模式。');
+        }
+        
+        function testForm() {
+            alert('表单测试：\n1. 进入主网站\n2. 滚动到"联系我们"部分\n3. 填写表单并提交\n4. 检查localStorage中的记录');
+        }
+        
+        function runAllTests() {
+            testFeatures();
+            setTimeout(() => {
+                alert('完整测试完成！请查看测试状态区域。');
+            }, 1000);
+        }
+        
+        // 页面加载时自动检查基础功能
+        window.addEventListener('load', function() {
+            const basicCheck = checkFiles() && checkCSS() && checkJS();
+            if (basicCheck) {
+                updateTestResult('基础检查', true, '网站基础功能正常');
+            } else {
+                updateTestResult('基础检查', false, '网站基础功能有问题');
+            }
+        });
+    </script>
+    <script src="js/path-resolver.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>备案信息 - 个人电脑维修技术分享</title>
+    <meta name="description" content="个人网站备案信息说明">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.min.css">
+    
+    <style>
+        .beian-content {
+            max-width: 800px;
+            margin: 100px auto 60px;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .beian-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .beian-header h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .beian-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .info-section {
+            margin-bottom: 30px;
+        }
+        
+        .info-section h2 {
+            font-size: 20px;
+            color: #4361ee;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .notice-box {
+            background: #fff8e1;
+            border: 1px solid #ffd54f;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .notice-box h3 {
+            color: #ff8f00;
+            margin-bottom: 10px;
+        }
+        
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .link-btn:hover {
+            background: #3a56d4;
+            transform: translateY(-2px);
+        }
+        
+        .link-btn.secondary {
+            background: white;
+            color: #4361ee;
+            border: 2px solid #4361ee;
+        }
+        
+        .link-btn.secondary:hover {
+            background: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .beian-content {
+                margin: 80px 20px 40px;
+                padding: 20px;
+            }
+            
+            .beian-header h1 {
+                font-size: 24px;
+            }
+            
+            .links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 简单导航 -->
+    <nav style="position: fixed; top: 0; left: 0; right: 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 15px 0; z-index: 1000;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; color: #4361ee;">
+                <i class="fas fa-laptop-code"></i>
+                <span>个人电脑维修技术分享</span>
+            </div>
+            <a href="/" style="text-decoration: none; color: #4361ee; font-weight: 500;">
+                <i class="fas fa-home"></i> 返回首页
+            </a>
+        </div>
+    </nav>
+
+    <!-- 备案信息内容 -->
+    <div class="beian-content">
+        <div class="beian-header">
+            <h1><i class="fas fa-file-alt"></i> 网站备案信息</h1>
+            <p>个人非经营性网站备案信息说明</p>
+        </div>
+        
+        <div class="info-section">
+            <h2><i class="fas fa-info-circle"></i> 网站基本信息</h2>
+            
+            <div class="info-item">
+                <div class="info-label">网站名称</div>
+                <div class="info-value">个人电脑维修技术分享</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">网站性质</div>
+                <div class="info-value">个人非经营性网站</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">网站内容</div>
+                <div class="info-value">个人电脑维修技术经验分享与交流</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">网站目的</div>
+                <div class="info-value">分享个人技术经验，进行技术交流，不涉及商业经营活动</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">网站负责人</div>
+                <div class="info-value">个人（根据备案信息填写）</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2><i class="fas fa-shield-alt"></i> 备案信息</h2>
+            
+            <div class="info-item">
+                <div class="info-label">ICP备案号</div>
+                <div class="info-value">
+                    浙ICP备XXXXXX号（备案中）
+                    <br><small>备案通过后将更新为实际号码</small>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">公安备案号</div>
+                <div class="info-value">
+                    浙公网安备 XXXXXXXXXXXXXX号（备案中）
+                    <br><small>公安备案通过后将更新为实际号码</small>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">备案时间</div>
+                <div class="info-value">2026年（备案申请时间）</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">备案状态</div>
+                <div class="info-value">备案申请已提交，审核中</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2><i class="fas fa-balance-scale"></i> 法律声明</h2>
+            
+            <div class="info-item">
+                <div class="info-label">网站性质声明</div>
+                <div class="info-value">
+                    1. 本网站为个人技术分享网站，非商业经营性网站<br>
+                    2. 网站内容为个人技术经验分享，仅供参考<br>
+                    3. 不提供在线交易、支付等商业功能<br>
+                    4. 不涉及用户注册、会员等交互功能
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">内容声明</div>
+                <div class="info-value">
+                    1. 网站内容为个人经验分享，不构成专业建议<br>
+                    2. 技术信息可能随时间变化而更新<br>
+                    3. 转载内容会注明出处，尊重知识产权<br>
+                    4. 用户应自行判断信息的适用性
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">联系方式声明</div>
+                <div class="info-value">
+                    1. 网站提供的联系方式为个人联系方式<br>
+                    2. 仅用于技术交流和信息沟通<br>
+                    3. 请勿用于商业推广或其他用途<br>
+                    4. 尊重个人隐私，合理使用联系方式
+                </div>
+            </div>
+        </div>
+        
+        <div class="notice-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> 重要提示</h3>
+            <p>根据中国法律法规，所有在中国大陆提供服务的网站都需要进行ICP备案和公安备案。</p>
+            <p>本网站正在按照相关规定进行备案申请，备案期间网站内容将保持合规。</p>
+            <p>备案完成后，将在网站底部展示正式的备案号码。</p>
+        </div>
+        
+        <div class="info-section">
+            <h2><i class="fas fa-link"></i> 相关链接</h2>
+            
+            <div class="info-item">
+                <div class="info-label">备案查询</div>
+                <div class="info-value">
+                    • 工信部ICP/IP地址/域名信息备案管理系统：<br>
+                      <a href="https://beian.miit.gov.cn" target="_blank">https://beian.miit.gov.cn</a>
+                    <br><br>
+                    • 公安机关互联网站安全服务平台：<br>
+                      <a href="http://www.beian.gov.cn" target="_blank">http://www.beian.gov.cn</a>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">监管部门</div>
+                <div class="info-value">
+                    • 浙江省通信管理局<br>
+                    • 浙江省公安厅网络安全保卫总队
+                </div>
+            </div>
+        </div>
+        
+        <div class="links">
+            <a href="/" class="link-btn">
+                <i class="fas fa-home"></i> 返回首页
+            </a>
+            <a href="about.html" class="link-btn secondary">
+                <i class="fas fa-user"></i> 关于我
+            </a>
+            <a href="https://beian.miit.gov.cn" target="_blank" class="link-btn secondary">
+                <i class="fas fa-external-link-alt"></i> 工信部备案系统
+            </a>
+        </div>
+    </div>
+
+    <!-- 简单页脚 -->
+    <footer style="background: #333; color: white; padding: 30px 0; text-align: center;">
+        <div class="container">
+            <p style="margin-bottom: 10px; font-size: 14px;">
+                <a href="beian.html" style="color: #aaa; text-decoration: none;">备案信息</a> | 
+                <a href="about.html" style="color: #aaa; text-decoration: none;">关于我</a> | 
+                <a href="/" style="color: #aaa; text-decoration: none;">首页</a>
+            </p>
+            <p style="font-size: 12px; color: #888;">
+                © 2026 个人电脑维修技术分享. 保留所有权利.<br>
+                本网站为个人非经营性网站
+            </p>
+        </div>
+    </footer>
+    <script src="js/path-resolver.js" defer></script>
+</body>
+</html>

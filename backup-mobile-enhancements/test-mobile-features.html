@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动端功能增强演示</title>
+    <link rel="stylesheet" href="./src/styles/mobile-enhancements.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4361ee;
+            padding-bottom: 10px;
+        }
+        
+        .feature-section {
+            margin: 30px 0;
+            padding: 25px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .feature-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .demo-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .demo-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .demo-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .demo-content {
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .clickable-demo {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #dee2e6;
+            margin: 5px 0;
+        }
+        
+        .clickable-demo:hover {
+            background: #e3f2fd;
+            border-color: #4361ee;
+            transform: translateY(-2px);
+        }
+        
+        .test-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .test-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-success {
+            background: #07c160;
+        }
+        
+        .btn-success:hover {
+            background: #06ad56;
+        }
+        
+        .btn-wechat {
+            background: #07c160;
+        }
+        
+        .btn-wechat:hover {
+            background: #06ad56;
+        }
+        
+        .btn-phone {
+            background: #38a169;
+        }
+        
+        .btn-phone:hover {
+            background: #2f855a;
+        }
+        
+        .btn-navigation {
+            background: #4361ee;
+        }
+        
+        .btn-navigation:hover {
+            background: #3a56d4;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .feature-desc {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        
+        .device-simulator {
+            background: #333;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            max-width: 375px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .device-screen {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+        }
+        
+        .screen-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .screen-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin: 5px;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-mobile {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-desktop {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>📱 移动端功能增强演示</h1>
+        
+        <div class="info-box">
+            <h3>🎯 功能概述</h3>
+            <p>为P001店铺页面添加移动端必备的实用功能，提升用户体验和转化率。</p>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <span class="status-badge status-success">一键拨号</span>
+                <span class="status-badge status-success">一键导航</span>
+                <span class="status-badge status-success">微信增强</span>
+                <span class="status-badge status-success">营业时间</span>
+            </div>
+        </div>
+        
+        <div class="feature-section">
+            <div class="feature-title">🚀 四大核心功能演示</div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📞</span>
+                    <div class="feature-name">一键拨号</div>
+                    <div class="feature-desc">
+                        点击电话号码直接调起手机拨号盘，移动端必备功能
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📍</span>
+                    <div class="feature-name">一键导航</div>
+                    <div class="feature-desc">
+                        调用高德/百度/腾讯地图App，直接规划路线
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">💬</span>
+                    <div class="feature-name">微信增强</div>
+                    <div class="feature-desc">
+                        显示微信号、二维码，支持一键复制和添加
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">⏰</span>
+                    <div class="feature-name">营业时间</div>
+                    <div class="feature-desc">
+                        日常时间 + 特殊时间提醒，实时营业状态
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>📞 功能一：一键拨号</h2>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>📱</span> 移动端效果
+                </div>
+                <div class="demo-content">
+                    <div class="clickable-demo clickable-phone" data-phone="010-88888888" 
+                         onclick="demoMakePhoneCall('010-88888888')">
+                        <strong>📞 联系电话:</strong> 010-88888888
+                        <div style="font-size: 12px; color: #07c160; margin-top: 5px;">
+                            📱 点击直接拨打
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>💻</span> 桌面端效果
+                </div>
+                <div class="demo-content">
+                    <p>在桌面端点击会显示号码和复制选项：</p>
+                    <button class="test-btn btn-phone" onclick="demoMakePhoneCall('010-88888888')">
+                        测试一键拨号
+                    </button>
+                </div>
+            </div>
+            
+            <div class="code-block">
+// 核心代码：一键拨号实现
+function makePhoneCall(phoneNumber) {
+    const cleanNumber = phoneNumber.replace(/[^\d+]/g, '');
+    
+    if (isMobileDevice()) {
+        // 移动端：使用tel协议
+        window.location.href = `tel:${cleanNumber}`;
+    } else {
+        // 桌面端：显示号码和复制选项
+        if (confirm(`拨打电话: ${phoneNumber}\n\n是否复制号码？`)) {
+            navigator.clipboard.writeText(phoneNumber);
+        }
+    }
+}
+
+// 检测移动设备
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+        .test(navigator.userAgent);
+}
+            </div>
+        </div>
+        
+        <div>
+            <h2>📍 功能二：一键导航</h2>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>🗺️</span> 多地图支持
+                </div>
+                <div class="demo-content">
+                    <div class="clickable-demo clickable-address" data-address="北京市朝阳区建国路88号"
+                         onclick="demoOpenNavigation('北京市朝阳区建国路88号')">
+                        <strong>📍 店铺地址:</strong> 北京市朝阳区建国路88号
+                        <div style="font-size: 12px; color: #4361ee; margin-top: 5px;">
+                            🗺️ 点击一键导航
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>📱</span> 支持的地图App
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                    <span class="status-badge status-mobile">高德地图</span>
+                    <span class="status-badge status-mobile">百度地图</span>
+                    <span class="status-badge status-mobile">腾讯地图</span>
+                    <span class="status-badge status-mobile">苹果地图</span>
+                    <span class="status-badge status-desktop">谷歌地图</span>
+                </div>
+            </div>
+            
+            <button class="test-btn btn-navigation" onclick="demoOpenNavigation('北京市朝阳区建国路88号')">
+                测试一键导航
+            </button>
+        </div>
+        
+        <div>
+            <h2>💬 功能三：微信增强</h2>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>📋</span> 微信号显示与复制
+                </div>
+                <div class="demo-content">
+                    <div style="padding: 15px; background: #f0f9f0; border-radius: 8px; border: 1px solid #c3e6cb;">
+                        <div style="font-weight: bold; color: #155724;">微信号:</div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                            <code style="background: white; padding: 8px 12px; border-radius: 4px; flex: 1;">
+                                WangCafe_Service
+                            </code>
+                            <button class="test-btn btn-success" style="padding: 8px 15px;" 
+                                    onclick="demoCopyWechatId()">
+                                复制
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>📱</span> 二维码展示
+                </div>
+                <div class="demo-content">
+                    <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                        <div style="font-weight: bold; color: #333;">微信扫一扫添加好友</div>
+                        <div style="color: #666; margin-top: 10px;">或搜索微信号: <strong>WangCafe_Service</strong></div>
+                        <button class="test-btn btn-wechat" style="margin-top: 15px;" 
+                                onclick="demoShowQRCode()">
+                            显示二维码
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>🔧</span> 完整微信功能
+                </div>
+                <div class="demo-content">
+                    <button class="test-btn btn-wechat" onclick="demoShowWechatOptions()">
+                        测试完整微信功能
+                    </button>
+                    <p style="font-size: 14px; color: #666; margin-top: 10px;">
+                        包含：复制微信号、打开微信添加、显示二维码、添加说明
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>⏰ 功能四：营业时间增强</h2>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>🕒</span> 实时营业状态
+                </div>
+                <div class="demo-content">
+                    <div class="business-hours-display">
+                        <div class="hours-main">
+                            <span class="hours-icon">⏰</span>
+                            <span class="hours-text">周一至周日 09:00-22:00</span>
+                        </div>
+                        <div class="hours-status open">
+                            🟢 营业中
+                            <div class="special-notice">
+                                节假日正常营业
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-label">
+                    <span>📅</span> 特殊时间提醒
+                </div>
+                <div class="demo-content">
+                    <div style="padding: 15px; background: #fff3cd; border-radius: 8px; border: 1px solid #ffeaa7;">
+                        <div style="font-weight: bold; color: #856404;">节假日安排：</div>
+                        <ul style="margin: 10px 0; padding-left: 20px; color: #856404;">
+                            <li>春节假期：2月10日-17日 营业时间调整为 10:00-20:00</li>
+                            <li>国庆假期：10月1日-7日 正常营业</li>
+                            <li>元旦：1月1日 营业时间 12:00-22:00</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="test-btn" onclick="demoCheckBusinessHours()">
+                测试营业时间功能
+            </button>
+        </div>
+        
+        <div class="device-simulator">
+            <div class="device-screen">
+                <div class="screen-content">
+                    <div style="text-align: center; font-weight: bold; color: #333; margin-bottom: 15px;">
+                        旺财咖啡馆
+                    </div>
+                    
+                    <div class="screen-button" onclick="demoMakePhoneCall('010-88888888')">
+                        📞 一键拨号
+                    </div>
+                    
+                    <div class="screen-button" onclick="demoOpenNavigation('北京市朝阳区建国路88号')">
+                        📍 一键导航
+                    </div>
+                    
+                    <div class="screen-button" onclick="demoShowWechatOptions()">
+                        💬 联系微信
+                    </div>
+                    
+                    <div class="screen-button" onclick="demoCheckBusinessHours()">
+                        ⏰ 营业时间
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🧪 实际页面测试</h2>
+            <p>访问实际店铺页面测试完整功能：</p>
+            
+            <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                <a href="/shop_index_modern_optimized.html" target="_blank">
+                    <button class="test-btn btn-success">
+                        <i>📱</i> 测试优化版店铺
+                    </button>
+                </a>
+                
+                <a href="/shop_index_modern.html" target="_blank">
+                    <button class="test-btn">
+                        <i>🌐</i> 测试现代版店铺
+                    </button>
+                </a>
+                
+                <button class="test-btn" onclick="clearBrowserCache()">
+                    <i>🧹</i> 清除缓存提示
+                </button>
+            </div>
+            
+            <div class="info-box">
+                <h4>⚠️ 重要提示</h4>
+                <p>由于浏览器可能缓存了旧文件，建议：</p>
+                <ol>
+                    <li>按 <strong>Ctrl+F5</strong> 强制刷新页面</li>
+                    <li>或打开开发者工具（F12）→ 网络 → 勾选"禁用缓存"</li>
+                    <li>测试移动端功能请使用手机或浏览器开发者工具的手机模式</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🔧 技术实现</h2>
+            
+            <div class="code-block">
+// 移动端增强模块结构
+class MobileEnhancements {
+    constructor() {
+        this.shopInfo = null;
+        this.init();
+    }
+    
+    // 1. 一键拨号
+    enhancePhoneFunction() {
+        // 为电话元素添加点击事件
+        // 移动端: tel:协议
+        // 桌面端: 复制选项
+    }
+    
+    // 2. 一键导航
+    enhanceAddressFunction() {
+        // 为地址元素添加点击事件
+        // 移动端: 多地图App支持
+        // 桌面端: 网页版地图
+    }
+    
+    // 3. 微信增强
+    enhanceWechatFunction() {
+        // 微信号复制
+        // 二维码显示
+        // 微信添加引导
+    }
+    
+    // 4. 营业时间
+    enhanceBusinessHours() {
+        // 实时状态显示
+        // 节假日提醒
+        // 特殊时间处理
+    }
+}
+            </div>
+        </div>
+        
+        <div>
+            <h2>🎯 用户体验价值</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+                    <h4>📈 转化率提升</h4>
+                    <p>减少用户操作步骤，提高联系和到店转化率</p>
+                </div>
+                
+                <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
+                    <h4>📱 移动友好</h4>
+                    <p>针对移动端优化，符合用户使用习惯</p>
+                </div>
+                
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                    <h4>⚡ 操作便捷</h4>
+                    <p>一键完成复杂操作，提升用户体验</p>
+                </div>
+                
+                <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
+                    <h4>🎨 专业形象</h4>
+                    <p>展示店铺专业性和对细节的关注</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h3>✅ 部署状态</h3>
+            <p>移动端增强功能已部署到：</p>
+            <ul>
+                <li><strong>shop_index_modern_optimized.html</strong> - 优化版店铺页面</li>
+                <li><strong>shop_index_modern.html</strong> - 现代版店铺页面</li>
+            </ul>
+            <p>功能模块：</p>
+            <ul>
+                <li><code>src/utils/mobile-enhancements.js</code> - 核心功能模块</li>
+                <li><code>src/styles/mobile-enhancements.css</code> - 样式文件</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // 演示函数
+        function demoMakePhoneCall(phoneNumber) {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                alert(`📱 移动端: 将拨打 ${phoneNumber}\n\n(演示中，实际会调起拨号盘)`);
+                // 实际代码: window.location.href = `tel:${phoneNumber.replace(/[^\d+]/g, '')}`;
+            } else {
+                if (confirm(`📞 拨打电话: ${phoneNumber}\n\n桌面端无法直接拨打。\n\n是否复制号码到剪贴板？`)) {
+                    navigator.clipboard.writeText(phoneNumber).then(() => {
+                        alert(`✅ 电话号码已复制: ${phoneNumber}`);
+                    }).catch(() => {
+                        prompt('请手动复制电话号码:', phoneNumber);
+                    });
+                }
+            }
+        }
+        
+        function demoOpenNavigation(address) {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                const maps = ['高德地图', '百度地图', '腾讯地图', '苹果地图'];
+                const choice = prompt(`🗺️ 选择地图App导航到:\n${address}\n\n输入数字选择(1-4):\n1. ${maps[0]}\n2. ${maps[1]}\n3. ${maps[2]}\n4. ${maps[3]}`);
+                
+                if (choice && !isNaN(choice) && choice >= 1 && choice <= 4) {
+                    alert(`📍 将使用 ${maps[choice-1]} 导航到: ${address}\n\n(演示中，实际会打开地图App)`);
+                } else {
+                    alert(`📍 将导航到: ${address}\n\n(演示中，实际会打开地图App)`);
+                }
+            } else {
+                window.open(`https://maps.google.com/maps?q=${encodeURIComponent(address)}`, '_blank');
+            }
+        }
+        
+        function demoCopyWechatId() {
+            const wechatId = 'WangCafe_Service';
+            navigator.clipboard.writeText(wechatId).then(() => {
+                alert(`✅ 微信号已复制: ${wechatId}`);
+            }).catch(() => {
+                prompt('请手动复制微信号:', wechatId);
+            });
+        }
+        
+        function demoShowQRCode() {
+            alert('📱 微信二维码显示\n\n(演示中，实际会显示二维码弹窗)');
+        }
+        
+        function demoShowWechatOptions() {
+            const options = [
+                '1. 📋 复制微信号',
+                '2. 💬 打开微信添加',
+                '3. 📱 显示二维码',
+                '4. ℹ️ 添加说明'
+            ].join('\n');
+            
+            const choice = prompt(`💬 微信联系选项:\n微信号: WangCafe_Service\n\n${options}\n\n输入数字选择操作:`);
+            
+            if (choice === '1') demoCopyWechatId();
+            else if (choice === '2') alert('将打开微信添加好友界面');
+            else if (choice === '3') demoShowQRCode();
+            else if (choice === '4') alert('将显示微信添加步骤说明');
+        }
+        
+        function demoCheckBusinessHours() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            
+            let status = '🟢 营业中';
+            if (currentHour < 9) status = '🔴 未营业 (09:00开始)';
+            else if (currentHour >= 22) status = '🔴 已打烊';
+            
+            alert(`⏰ 营业时间检查\n\n当前时间: ${now.toLocaleTimeString('zh-CN')}\n营业状态: ${status}\n营业时间: 09:00-22:00`);
+        }
+        
+        function clearBrowserCache() {
+            alert(`🧹 清除浏览器缓存指南:\n\n1. 按 Ctrl+F5 强制刷新\n2. 或按 Ctrl+Shift+R\n3. 或打开开发者工具(F12)→网络→勾选"禁用缓存"`);
+        }
+        
+        // 页面加载时显示当前时间
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            console.log(`移动端功能演示页面加载时间: ${now.toLocaleString('zh-CN')}`);
+            console.log('部署的文件: mobile-enhancements.js, mobile-enhancements.css');
+        });
+    </script>
+</body>
+</html>

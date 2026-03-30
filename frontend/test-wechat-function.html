@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信功能测试</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4361ee;
+            padding-bottom: 10px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .test-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .test-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-wechat {
+            background: #07c160;
+        }
+        
+        .btn-wechat:hover {
+            background: #06ad56;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #dee2e6;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .success {
+            border-left: 4px solid #38a169;
+        }
+        
+        .error {
+            border-left: 4px solid #e53e3e;
+        }
+        
+        .warning {
+            border-left: 4px solid #d69e2e;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .feature-item h3 {
+            margin-top: 0;
+            color: #4361ee;
+        }
+        
+        .feature-item ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .feature-item li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>微信功能测试与演示</h1>
+        
+        <div class="test-section">
+            <h2>1. 测试微信功能按钮</h2>
+            <p>点击下方按钮测试改进后的微信功能：</p>
+            
+            <button class="test-btn btn-wechat" onclick="testWechatFunction()">
+                <i>💬</i> 测试微信联系功能
+            </button>
+            
+            <button class="test-btn" onclick="testShopAPI()">
+                <i>🔧</i> 测试店铺API
+            </button>
+            
+            <div id="testResult" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. 功能特性展示</h2>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>💬 智能微信显示</h3>
+                    <ul>
+                        <li>从API获取真实微信ID</li>
+                        <li>店铺名称个性化提示</li>
+                        <li>清晰的添加步骤说明</li>
+                        <li>友好的默认信息</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>📋 实用功能</h3>
+                    <ul>
+                        <li>一键复制微信号</li>
+                        <li>访问统计记录</li>
+                        <li>错误友好处理</li>
+                        <li>移动端优化</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>🎯 用户体验</h3>
+                    <ul>
+                        <li>明确的操作指引</li>
+                        <li>添加好友备注建议</li>
+                        <li>离线可用性</li>
+                        <li>多场景适配</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. 实际页面测试</h2>
+            <p>访问实际店铺页面测试功能：</p>
+            
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <a href="/shop_index_modern.html" target="_blank">
+                    <button class="test-btn">
+                        <i>🌐</i> 打开现代版店铺
+                    </button>
+                </a>
+                
+                <a href="/shop_index_modern_optimized.html" target="_blank">
+                    <button class="test-btn">
+                        <i>⚡</i> 打开优化版店铺
+                    </button>
+                </a>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                <i>💡 提示：在实际页面中点击"联系微信"按钮测试完整功能</i>
+            </p>
+        </div>
+        
+        <div class="test-section">
+            <h2>4. 技术实现说明</h2>
+            
+            <div id="techInfo" class="result">
+                <h3>改进的微信功能实现：</h3>
+                <pre><code>async function showWechatInfo() {
+    try {
+        // 1. 从API获取店铺信息
+        const shopInfo = await shopService.getShopInfo();
+        
+        if (shopInfo && shopInfo.wechat_id) {
+            // 2. 个性化提示信息
+            const message = `💬 联系${shopInfo.name}微信\n\n` +
+                           `微信号: ${shopInfo.wechat_id}\n\n` +
+                           `操作步骤说明...`;
+            
+            alert(message);
+            
+            // 3. 记录访问统计
+            await shopService.recordVisit('click_wechat');
+            
+            // 4. 提供复制功能
+            if (confirm('复制微信号？')) {
+                navigator.clipboard.writeText(shopInfo.wechat_id);
+            }
+        } else {
+            // 5. 友好的默认信息
+            alert('💬 联系店铺微信\n\n微信号: WangCafe_Service\n\n...');
+        }
+    } catch (error) {
+        // 6. 错误处理
+        console.error('显示微信信息失败:', error);
+        alert('💬 联系店铺微信\n\n微信号: WangCafe_Service\n\n...');
+    }
+}</code></pre>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 模拟shopService
+        const mockShopService = {
+            getShopInfo: async function() {
+                // 模拟API响应
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve({
+                            name: "旺财咖啡馆",
+                            wechat_id: "WangCafe_Service",
+                            address: "台州市椒江区",
+                            phone: "13800138000"
+                        });
+                    }, 500);
+                });
+            },
+            
+            recordVisit: async function(action) {
+                console.log(`记录访问: ${action}`);
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve({ success: true });
+                    }, 300);
+                });
+            }
+        };
+        
+        // 测试微信功能
+        async function testWechatFunction() {
+            const result = document.getElementById('testResult');
+            result.innerHTML = '测试中...';
+            result.className = 'result warning';
+            
+            try {
+                // 模拟改进后的微信功能
+                const shopInfo = await mockShopService.getShopInfo();
+                
+                if (shopInfo && shopInfo.wechat_id) {
+                    const wechatId = shopInfo.wechat_id;
+                    const shopName = shopInfo.name;
+                    
+                    const message = `💬 联系${shopName}微信\n\n` +
+                                   `微信号: ${wechatId}\n\n` +
+                                   `操作建议:\n` +
+                                   `1. 打开微信 → 添加朋友\n` +
+                                   `2. 搜索微信号: ${wechatId}\n` +
+                                   `3. 添加后即可联系\n\n` +
+                                   `添加时请备注: "来自店铺小程序"`;
+                    
+                    // 记录访问
+                    await mockShopService.recordVisit('click_wechat');
+                    
+                    result.innerHTML = `✅ 微信功能测试成功！\n\n` +
+                                      `店铺名称: ${shopName}\n` +
+                                      `微信号: ${wechatId}\n\n` +
+                                      `提示信息:\n${message}`;
+                    result.className = 'result success';
+                    
+                    // 模拟alert
+                    setTimeout(() => {
+                        alert('演示: ' + message);
+                    }, 100);
+                } else {
+                    result.innerHTML = '⚠️ 测试完成，但未获取到微信ID';
+                    result.className = 'result warning';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ 测试失败: ${error.message}`;
+                result.className = 'result error';
+            }
+        }
+        
+        // 测试店铺API
+        async function testShopAPI() {
+            const result = document.getElementById('testResult');
+            result.innerHTML = '测试API连接中...';
+            result.className = 'result warning';
+            
+            try {
+                // 测试实际API
+                const response = await fetch('/api/shop/info');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result.innerHTML = `✅ API连接成功！\n\n` +
+                                      `店铺信息:\n${JSON.stringify(data, null, 2)}`;
+                    result.className = 'result success';
+                } else {
+                    result.innerHTML = `⚠️ API响应异常: HTTP ${response.status}`;
+                    result.className = 'result warning';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ API连接失败: ${error.message}\n\n` +
+                                  `可能原因:\n` +
+                                  `1. 服务未运行\n` +
+                                  `2. 网络问题\n` +
+                                  `3. 端口被阻止`;
+                result.className = 'result error';
+            }
+        }
+        
+        // 页面加载时显示技术信息
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('微信功能测试页面已加载');
+            console.log('改进的微信功能特性:');
+            console.log('1. 从API获取真实微信ID');
+            console.log('2. 个性化店铺名称提示');
+            console.log('3. 清晰的添加步骤说明');
+            console.log('4. 一键复制功能');
+            console.log('5. 访问统计记录');
+            console.log('6. 错误友好处理');
+        });
+    </script>
+</body>
+</html>

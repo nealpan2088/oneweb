@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旺财咖啡馆 - 云信旺店（API队列优化版）</title>
+    <meta name="description" content="实体店铺营销小程序">
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    
+    <!-- 引入WiFi弹窗模块（带版本控制） -->
+    <link rel="stylesheet" href="./src/styles/wifi-modal.css?v=20260330_1057">
+    
+    <!-- 引入API队列系统 -->
+    <script src="./src/utils/api-queue.js?v=20260330_1135" defer></script>
+    <script src="./src/utils/api-queue-integration.js?v=20260330_1135" defer></script>
+    
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        /* 加载状态 */
+        #loading {
+            padding: 40px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4361ee;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 错误提示 */
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px;
+            text-align: center;
+            border: 1px solid #fcc;
+        }
+        
+        /* 头部区域 */
+        .header {
+            background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .shop-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .shop-industry {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .shop-description {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.5;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        /* 信息卡片 */
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: #4361ee;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .info-content {
+            flex: 1;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        /* 操作按钮区域 */
+        .actions {
+            padding: 0 20px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: white;
+            border: 2px solid #4361ee;
+            color: #4361ee;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            background: #4361ee;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .action-btn.wechat {
+            border-color: #07c160;
+            color: #07c160;
+        }
+        
+        .action-btn.wechat:hover {
+            background: #07c160;
+            color: white;
+            box-shadow: 0 5px 15px rgba(7, 193, 96, 0.3);
+        }
+        
+        .action-btn.wifi {
+            border-color: #38a169;
+            color: #38a169;
+        }
+        
+        .action-btn.wifi:hover {
+            background: #38a169;
+            color: white;
+            box-shadow: 0 5px 15px rgba(56, 161, 105, 0.3);
+        }
+        
+        /* 评价区域 */
+        .reviews-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+        }
+        
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .reviews-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .review-count {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .review-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .reviewer-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .review-rating {
+            color: #ffc107;
+            font-size: 14px;
+        }
+        
+        .review-comment {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .review-date {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+        
+        /* 统计信息 */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 0 20px 20px;
+        }
+        
+        .stat-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4361ee;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* API队列状态指示器 */
+        .queue-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: none;
+        }
+        
+        .queue-status.active {
+            display: block;
+        }
+        
+        .queue-status .indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .queue-status .indicator.idle {
+            background: #38a169;
+        }
+        
+        .queue-status .indicator.processing {
+            background: #ffc107;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .info-card,
+            .reviews-section {
+                margin: 15px;
+                padding: 15px;
+            }
+            
+            .actions {
+                padding: 0 15px 15px;
+            }
+            
+            .stats {
+                padding: 0 15px 15px;
+            }
+        }
+        
+        /* 暗色模式支持 */
+        @media (prefers-color-scheme: dark) {
+            .container {
+                background: #1a1a1a;
+                color: #fff;
+            }
+            
+            .info-card,
+            .reviews-section,
+            .stat-item {
+                background: #2d2d2d;
+            }
+            
+            .info-value,
+            .reviewer-name,
+            .reviews-title {
+                color: #fff;
+            }
+            
+            .info-label,
+            .review-comment,
+            .review-date,
+            .stat-label {
+                color: #aaa;
+            }
+            
+            .review-item {
+                background: #333;
+            }
+            
+            .action-btn {
+                background: #2d2d2d;
+                color: #fff;
+            }
+            
+            .error-message {
+                background: #442222;
+                color: #ff9999;
+                border-color: #663333;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- API队列状态指示器 -->
+    <div id="queueStatus" class="queue-status">
+        <span class="indicator idle"></span>
+        <span id="queueStatusText">API队列: 空闲</span>
+    </div>
+    
+    <div class="container">
+        <!-- 加载状态 -->
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>加载店铺信息中...</p>
+            <p style="font-size: 12px; color: #999; margin-top: 10px;">
+                <span id="queueInfo">API队列初始化中...</span>
+            </p>
+        </div>
+        
+        <!-- 错误提示 -->
+        <div id="errorMessage" class="error-message hidden"></div>
+        
+        <!-- 店铺内容 -->
+        <div id="shopContent" class="hidden">
+            <!-- 头部 -->
+            <div class="header">
+                <div class="shop-name" id="shopName">旺财咖啡馆</div>
+                <div class="shop-industry" id="shopIndustry">餐饮行业</div>
+                <div class="shop-description" id="shopDescription">实体店铺营销小程序演示</div>
+            </div>
+            
+            <!-- 联系信息 -->
+            <div class="info-card">
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div class="info-content">
+                        <div class="info-label">店铺地址</div>
+                        <div class="info-value" id="shopAddress">加载中...</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">📞</div>
+                    <div class="info-content">
+                        <div class="info-label">联系电话</div>
+                        <div class="info-value" id="shopPhone">加载中...</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">💬</div>
+                    <div class="info-content">
+                        <div class="info-label">微信客服</div>
+                        <div class="info-value" id="shopWechat">加载中...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="actions">
+                <button class="action-btn wechat" onclick="showWechatInfo()">
+                    <i>💬</i> 联系微信
+                </button>
+                
+                <button class="action-btn wifi" onclick="showWifiPassword()">
+                    <i>📶</i> WiFi密码
+                </button>
+            </div>
+            
+            <!-- 统计信息 -->
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalVisits">0</div>
+                    <div class="stat-label">总访问量</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-value" id="todayVisits">0</div>
+                    <div class="stat-label">今日访问</div>
+                </div>
+            </div>
+            
+            <!-- 评价区域 -->
+            <div class="reviews-section">
+                <div class="reviews-header">
+                    <div class="reviews-title">
+                        <i>⭐</i> 顾客评价
+                    </div>
+                    <div class="review-count" id="reviewCount">0条</div>
+                </div>
+                <div id="reviewsList"></div>
+            </div>
+            
+            <!-- 页脚 -->
+            <div class="footer">
+                <p>云信旺店 · 实体店铺营销解决方案</p>
+                <p style="font-size: 10px; margin-top: 5px; color: #999;">
+                    API队列优化版 | 版本: 2026-03-30
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入API客户端和服务 -->
+    <script src="./src/services/apiClient.js?v=20260330_1135"></script>
+    <script src="./src/services/shopService.js?v=20260330_1135"></script>
+    
+    <script>
+        // 全局变量
+        let shopService = null;
+        let apiQueue = null;
+        
+        // 页面加载完成
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 店铺页面加载（API队列优化版）');
+            
+            try {
+                // 初始化API队列系统
+                await initApiQueue();
+                
+                // 加载页面数据
+                await loadPageData();
+                
+            } catch (error) {
+                console.error('页面初始化失败:', error);
+                showError('页面初始化失败: ' + error.message);
+            }
+        });
+        
+        // 初始化API队列
+        async function initApiQueue() {
+            console.log('🔧 初始化API队列系统...');
+            
+            try {
+                // 初始化API队列系统
+                apiQueue = window.initApiQueueSystem({
+                    delay: 600,
+                    maxRetries: 2,
+                    retryDelay: 2000,
+                    debug: true,
+                    showMonitor: true
+                });
+                
+                // 更新队列信息显示
+                document.getElementById('queueInfo').textContent = 'API队列已就绪';
+                
+                // 监听队列状态变化
+                setInterval(updateQueueStatus, 500);
+                
+                console.log('✅ API队列系统初始化完成');
+                
+            } catch (error) {
+                console.error('API队列初始化失败:', error);
+                document.getElementById('queueInfo').textContent = 'API队列初始化失败，使用传统模式';
+            }
+        }
+        
+        // 更新队列状态显示
+        function updateQueueStatus() {
+            if (!apiQueue) return;
+            
+            const status = apiQueue.getStatus();
+            const statusElement = document.getElementById('queueStatus');
+            const textElement = document.getElementById('queueStatusText');
+            const indicator = statusElement.querySelector('.indicator');
+            
+            if (status.processing || status.activeRequests > 0) {
+                statusElement.classList.add('active');
+                indicator.className = 'indicator processing';
+                textElement.textContent = `API队列: 处理中 (${status.queueLength}等待)`;
+            } else if (status.queueLength > 0) {
+                statusElement.classList.add('active');
+                indicator.className = 'indicator idle';
+                textElement.textContent = `API队列: 等待中 (${status.queueLength}个)`;
+            } else {
+                statusElement.classList.remove('active');
+            }
+        }
+        
+        // 加载页面数据
+        async function loadPageData() {
+            try {
+                console.log('📥 开始加载页面数据...');
+                
+                // 创建shopService实例
+                shopService = new ShopService(3); // 使用店铺ID 3
+                
+                // 使用API队列包装shopService
+                if (window.wrapShopServiceMethods) {
+                    shopService = window.wrapShopServiceMethods(shopService);
+                    console.log('✅ shopService已集成API队列');
+                }
+                
+                // 1. 加载店铺基本信息
+                const shopInfo = await shopService.getShopInfo();
+                updateShopInfo(shopInfo);
+                
+                // 2. 添加延迟，避免快速连续调用
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // 3. 并行加载评价和统计信息
+                try {
+                    const [reviews, stats] = await Promise.allSettled([
+                        shopService.getReviews(),
+                        shopService.getStats()
+                    ]);
+                    
+                    // 处理评价数据
+                    if (reviews.status === 'fulfilled') {
+                        updateReviews(reviews.value);
+                    } else {
+                        console.warn('评价加载失败:', reviews.reason);
+                        updateReviews({ reviews: [], total: 0 });
+                    }
+                    
+                    // 处理统计数据
+                    if (stats.status === 'fulfilled') {
+                        updateStats(stats.value);
+                    } else {
+                        console.warn('统计加载失败:', stats.reason);
+                        updateStats({ total_visits: 0, today_visits: 0 });
+                    }
+                    
+                } catch (secondaryError) {
+                    console.warn('次要数据加载失败:', secondaryError);
+                }
+                
+                // 4. 记录访问（非阻塞）
+                setTimeout(() => {
+                    shopService.recordVisit('view').catch(err => {
+                        console.warn('记录访问失败:', err);
+                    });
+                }, 1000);
+                
+                // 隐藏加载状态，显示内容
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('shopContent').classList.remove('hidden');
+                
+                console.log('✅ 页面数据加载完成');
+                
+            } catch (error) {
+                console.error('加载主要数据失败:', error);
+                
+                // 显示错误但继续显示页面
+                if (error.message.includes('429')) {
+                    showError('服务器繁忙，请稍后刷新页面');
+                } else {
+                    showError('无法加载数据，请刷新页面重试');
+                }
+                
+                // 仍然显示页面，但使用默认数据
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('shopContent').classList.remove('hidden');
+                
+                // 使用默认数据
+                updateShopInfo({
+                    name: '旺财咖啡馆',
+                    industry: '餐饮',
+                    description: '实体店铺营销小程序演示',
+                    address: '演示地址',
+                    phone: '138-0013-8000',
+                    wechat_id: 'wangcai_coffee'
+                });
+            }
+        }
+        
+        // 更新店铺信息
+        function updateShopInfo(shopInfo) {
+            document.getElementById('shopName').textContent = shopInfo.name || '旺财咖啡馆';
+            document.getElementById('shopIndustry').textContent = shopInfo.industry || '餐饮行业';
+            document.getElementById('shopDescription').textContent = shopInfo.description || '实体店铺营销小程序演示';
+            document.getElementById('shopAddress').textContent = shopInfo.address || '演示地址';
+            document.getElementById('shopPhone').textContent = shopInfo.phone || '138-0013-8000';
+            document.getElementById('shopWechat').textContent = shopInfo.wechat_id || 'wangcai_coffee';
+        }
+        
+        // 更新评价
+        function updateReviews(reviewsData) {
+            const reviewsList = document.getElementById('reviewsList');
+            const reviewCount = document.getElementById('reviewCount');
+            
+            if (!reviewsData || !reviewsData.reviews || reviewsData.reviews.length === 0) {
+                reviewsList.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">暂无评价</div>';
+                reviewCount.textContent = '0条';
+                return;
+            }
+            
+            reviewCount.textContent = `${reviewsData.total || reviewsData.reviews.length}条`;
+            
+            let reviewsHtml = '';
+            reviewsData.reviews.slice(0, 3).forEach(review => {
+                const date = new Date(review.created_at);
+                const dateStr = date.toLocaleDateString('zh-CN');
+                
+                let stars = '';
+                for (let i = 0; i < 5; i++) {
+                    stars += i < review.rating ? '★' : '☆';
+                }
+                
+                reviewsHtml += `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-name">${review.customer_name || '匿名用户'}</div>
+                            <div class="review-rating">${stars}</div>
+                        </div>
+                        <div class="review-comment">${review.comment || '暂无评论'}</div>
+                        <div class="review-date">${dateStr}</div>
+                    </div>
+                `;
+            });
+            
+            reviewsList.innerHTML = reviewsHtml;
+        }
+        
+        // 更新统计
+        function updateStats(statsData) {
+            document.getElementById('totalVisits').textContent = statsData.total_visits || 0;
+            document.getElementById('todayVisits').textContent = statsData.today_visits || 0;
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            
+            // 5秒后自动隐藏
+            setTimeout(() => {
+                errorElement.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // 显示微信信息
+        async function showWechatInfo() {
+            try {
+                const shopInfo = await shopService.getShopInfo();
+                const wechatId = shopInfo.wechat_id || 'wangcai_coffee';
+                
+                // 复制到剪贴板
+                await navigator.clipboard.writeText(wechatId);
+                
+                alert(`微信客服: ${wechatId}\n\n✅ 微信号已复制到剪贴板\n\n请打开微信添加好友`);
+                
+                // 记录微信点击
+                shopService.recordVisit('click_wechat').catch(console.warn);
+                
+            } catch (error) {
+                console.error('获取微信信息失败:', error);
+                alert('微信客服: wangcai_coffee\n\n（默认信息，实际请查看页面）');
+            }
+        }
+        
+        // 显示WiFi密码
+        async function showWifiPassword() {
+            try {
+                // 先询问用户是否已加微信
+                const confirmed = confirm('📶 获取WiFi密码\n\n为了确保您是店铺顾客，请先确认：\n\n1. 已添加店铺微信好友\n2. 已向店员说明来意\n\n确认已完成后，点击"确定"获取WiFi密码。\n\n如果还未添加微信，请先点击"联系微信"按钮。');
+                
+                if (!confirmed) {
+                    return;
+                }
+                
+                // 添加延迟，避免快速连续调用
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                const wifiInfo = await shopService.getWifiInfo();
+                
+                // 记录访问（非阻塞）
+                setTimeout(() => {
+                    shopService.recordVisit('click_wifi').catch(err => {
+                        console.warn('记录WiFi访问失败:', err);
+                    });
+                }, 500);
+                
+                // 显示WiFi弹窗
+                if (window.showWifiModal) {
+                    window.showWifiModal({
+                        ssid: wifiInfo.ssid || 'WangCafe_Guest',
+                        password: wifiInfo.password || '88888888'
+                    }, (wasCopied) => {
+                        console.log('WiFi弹窗关闭，密码是否被复制:', wasCopied);
+                    });
+                } else {
+                    // 降级方案
+                    alert(`📶 WiFi信息\n\nWiFi名称: ${wifiInfo.ssid || 'WangCafe_Guest'}\nWiFi密码: ${wifiInfo.password || '88888888'}\n\n请妥善保管密码，勿外泄`);
+                }
+                
+            } catch (error) {
+                console.error('获取WiFi信息失败:', error);
+                
+                if (error.message.includes('429')) {
+                    alert('📶 WiFi信息\n\n服务器繁忙，请稍后再试\n\nWiFi名称: WangCafe_Guest\nWiFi密码: 88888888\n\n（默认信息，实际请咨询店员）');
+                } else {
+                    if (window.showWifiModal) {
+                        window.showWifiModal({
+                            ssid: 'WangCafe_Guest',
+                            password: '88888888'
+                        });
+                    } else {
+                        alert('📶 WiFi信息\n\nWiFi名称: WangCafe_Guest\nWiFi密码: 88888888\n\n（默认信息，实际请咨询店员）');
+                    }
+                }
+            }
+        }
+        
+        // 测试API队列功能
+        window.testQueue = async function() {
+            console.log('🧪 测试API队列功能...');
+            
+            if (!apiQueue) {
+                alert('API队列未初始化');
+                return;
+            }
+            
+            try {
+                // 测试并发请求
+                const results = await Promise.all([
+                    shopService.getShopInfo(),
+                    shopService.getReviews(),
+                    shopService.getStats()
+                ]);
+                
+                alert(`✅ API队列测试成功！\n\n成功处理 ${results.length} 个请求\n\n查看控制台了解详情`);
+                console.log('测试结果:', results);
+                
+            } catch (error) {
+                alert(`❌ API队列测试失败: ${error.message}`);
+                console.error('测试失败:', error);
+            }
+        };
+        
+        // 显示队列状态
+        window.showQueueStatus = function() {
+            if (!apiQueue) {
+                alert('API队列未初始化');
+                return;
+            }
+            
+            const status = apiQueue.getStatus();
+            const history = apiQueue.getRequestHistory(5);
+            
+            let message = `📊 API队列状态\n\n`;
+            message += `队列长度: ${status.queueLength}\n`;
+            message += `活跃请求: ${status.activeRequests}\n`;
+            message += `处理中: ${status.processing ? '是' : '否'}\n`;
+            message += `成功/失败: ${status.stats.successfulRequests}/${status.stats.failedRequests}\n`;
+            message += `平均响应: ${Math.round(status.stats.averageResponseTime)}ms\n\n`;
+            message += `最近请求:\n`;
+            
+            history.forEach((item, index) => {
+                message += `${index + 1}. ${item.action} - ${item.id || ''}\n`;
+            });
+            
+            alert(message);
+        };
+    </script>
+</body>
+</html>

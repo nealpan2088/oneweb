@@ -1,0 +1,154 @@
+{
+  "name": "IT技术服务站",
+  "short_name": "IT服务站",
+  "description": "个人电脑维修技术分享与服务",
+  "start_url": "/it-tech-service/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4361ee",
+  "orientation": "portrait-primary",
+  "scope": "/it-tech-service/",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "utilities"],
+  
+  "icons": [
+    {
+      "src": "/it-tech-service/images/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/it-tech-service/images/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/it-tech-service/images/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/it-tech-service/images/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/it-tech-service/images/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/it-tech-service/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/it-tech-service/images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/it-tech-service/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/it-tech-service/images/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "网站首页"
+    },
+    {
+      "src": "/it-tech-service/images/screenshot2.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "移动端页面"
+    }
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "技术咨询",
+      "short_name": "咨询",
+      "description": "快速提交技术咨询",
+      "url": "/it-tech-service/#contact",
+      "icons": [
+        {
+          "src": "/it-tech-service/images/shortcut-chat.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "图片展示",
+      "short_name": "图库",
+      "description": "查看技术案例图片",
+      "url": "/it-tech-service/gallery.html",
+      "icons": [
+        {
+          "src": "/it-tech-service/images/shortcut-gallery.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "关于我们",
+      "short_name": "关于",
+      "description": "了解我们的服务",
+      "url": "/it-tech-service/about.html",
+      "icons": [
+        {
+          "src": "/it-tech-service/images/shortcut-about.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  
+  "related_applications": [],
+  
+  "prefer_related_applications": false,
+  
+  "protocol_handlers": [],
+  
+  "share_target": {
+    "action": "/it-tech-service/share",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  
+  "file_handlers": [],
+  
+  "launch_handler": {
+    "client_mode": ["auto"]
+  },
+  
+  "handle_links": "preferred",
+  
+  "permissions": [
+    "notifications"
+  ]
+}

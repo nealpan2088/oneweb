@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片展示 - 个人电脑维修技术分享</title>
+    <meta name="description" content="个人电脑维修技术相关图片展示">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="it-tech-service/css/style.min.css">
+    
+    <!-- 图片库样式 -->
+    <style>
+        .gallery-content {
+            padding: 100px 0 60px;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .gallery-header h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .gallery-header p {
+            color: #666;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .gallery-categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            padding: 10px 25px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            color: #555;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn.active,
+        .category-btn:hover {
+            background: #4361ee;
+            color: white;
+            border-color: #4361ee;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            background: white;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .gallery-info {
+            padding: 20px;
+        }
+        
+        .gallery-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .gallery-desc {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .gallery-date {
+            color: #888;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .upload-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .upload-note {
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        
+        .modal-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        .modal-info {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .gallery-header h1 {
+                font-size: 28px;
+            }
+            
+            .upload-section {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-categories {
+                gap: 10px;
+            }
+            
+            .category-btn {
+                padding: 8px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-laptop-code"></i>
+                <span>个人电脑维修技术分享</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="/" class="nav-link">首页</a></li>
+                <li><a href="index.html#services" class="nav-link">技术经验</a></li>
+                <li><a href="it-tech-service/gallery.html" class="nav-link active">图片展示</a></li>
+                <li><a href="index.html#portfolio" class="nav-link">案例分享</a></li>
+                <li><a href="it-tech-service/about.html" class="nav-link">关于我</a></li>
+                <li><a href="index.html#contact" class="nav-link">技术交流</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 图片展示内容 -->
+    <section class="gallery-content">
+        <div class="container">
+            <div class="gallery-header">
+                <h1><i class="fas fa-images"></i> 技术图片展示</h1>
+                <p>个人电脑维修技术相关图片记录与分享</p>
+            </div>
+            
+            <!-- 分类筛选 -->
+            <div class="gallery-categories">
+                <button class="category-btn active" data-category="all">全部图片</button>
+                <button class="category-btn" data-category="hardware">硬件维修</button>
+                <button class="category-btn" data-category="software">软件安装</button>
+                <button class="category-btn" data-category="network">网络调试</button>
+                <button class="category-btn" data-category="data">数据恢复</button>
+            </div>
+            
+            <!-- 图片网格 -->
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- 图片将通过JavaScript动态加载 -->
+                <div class="loading">加载中...</div>
+            </div>
+            
+            <!-- 上传区域（仅展示，实际需要后端支持） -->
+            <div class="upload-section">
+                <h3><i class="fas fa-cloud-upload-alt"></i> 图片上传</h3>
+                <p>如需上传技术相关图片，请通过技术交流页面联系</p>
+                <button class="upload-btn" onclick="alert('图片上传功能需要后端支持，目前可通过技术交流页面联系上传')">
+                    <i class="fas fa-upload"></i> 上传图片
+                </button>
+                <p class="upload-note">注：仅接受技术相关图片，大小不超过5MB</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 图片查看模态框 -->
+    <div class="modal" id="imageModal">
+        <button class="modal-close" onclick="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-content">
+            <img class="modal-img" id="modalImage" src="" alt="">
+            <div class="modal-info">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDesc"></p>
+                <p id="modalDate"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>个人电脑维修技术分享</span>
+                </div>
+                <p class="footer-description">
+                    个人电脑维修技术经验分享网站，交流电脑维修相关技术。
+                </p>
+                <div class="footer-links">
+                    <a href="it-tech-service/about.html" class="footer-link">关于我</a>
+                    <a href="it-tech-service/beian.html" class="footer-link">备案信息</a>
+                    <a href="it-tech-service/gallery.html" class="footer-link">图片展示</a>
+                    <a href="index.html#contact" class="footer-link">技术交流</a>
+                </div>
+                <div class="personal-statement">
+                    <p><strong>个人网站声明</strong>: 本网站为个人技术分享网站，备案类型：个人非经营性网站。网站内容为个人电脑维修经验和技术服务信息分享。</p>
+                </div>
+                <div class="footer-icp">
+                    <p>
+                        <a href="https://beian.miit.gov.cn/" target="_blank" rel="nofollow">
+                            浙ICP备XXXXXX号
+                        </a>
+                        &nbsp;|&nbsp;
+                        <a href="http://www.beian.gov.cn/" target="_blank" rel="nofollow">
+                            浙公网安备 XXXXXXXXXXXXXX号
+                        </a>
+                    </p>
+                </div>
+                <p class="footer-copyright">
+                    © 2026 个人技术分享网站. 保留所有权利.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script>
+        // 图片数据
+        const galleryData = [
+            {
+                id: 1,
+                title: "电脑硬件清理",
+                description: "台式机内部灰尘清理与散热优化",
+                category: "hardware",
+                date: "2026-03-28",
+                image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=400&fit=crop"
+            },
+            {
+                id: 2,
+                title: "系统安装界面",
+                description: "Windows 11系统安装过程截图",
+                category: "software",
+                date: "2026-03-27",
+                image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&h=400&fit=crop"
+            },
+            {
+                id: 3,
+                title: "网络设备调试",
+                description: "企业级路由器配置与调试",
+                category: "network",
+                date: "2026-03-26",
+                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop"
+            },
+            {
+                id: 4,
+                title: "数据恢复软件",
+                description: "使用专业工具进行数据恢复",
+                category: "data",
+                date: "2026-03-25",
+                image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=600&h=400&fit=crop"
+            },
+            {
+                id: 5,
+                title: "笔记本电脑维修",
+                description: "笔记本键盘更换与维修",
+                category: "hardware",
+                date: "2026-03-24",
+                image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=400&fit=crop"
+            },
+            {
+                id: 6,
+                title: "驱动程序安装",
+                description: "显卡驱动安装与配置",
+                category: "software",
+                date: "2026-03-23",
+                image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&h=400&fit=crop"
+            },
+            {
+                id: 7,
+                title: "无线网络优化",
+                description: "WiFi信号测试与优化调整",
+                category: "network",
+                date: "2026-03-22",
+                image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop"
+            },
+            {
+                id: 8,
+                title: "硬盘检测修复",
+                description: "硬盘坏道检测与修复过程",
+                category: "data",
+                date: "2026-03-21",
+                image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&h=400&fit=crop"
+            }
+        ];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化导航
+            initNavigation();
+            
+            // 初始化图片库
+            initGallery();
+            
+            // 初始化返回顶部
+            initBackToTop();
+        });
+
+        function initNavigation() {
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    this.innerHTML = navMenu.classList.contains('active') 
+                        ? '<i class="fas fa-times"></i>' 
+                        : '<i class="fas fa-bars"></i>';
+                });
+            }
+        }
+
+        function initGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            
+            // 渲染图片
+            renderGallery('all');
+            
+            // 分类筛选
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 更新激活状态
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 渲染对应分类
+                    const category = this.getAttribute('data-category');
+                    renderGallery(category);
+                });
+            });
+        }
+
+        function renderGallery(category) {
+            const galleryGrid = document.getElementById('galleryGrid');
+            
+            // 过滤图片
+            const filteredData = category === 'all' 
+                ? galleryData 
+                : galleryData.filter(item => item.category === category);
+            
+            // 清空并重新渲染
+            galleryGrid.innerHTML = '';
+            
+            if (filteredData.length === 0) {
+                galleryGrid.innerHTML = '<div class="no-data">暂无图片</div>';
+                return;
+            }
+            
+            filteredData.forEach(item => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.setAttribute('data-category', item.category);
+                
+                galleryItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" class="gallery-img" loading="lazy">
+                    <div class="gallery-info">
+                        <h3 class="gallery-title">${item.title}</h3>
+                        <p class="gallery-desc">${item.description}</p>
+                        <div class="gallery-date">
+                            <i class="far fa-calendar"></i>
+                            ${item.date}
+                        </div>
+                    </div>
+                `;
+                
+                // 点击查看大图
+                galleryItem.addEventListener('click', () => openModal(item));
+                
+                galleryGrid.appendChild(galleryItem);
+            });
+        }
+
+        function openModal(item) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDesc');
+            const modalDate = document.getElementById('modalDate');
+            
+            modalImage.src = item.image;
+            modalImage.alt = item.title;
+            modalTitle.textContent = item.title;
+            modalDesc.textContent = item.description;
+            modalDate.textContent = `上传时间：${item.date}`;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function initBackToTop() {
+            const backToTopBtn = document.getElementById('backToTop');
+            
+            if (backToTopBtn) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        backToTopBtn.classList.add('visible');
+                    } else {
+                        backToTopBtn.classList.remove('visible');
+                    }
+                });
+                
+                backToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        }
+
+        // 点击模态框外部关闭
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API连接调试</title>
+</head>
+<body>
+    <h1>API连接调试测试</h1>
+    
+    <div id="results">
+        <h2>测试结果：</h2>
+        <div id="test1">
+            <h3>1. 测试 localhost:3007/health</h3>
+            <button onclick="testLocalhost()">测试</button>
+            <div id="result1"></div>
+        </div>
+        
+        <div id="test2">
+            <h3>2. 测试 47.110.156.11:3007/health</h3>
+            <button onclick="testPublic()">测试</button>
+            <div id="result2"></div>
+        </div>
+        
+        <div id="test3">
+            <h3>3. 测试前端API客户端</h3>
+            <button onclick="testFrontendAPI()">测试</button>
+            <div id="result3"></div>
+        </div>
+        
+        <div id="test4">
+            <h3>4. 浏览器信息</h3>
+            <div id="result4"></div>
+        </div>
+    </div>
+    
+    <script>
+        function testLocalhost() {
+            const result = document.getElementById('result1');
+            result.innerHTML = '测试中...';
+            
+            fetch('http://localhost:3007/health')
+                .then(response => response.json())
+                .then(data => {
+                    result.innerHTML = `✅ 成功: ${JSON.stringify(data)}`;
+                })
+                .catch(error => {
+                    result.innerHTML = `❌ 失败: ${error.message}`;
+                });
+        }
+        
+        function testPublic() {
+            const result = document.getElementById('result2');
+            result.innerHTML = '测试中...';
+            
+            fetch('http://47.110.156.11:3007/health')
+                .then(response => response.json())
+                .then(data => {
+                    result.innerHTML = `✅ 成功: ${JSON.stringify(data)}`;
+                })
+                .catch(error => {
+                    result.innerHTML = `❌ 失败: ${error.message}`;
+                });
+        }
+        
+        function testFrontendAPI() {
+            const result = document.getElementById('result3');
+            result.innerHTML = '测试中...';
+            
+            // 动态加载前端API
+            const script = document.createElement('script');
+            script.src = 'it-tech-service/js/api-backend.js';
+            script.onload = function() {
+                if (window.MessageAPI) {
+                    const api = new window.MessageAPI();
+                    api.isAvailable()
+                        .then(available => {
+                            result.innerHTML = `✅ 前端API可用: ${available}`;
+                        })
+                        .catch(error => {
+                            result.innerHTML = `❌ 前端API错误: ${error.message}`;
+                        });
+                } else {
+                    result.innerHTML = '❌ MessageAPI未定义';
+                }
+            };
+            script.onerror = function() {
+                result.innerHTML = '❌ 无法加载api-backend.js';
+            };
+            document.head.appendChild(script);
+        }
+        
+        // 显示浏览器信息
+        document.getElementById('result4').innerHTML = `
+            <p>当前URL: ${window.location.href}</p>
+            <p>主机名: ${window.location.hostname}</p>
+            <p>协议: ${window.location.protocol}</p>
+            <p>用户代理: ${navigator.userAgent}</p>
+        `;
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+                });
+            }
+        );
+    });
+});
+
+// 提交评价（旧API）
+app.post('/api/shop/:id/reviews', strictLimiter, (req, res) => {
+    const shopId = parseInt(req.params.id);
+    const { customer_name, rating, content } = req.body;
+    
+    if (isNaN(shopId)) {
+        return res.json({ error: '无效的店铺 ID' });
+    }
+    
+    // 参数校验
+    if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {
+        return res.json({ error: '评分必须是 1-5 的数字' });
+    }
+    if (!content || typeof content !== 'string' || content.trim().length === 0) {
+        return res.json({ error: '评价内容不能为空' });
+    }
+    
+    db.run(
+        `INSERT INTO reviews (shop_id, customer_name, rating, content, is_visible)
+         VALUES (?, ?, ?, ?, 1)`,
+        [shopId, customer_name || '匿名顾客', rating, content.trim()],
+        function(err) {
+            if (err) {
+                console.error('数据库错误:', err);
+                return res.json({ error: '提交评价失败' });
+            }
+            
+            res.json({ success: true, message: '评价提交成功' });
+        }
+    );
+});
+
+// 记录访问（旧API）
+app.post('/api/shop/:id/visit', (req, res) => {
+    const shopId = parseInt(req.params.id);
+    const { action = 'view' } = req.body;
+    
+    if (isNaN(shopId)) {
+        return res.json({ error: '无效的店铺 ID' });
+    }
+    
+    const visitorIp = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const userAgent = req.headers['user-agent'] || '';
+    
+    db.run(
+        `INSERT INTO visit_logs (shop_id, visitor_ip, user_agent, action)
+         VALUES (?, ?, ?, ?)`,
+        [shopId, visitorIp, userAgent, action],
+        function(err) {
+            if (err) {
+                console.error('数据库错误:', err);
+                return res.json({ success: true, message: '访问记录失败，但不影响使用' });
+            }
+            
+            res.json({ success: true, message: '访问记录成功' });
+        }
+    );
+});
+
+// WiFi访问（旧API）
+app.post('/api/shop/:id/wifi', strictLimiter, (req, res) => {
+    const shopId = parseInt(req.params.id);
+    
+    if (isNaN(shopId)) {
+        return res.json({ error: '无效的店铺 ID' });
+    }
+    
+    // 记录WiFi访问
+    const visitorIp = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const userAgent = req.headers['user-agent'] || '';
+    
+    db.run(
+        `INSERT INTO visit_logs (shop_id, visitor_ip, user_agent, action)
+         VALUES (?, ?, ?, 'click_wifi')`,
+        [shopId, visitorIp, userAgent],
+        function(err) {
+            if (err) {
+                console.error('数据库错误:', err);
+                // 继续返回WiFi信息
+            }
+            
+            // 获取WiFi信息
+            db.get(
+                `SELECT wifi_ssid, wifi_password, show_wifi_button 
+                 FROM shops 
+                 WHERE id = ? AND status = 1`,
+                [shopId],
+                (err, shop) => {
+                    if (err || !shop) {
+                        return res.json({ error: '获取WiFi信息失败' });
+                    }
+                    
+                    res.json({
+                        ssid: shop.wifi_ssid || '',
+                        password: shop.wifi_password || '',
+                        show_wifi_button: shop.show_wifi_button || 0
+                    });
+                }
+            );
+        }
+    );
+});
+
+// ==================== 静态文件服务 ====================
+
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// ==================== 错误处理 ====================
+
+// 404处理
+app.use('*', (req, res) => {
+    res.status(404).json({
+        success: false,
+        data: null,
+        message: '请求的资源不存在',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// 全局错误处理
+app.use((err, req, res, next) => {
+    console.error('服务器错误:', err);
+    
+    res.status(500).json({
+        success: false,
+        data: null,
+        message: '服务器内部错误',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// ==================== 服务器启动 ====================
+
+db.get('SELECT 1', (err) => {
+    if (err) {
+        console.error('数据库连接失败:', err.message);
+        process.exit(1);
+    }
+    
+    console.log('数据库连接成功');
+    
+    app.listen(PORT, () => {
+        console.log(`
+=========================================
+云信旺店后端API服务器
+版本: 1.2.0 (API规范化版本)
+端口: ${PORT}
+时间: ${new Date().toISOString()}
+=========================================
+API端点:
+  新版API (v1):
+    http://localhost:${PORT}/api/v1/health
+    http://localhost:${PORT}/api/v1/docs
+    http://localhost:${PORT}/api/v1/shops
+    http://localhost:${PORT}/api/v1/shops/3
+  
+  旧版API (兼容):
+    http://localhost:${PORT}/api/shop/3
+    http://localhost:${PORT}/api/shop/3/reviews
+=========================================
+        `);
+    });
+});
+
+// 优雅关闭
+process.on('SIGTERM', () => {
+    console.log('收到SIGTERM信号，正在关闭服务器...');
+    db.close();
+    process.exit(0);
+});
+
+process.on('SIGINT', () => {
+    console.log('收到SIGINT信号，正在关闭服务器...');
+    db.close();
+    process.exit(0);
+});
+
+module.exports = app;

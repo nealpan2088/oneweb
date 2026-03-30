@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回退验证测试</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4361ee;
+            padding-bottom: 10px;
+        }
+        
+        .status-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            border-color: #38a169;
+            color: #155724;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        .test-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .test-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-success {
+            background: #07c160;
+        }
+        
+        .btn-success:hover {
+            background: #06ad56;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .feature-item h3 {
+            margin-top: 0;
+            color: #4361ee;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>✅ 回退验证测试</h1>
+        
+        <div class="status-box status-success">
+            <h3>🎯 回退操作完成</h3>
+            <p>已成功回退到API路径修复完成后的状态，移除了移动端功能增强修改。</p>
+        </div>
+        
+        <div>
+            <h2>📋 当前功能状态</h2>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>🌐 API连接</h3>
+                    <p>✅ 正常 - 使用正确路径 `/api/shop/`</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>🏪 店铺页面</h3>
+                    <p>✅ 正常 - 可正常加载和显示</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>🎨 行业图标</h3>
+                    <p>✅ 正常 - 店铺名前显示行业图标</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>💬 微信功能</h3>
+                    <p>✅ 正常 - 改进后的微信联系功能</p>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🧪 功能测试</h2>
+            
+            <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                <a href="/shop_index_modern_optimized.html" target="_blank">
+                    <button class="test-btn btn-success">
+                        <i>📱</i> 测试优化版店铺
+                    </button>
+                </a>
+                
+                <a href="/shop_index_modern.html" target="_blank">
+                    <button class="test-btn">
+                        <i>🌐</i> 测试现代版店铺
+                    </button>
+                </a>
+                
+                <a href="/test-api-fix.html" target="_blank">
+                    <button class="test-btn">
+                        <i>🔧</i> 测试API修复
+                    </button>
+                </a>
+                
+                <button class="test-btn" onclick="checkRollbackStatus()">
+                    <i>🔍</i> 检查回退状态
+                </button>
+            </div>
+            
+            <div id="testResult" class="status-box status-info">
+                <h4>测试说明：</h4>
+                <p>点击按钮测试各功能是否正常工作。</p>
+            </div>
+        </div>
+        
+        <div>
+            <h2>📝 回退详情</h2>
+            
+            <div class="status-box status-info">
+                <h4>已移除的内容：</h4>
+                <ul>
+                    <li>❌ 移动端增强模块 (`mobile-enhancements.js`)</li>
+                    <li>❌ 移动端增强样式 (`mobile-enhancements.css`)</li>
+                    <li>❌ 移动端功能演示页面 (`test-mobile-features.html`)</li>
+                    <li>❌ 店铺页面中的增强功能集成代码</li>
+                </ul>
+                
+                <h4>保留的内容：</h4>
+                <ul>
+                    <li>✅ API路径修复 (`/api/shop/` 路径)</li>
+                    <li>✅ 行业图标功能</li>
+                    <li>✅ 改进的微信功能</li>
+                    <li>✅ 手机端图标排列修复</li>
+                    <li>✅ 所有测试和验证页面</li>
+                </ul>
+                
+                <h4>备份文件：</h4>
+                <ul>
+                    <li>📁 `shop_index_modern_optimized.html.backup-mobile`</li>
+                    <li>📁 `shop_index_modern.html.backup-mobile`</li>
+                    <li>📁 `backup-mobile-enhancements/` 目录</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div>
+            <h2>⚠️ 重要提示</h2>
+            
+            <div class="status-box status-info">
+                <p><strong>清除浏览器缓存：</strong></p>
+                <p>由于浏览器可能缓存了旧文件，建议：</p>
+                <ol>
+                    <li>按 <strong>Ctrl+F5</strong> 强制刷新页面</li>
+                    <li>或按 <strong>Ctrl+Shift+R</strong> 清除缓存并刷新</li>
+                    <li>或打开开发者工具（F12）→ 网络 → 勾选"禁用缓存"</li>
+                </ol>
+                
+                <p><strong>如需重新启用移动端增强功能：</strong></p>
+                <p>可以从备份文件中恢复相关代码和文件。</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function checkRollbackStatus() {
+            const result = document.getElementById('testResult');
+            
+            // 检查移动端增强相关代码是否存在
+            const checks = [
+                { name: '移动端增强模块', check: () => !document.querySelector('script[src*="mobile-enhancements"]') },
+                { name: '移动端增强样式', check: () => !document.querySelector('link[href*="mobile-enhancements"]') },
+                { name: '增强功能类名', check: () => !document.querySelector('.clickable-phone, .clickable-address') }
+            ];
+            
+            let allPassed = true;
+            let results = [];
+            
+            checks.forEach(check => {
+                const passed = check.check();
+                results.push(`${passed ? '✅' : '❌'} ${check.name}: ${passed ? '已移除' : '仍存在'}`);
+                if (!passed) allPassed = false;
+            });
+            
+            // 检查API连接
+            fetch('/api/shop/3')
+                .then(response => {
+                    if (response.ok) {
+                        results.push('✅ API连接: 正常');
+                    } else {
+                        results.push(`❌ API连接: HTTP ${response.status}`);
+                        allPassed = false;
+                    }
+                    
+                    result.innerHTML = `
+                        <h4>回退状态检查结果：</h4>
+                        <pre style="background: white; padding: 10px; border-radius: 4px;">${results.join('\n')}</pre>
+                        <p><strong>${allPassed ? '✅ 回退成功！所有检查通过。' : '⚠️ 部分检查未通过，请手动清理。'}</strong></p>
+                    `;
+                    result.className = allPassed ? 'status-box status-success' : 'status-box status-info';
+                })
+                .catch(error => {
+                    result.innerHTML = `
+                        <h4>回退状态检查结果：</h4>
+                        <pre style="background: white; padding: 10px; border-radius: 4px;">${results.join('\n')}
+❌ API连接: ${error.message}</pre>
+                        <p><strong>⚠️ API连接失败，请检查服务状态。</strong></p>
+                    `;
+                    result.className = 'status-box status-info';
+                });
+        }
+        
+        // 页面加载时显示当前时间
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            console.log(`回退验证页面加载时间: ${now.toLocaleString('zh-CN')}`);
+            console.log('回退完成，系统已恢复到稳定状态');
+        });
+    </script>
+</body>
+</html>

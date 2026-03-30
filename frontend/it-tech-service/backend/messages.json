@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1774828070369,
+    "name": "测试用户",
+    "phone": "13800138000",
+    "email": "",
+    "content": "测试后端留言系统",
+    "serviceType": "系统测试",
+    "budget": "测试预算",
+    "status": "pending",
+    "ip": "::1",
+    "userAgent": "curl/7.61.1",
+    "createdAt": "2026-03-29T23:47:50.369Z",
+    "updatedAt": "2026-03-29T23:47:50.369Z"
+  },
+  {
+    "id": 1774828248262,
+    "name": "公网测试用户",
+    "phone": "13888888888",
+    "email": "",
+    "content": "测试从公网提交留言",
+    "serviceType": "网络测试",
+    "budget": "未指定",
+    "status": "pending",
+    "ip": "47.110.156.11",
+    "userAgent": "curl/7.61.1",
+    "createdAt": "2026-03-29T23:50:48.262Z",
+    "updatedAt": "2026-03-29T23:50:48.262Z"
+  },
+  {
+    "id": 1774829189970,
+    "name": "测试用户",
+    "phone": "13800138000",
+    "email": "",
+    "content": "API连接测试留言",
+    "serviceType": "系统测试",
+    "budget": "测试",
+    "status": "pending",
+    "ip": "103.172.52.178",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "createdAt": "2026-03-30T00:06:29.970Z",
+    "updatedAt": "2026-03-30T00:06:29.970Z"
+  },
+  {
+    "id": 1774829196892,
+    "name": "前端测试用户",
+    "phone": "13900139000",
+    "email": "",
+    "content": "前端API客户端测试留言",
+    "serviceType": "未指定",
+    "budget": "未指定",
+    "status": "pending",
+    "ip": "103.172.52.178",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "createdAt": "2026-03-30T00:06:36.892Z",
+    "updatedAt": "2026-03-30T00:06:36.892Z"
+  },
+  {
+    "id": 1774829197045,
+    "name": "综合测试用户",
+    "phone": "13700137000",
+    "email": "",
+    "content": "综合测试留言内容",
+    "serviceType": "未指定",
+    "budget": "未指定",
+    "status": "pending",
+    "ip": "103.172.52.178",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "createdAt": "2026-03-30T00:06:37.045Z",
+    "updatedAt": "2026-03-30T00:06:37.045Z"
+  }
+]

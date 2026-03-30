@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>强制刷新缓存测试</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #e53e3e;
+            padding-bottom: 10px;
+        }
+        
+        .error-box {
+            background: #f8d7da;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #e53e3e;
+            color: #721c24;
+        }
+        
+        .solution-box {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #38a169;
+            color: #155724;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+        
+        .test-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .test-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-danger {
+            background: #e53e3e;
+        }
+        
+        .btn-danger:hover {
+            background: #c53030;
+        }
+        
+        .btn-success {
+            background: #38a169;
+        }
+        
+        .btn-success:hover {
+            background: #2f855a;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        
+        .step-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .step-list li {
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+        
+        .cache-status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        
+        .status-good {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-bad {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .refresh-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .method-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .method-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .method-hotkey {
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔄 强制刷新缓存测试</h1>
+        
+        <div class="error-box">
+            <h3>❌ 当前问题：SyntaxError: Unexpected token 'export'</h3>
+            <p><strong>文件</strong>: <code>wifi-modal.js:383</code></p>
+            <p><strong>原因</strong>: 浏览器缓存了旧的JavaScript文件，没有加载修复后的版本</p>
+            <p><strong>影响</strong>: WiFi弹窗功能无法使用</p>
+        </div>
+        
+        <div class="warning-box">
+            <h3>⚠️ 重要：为什么需要强制刷新？</h3>
+            <p>浏览器会缓存JavaScript、CSS等静态文件以提高性能。当文件更新时，浏览器可能仍然使用旧版本。</p>
+            <p><strong>已采取的修复措施</strong>:</p>
+            <ol class="step-list">
+                <li>✅ 修复了 <code>wifi-modal.js</code> 文件（移除export语句）</li>
+                <li>✅ 添加了版本控制参数（<code>?v=20260330_1057</code>）</li>
+                <li>✅ 更新了店铺页面引用</li>
+            </ol>
+            <p><strong>但浏览器仍然使用缓存</strong>，需要强制刷新。</p>
+        </div>
+        
+        <div class="solution-box">
+            <h3>✅ 解决方案：强制刷新浏览器缓存</h3>
+            
+            <div class="refresh-methods">
+                <div class="method-card">
+                    <div class="method-title">方法1：快捷键强制刷新</div>
+                    <p>最简单有效的方法：</p>
+                    <ul>
+                        <li><strong>Windows/Linux</strong>: <span class="method-hotkey">Ctrl</span> + <span class="method-hotkey">F5</span></li>
+                        <li><strong>Windows/Linux</strong>: <span class="method-hotkey">Ctrl</span> + <span class="method-hotkey">Shift</span> + <span class="method-hotkey">R</span></li>
+                        <li><strong>Mac</strong>: <span class="method-hotkey">Cmd</span> + <span class="method-hotkey">Shift</span> + <span class="method-hotkey">R</span></li>
+                    </ul>
+                    <p><strong>效果</strong>: 强制重新下载所有资源</p>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-title">方法2：开发者工具</div>
+                    <ol class="step-list">
+                        <li>按 <span class="method-hotkey">F12</span> 打开开发者工具</li>
+                        <li>切换到 <strong>网络(Network)</strong> 标签</li>
+                        <li>勾选 <strong>禁用缓存(Disable cache)</strong></li>
+                        <li>按 <span class="method-hotkey">F5</span> 刷新页面</li>
+                    </ol>
+                    <p><strong>效果</strong>: 本次会话禁用缓存</p>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-title">方法3：清除浏览器数据</div>
+                    <ol class="step-list">
+                        <li>打开浏览器设置</li>
+                        <li>找到"隐私和安全"或"清除浏览数据"</li>
+                        <li>选择"缓存的图片和文件"</li>
+                        <li>选择时间范围（建议"所有时间"）</li>
+                        <li>点击"清除数据"</li>
+                    </ol>
+                    <p><strong>效果</strong>: 彻底清除所有缓存</p>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🧪 缓存状态测试</h2>
+            
+            <div id="cacheTestResult" class="cache-status status-warning">
+                点击下方按钮测试缓存状态...
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                <button class="test-btn" onclick="testWifiModule()">
+                    <i>🔧</i> 测试WiFi模块
+                </button>
+                
+                <button class="test-btn btn-success" onclick="testVersionControl()">
+                    <i>🔄</i> 测试版本控制
+                </button>
+                
+                <button class="test-btn btn-danger" onclick="clearCacheNow()">
+                    <i>🧹</i> 清除当前页面缓存
+                </button>
+                
+                <button class="test-btn" onclick="openDevTools()">
+                    <i>🔍</i> 打开开发者工具
+                </button>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🌐 实际页面测试</h2>
+            
+            <div class="warning-box">
+                <p><strong>测试步骤</strong>:</p>
+                <ol class="step-list">
+                    <li>先按 <span class="method-hotkey">Ctrl</span> + <span class="method-hotkey">F5</span> 强制刷新</li>
+                    <li>然后点击下方链接测试店铺页面</li>
+                    <li>打开控制台(F12)检查是否有错误</li>
+                    <li>测试WiFi弹窗功能</li>
+                </ol>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin: 15px 0;">
+                <a href="/shop_index_modern_optimized.html" target="_blank" onclick="return confirm('请先按Ctrl+F5强制刷新，然后点击确定')">
+                    <button class="test-btn btn-success">
+                        <i>📱</i> 测试优化版店铺
+                    </button>
+                </a>
+                
+                <a href="/shop_index_modern.html" target="_blank" onclick="return confirm('请先按Ctrl+F5强制刷新，然后点击确定')">
+                    <button class="test-btn">
+                        <i>🌐</i> 测试现代版店铺
+                    </button>
+                </a>
+                
+                <button class="test-btn" onclick="showHotkeyGuide()">
+                    <i>⌨️</i> 快捷键指南
+                </button>
+            </div>
+        </div>
+        
+        <div>
+            <h2>🔧 技术解决方案</h2>
+            
+            <div class="code-block">
+<!-- 已实施的版本控制方案 -->
+<link rel="stylesheet" href="./src/styles/wifi-modal.css?v=20260330_1057">
+<script src="./src/utils/wifi-modal.js?v=20260330_1057" defer></script>
+
+<!-- 文件内容已修复 -->
+// wifi-modal.js 修复内容：
+if (typeof window !== 'undefined') {
+    window.WifiModal = WifiModal;
+    window.showWifiModal = function(wifiInfo, onClose) {
+        return WifiModal.showWifiInfo(wifiInfo, onClose);
+    };
+}
+// 注意：已移除 export default WifiModal
+            </div>
+            
+            <p><strong>为什么添加版本参数有效？</strong></p>
+            <ul class="step-list">
+                <li>浏览器认为 <code>wifi-modal.js?v=20260330_1057</code> 是新文件</li>
+                <li>会重新从服务器下载，而不是使用缓存</li>
+                <li>每次更新时只需修改版本号即可</li>
+            </ul>
+        </div>
+        
+        <div>
+            <h2>📝 验证步骤</h2>
+            
+            <ol class="step-list">
+                <li><strong>强制刷新</strong>: 按 Ctrl+F5 刷新当前页面</li>
+                <li><strong>测试WiFi模块</strong>: 点击上方"测试WiFi模块"按钮</li>
+                <li><strong>检查控制台</strong>: 按F12，查看控制台是否有SyntaxError</li>
+                <li><strong>访问店铺</strong>: 点击店铺链接，再次检查控制台</li>
+                <li><strong>测试功能</strong>: 点击WiFi按钮测试弹窗功能</li>
+            </ol>
+            
+            <p><strong>预期结果</strong>: 控制台无SyntaxError，WiFi弹窗正常显示</p>
+        </div>
+    </div>
+    
+    <!-- 引入修复后的WiFi模块（带版本控制） -->
+    <script src="./src/utils/wifi-modal.js?v=20260330_1057"></script>
+    
+    <script>
+        // 测试WiFi模块
+        function testWifiModule() {
+            const result = document.getElementById('cacheTestResult');
+            
+            if (window.WifiModal && window.showWifiModal) {
+                result.innerHTML = `
+                    <h4>✅ WiFi模块测试成功！</h4>
+                    <p><strong>模块状态</strong>: 已正确加载修复后的版本</p>
+                    <p><strong>全局变量</strong>: window.WifiModal ✓, window.showWifiModal ✓</p>
+                    <p><strong>缓存状态</strong>: 已加载最新版本</p>
+                    <p><strong>建议</strong>: 现在可以测试店铺页面了</p>
+                `;
+                result.className = 'cache-status status-good';
+                
+                // 显示测试弹窗
+                setTimeout(() => {
+                    window.showWifiModal({
+                        ssid: 'Test_WiFi',
+                        password: 'test1234'
+                    });
+                }, 500);
+                
+            } else {
+                result.innerHTML = `
+                    <h4>❌ WiFi模块测试失败</h4>
+                    <p><strong>问题</strong>: 仍然加载了旧版本文件</p>
+                    <p><strong>解决方案</strong>:</p>
+                    <ol>
+                        <li>按 <strong>Ctrl+F5</strong> 强制刷新本页面</li>
+                        <li>或点击"清除当前页面缓存"按钮</li>
+                        <li>或使用开发者工具禁用缓存</li>
+                    </ol>
+                `;
+                result.className = 'cache-status status-bad';
+            }
+        }
+        
+        // 测试版本控制
+        function testVersionControl() {
+            const result = document.getElementById('cacheTestResult');
+            
+            // 检查当前加载的脚本
+            const scripts = document.querySelectorAll('script[src*="wifi-modal"]');
+            const currentSrc = scripts.length > 0 ? scripts[scripts.length-1].src : '';
+            const hasVersion = currentSrc.includes('?v=');
+            
+            result.innerHTML = `
+                <h4>🔄 版本控制测试</h4>
+                <p><strong>当前脚本</strong>: ${currentSrc || '未找到'}</p>
+                <p><strong>版本参数</strong>: ${hasVersion ? '✅ 包含版本号' : '❌ 无版本号'}</p>
+                <p><strong>版本号</strong>: ${hasVersion ? currentSrc.split('?v=')[1] : '无'}</p>
+                <p><strong>状态</strong>: ${hasVersion ? '✅ 版本控制已启用' : '❌ 需要启用版本控制'}</p>
+            `;
+            
+            if (hasVersion) {
+                result.className = 'cache-status status-good';
+            } else {
+                result.className = 'cache-status status-bad';
+            }
+        }
+        
+        // 清除当前页面缓存
+        function clearCacheNow() {
+            const result = document.getElementById('cacheTestResult');
+            result.innerHTML = '正在清除缓存...';
+            result.className = 'cache-status status-warning';
+            
+            // 尝试清除缓存
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    names.forEach(function(name) {
+                        caches.delete(name);
+                    });
+                    result.innerHTML = '✅ 缓存已清除，请刷新页面';
+                    result.className = 'cache-status status-good';
+                }).catch(function() {
+                    result.innerHTML = '⚠️ 缓存清除失败，请使用Ctrl+F5';
+                    result.className = 'cache-status status-warning';
+                });
+            } else {
+                result.innerHTML = '⚠️ 浏览器不支持缓存API，请使用Ctrl+F5';
+                result.className = 'cache-status status-warning';
+            }
+        }
+        
+        // 打开开发者工具
+        function openDevTools() {
+            alert('打开开发者工具方法：\n\n1. 按 F12 键\n2. 或右键页面 → 检查\n3. 或菜单 → 更多工具 → 开发者工具\n\n然后切换到"网络(Network)"标签，勾选"禁用缓存(Disable cache)"');
+        }
+        
+        // 显示快捷键指南
+        function showHotkeyGuide() {
+            alert('强制刷新快捷键指南：\n\n🖥️ Windows/Linux:\n• Ctrl + F5 - 强制刷新\n• Ctrl + Shift + R - 强制刷新\n\n🍎 Mac:\n• Cmd + Shift + R - 强制刷新\n\n📱 移动端:\n• 下拉刷新并保持几秒\n• 或清除浏览器数据');
+        }
+        
+        // 页面加载时自动测试
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('强制刷新测试页面加载完成');
+            console.log('WiFi模块状态:', window.WifiModal ? '已加载' : '未加载');
+            
+            // 延迟显示状态
+            setTimeout(() => {
+                const result = document.getElementById('cacheTestResult');
+                if (window.WifiModal) {
+                    result.innerHTML = '✅ 页面已加载最新版本WiFi模块';
+                    result.className = 'cache-status status-good';
+                } else {
+                    result.innerHTML = '❌ 仍然加载旧版本，请按Ctrl+F5强制刷新';
+                    result.className = 'cache-status status-bad';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

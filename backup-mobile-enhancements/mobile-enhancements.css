@@ -1,0 +1,348 @@
+/**
+ * 移动端功能增强样式
+ * 版本: 1.0.0
+ * 日期: 2026-03-30
+ */
+
+/* 基础增强样式 */
+.clickable-phone {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.clickable-phone:hover {
+    color: #07c160 !important;
+    transform: translateY(-2px);
+}
+
+.clickable-phone::after {
+    content: '📞';
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.clickable-phone:hover::after {
+    opacity: 1;
+    animation: ring 0.5s ease;
+}
+
+@keyframes ring {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg); }
+    75% { transform: rotate(15deg); }
+}
+
+.clickable-address {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.clickable-address:hover {
+    color: #4361ee !important;
+    transform: translateY(-2px);
+}
+
+.clickable-address::after {
+    content: '📍';
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.clickable-address:hover::after {
+    opacity: 1;
+    animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* 电话提示 */
+.phone-hint {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 营业时间显示 */
+.business-hours-display {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.business-hours-display:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.hours-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.hours-icon {
+    font-size: 1.5em;
+    color: #d69e2e;
+}
+
+.hours-text {
+    font-weight: 500;
+    color: #333;
+}
+
+.hours-status {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.hours-status.open {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.hours-status.closed {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.special-notice {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid #ffeaa7;
+}
+
+/* 增强按钮样式 */
+.enhanced-phone-button,
+.enhanced-address-button,
+.enhanced-wechat-button {
+    transition: all 0.3s ease !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-phone-button:hover,
+.enhanced-address-button:hover,
+.enhanced-wechat-button:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
+
+.enhanced-phone-button:active,
+.enhanced-address-button:active,
+.enhanced-wechat-button:active {
+    transform: translateY(-1px) !important;
+}
+
+.enhanced-phone-button::after,
+.enhanced-address-button::after,
+.enhanced-wechat-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255,255,255,0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.enhanced-phone-button:focus:not(:active)::after,
+.enhanced-address-button:focus:not(:active)::after,
+.enhanced-wechat-button:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .clickable-phone,
+    .clickable-address {
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: rgba(0,0,0,0.03);
+    }
+    
+    .business-hours-display {
+        padding: 12px;
+    }
+    
+    .enhanced-phone-button,
+    .enhanced-address-button,
+    .enhanced-wechat-button {
+        width: 100%;
+        justify-content: center;
+        margin: 8px 0 !important;
+    }
+    
+    /* 触摸反馈 */
+    .clickable-phone:active,
+    .clickable-address:active {
+        background: rgba(0,0,0,0.1);
+        transform: scale(0.98);
+    }
+}
+
+/* 桌面端优化 */
+@media (min-width: 769px) {
+    .mobile-feature-tips {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+    .business-hours-display {
+        background: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    .hours-text {
+        color: #e2e8f0;
+    }
+    
+    .hours-status.open {
+        background: #22543d;
+        color: #c6f6d5;
+        border-color: #38a169;
+    }
+    
+    .hours-status.closed {
+        background: #742a2a;
+        color: #fed7d7;
+        border-color: #e53e3e;
+    }
+    
+    .special-notice {
+        background: #744210;
+        color: #feebc8;
+        border-color: #d69e2e;
+    }
+    
+    .clickable-phone:hover {
+        color: #68d391 !important;
+    }
+    
+    .clickable-address:hover {
+        color: #7f9cf5 !important;
+    }
+}
+
+/* 无障碍支持 */
+.clickable-phone:focus,
+.clickable-address:focus,
+.enhanced-phone-button:focus,
+.enhanced-address-button:focus,
+.enhanced-wechat-button:focus {
+    outline: 2px solid #4361ee;
+    outline-offset: 2px;
+}
+
+/* 加载动画 */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.loading-enhancements {
+    animation: pulse 1.5s infinite;
+}
+
+/* 工具提示 */
+[title] {
+    position: relative;
+}
+
+[title]:hover::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+[title]:hover::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+    margin-bottom: -5px;
+}
+
+/* 打印样式 */
+@media print {
+    .clickable-phone,
+    .clickable-address,
+    .enhanced-phone-button,
+    .enhanced-address-button,
+    .enhanced-wechat-button {
+        background: none !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .business-status,
+    .special-notice {
+        border: 1px solid #ccc !important;
+    }
+}
+
+/* 高性能动画优化 */
+@media (prefers-reduced-motion: reduce) {
+    .clickable-phone,
+    .clickable-address,
+    .enhanced-phone-button,
+    .enhanced-address-button,
+    .enhanced-wechat-button,
+    .business-hours-display {
+        transition: none !important;
+        animation: none !important;
+    }
+}
